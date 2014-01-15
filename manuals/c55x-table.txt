@@ -1,0 +1,440 @@
+0000000E xCCCCCCC kkkkkkkk                                      RPTCC k8, cond
+0000001E xCCCCCCC xxxxxxxx                                      RETCC cond
+0000010E xCCCCCCC LLLLLLLL                                      BCC L8, cond
+0000011E LLLLLLLL LLLLLLLL                                      B L16
+0000100E LLLLLLLL LLLLLLLL                                      CALL L16
+0000110E kkkkkkkk kkkkkkkk                                      RPT k16
+0000111E llllllll llllllll                                      RPTB pmad
+0001000E DDSS0000 xxSHIFTW                                      AND ACx << #SHIFTW[, ACy]
+0001000E DDSS0001 xxSHIFTW                                      OR ACx << #SHIFTW[, ACy]
+0001000E DDSS0010 xxSHIFTW                                      XOR ACx << #SHIFTW[, ACy]
+0001000E DDSS0011 xxSHIFTW                                      ADD ACx << #SHIFTW, ACy
+0001000E DDSS0100 xxSHIFTW                                      SUB ACx << #SHIFTW, ACy
+0001000E DDSS0101 xxSHIFTW                                      SFTS ACx, #SHIFTW[, ACy]
+0001000E DDSS0110 xxSHIFTW                                      SFTSC ACx, #SHIFTW[, ACy]
+0001000E DDSS0111 xxSHIFTW                                      SFTL ACx, #SHIFTW[, ACy]
+0001000E xxSS1000 xxddxxxx                                      EXP ACx, Tx
+0001000E DDSS1001 xxddxxxx                                      MANT ACx, ACy :: NEXP ACx, Tx
+0001000E xxSS1010 SSddxxxt                                      BCNT ACx, ACy,TCx, Tx
+0001000E DDSS1100 SSDDnnnn                                      MAXDIFF ACx, ACy, ACz, ACw
+0001000E DDSS1101 SSDDxxxr                                      DMAXDIFF ACx, ACy, ACz, ACw, TRNx
+0001000E DDSS1110 SSDDxxxx                                      MINDIFF ACx, ACy, ACz, ACw
+0001000E DDSS1111 SSDDxxxr                                      DMINDIFF ACx, ACy, ACz, ACw, TRNx
+0001001E FSSScc00 FDDDxuxt                                      CMP[U] src RELOP dst, TCx
+0001001E FSSScc01 FDDD0utt                                      CMPAND[U] src RELOP dst, TCy, TCx
+0001001E FSSScc01 FDDD1utt                                      CMPAND[U] src RELOP dst, !TCy, TCx
+0001001E FSSScc10 FDDD0utt                                      CMPOR[U] src RELOP dst, TCy, TCx
+0001001E FSSScc10 FDDD1utt                                      CMPOR[U] src RELOP dst, !TCy, TCx
+0001001E FSSSxx11 FDDD0xvv                                      ROL BitOut, src, BitIn, dst
+0001001E FSSSxx11 FDDD1xvv                                      ROR BitIn, src, BitOut, dst
+0001010E FSSSxxxx FDDD0000                                      AADD TAx, TAy
+0001010E FSSSxxxx FDDD0001                                      AMOV TAx, TAy
+0001010E FSSSxxxx FDDD0010                                      ASUB TAx, TAy
+0001010E PPPPPPPP FDDD0100                                      AADD P8, TAx
+0001010E PPPPPPPP FDDD0101                                      AMOV P8, TAx
+0001010E PPPPPPPP FDDD0110                                      ASUB P8, TAx
+0001010E FSSSxxxx FDDD1000                                      AADD TAx, TAy
+0001010E FSSSxxxx FDDD1001                                      AMOV TAx, TAy
+0001010E FSSSxxxx FDDD1010                                      ASUB TAx, TAy
+0001010E PPPPPPPP FDDD1100                                      AADD P8, TAx
+0001010E PPPPPPPP FDDD1101                                      AMOV P8, TAx
+0001010E PPPPPPPP FDDD1110                                      ASUB P8, TAx
+0001010E XACS0001 XACD0000                                      AADD XACsrc, XACdst
+0001010E XACS0001 XACD0001                                      AMOV XACsrc, XACdst
+0001010E XACS0001 XACD0010                                      ASUB XACsrc, XACdst
+0001010E XACS0001 XACD1000                                      AADD XACsrc, XACdst
+0001010E XACS0001 XACD1001                                      AMOV XACsrc, XACdst
+0001010E XACS0001 XACD1010                                      ASUB XACsrc, XACdst
+0001011E xxxxxkkk kkkk0000                                      MOV k7, DPH
+0001011E xxxkkkkk kkkk0011                                      MOV k9, PDP
+0001011E kkkkkkkk kkkk0100                                      MOV k12, BK03
+0001011E kkkkkkkk kkkk0101                                      MOV k12, BK47
+0001011E kkkkkkkk kkkk0110                                      MOV k12, BKC
+0001011E kkkkkkkk kkkk1000                                      MOV k12, CSR
+0001011E kkkkkkkk kkkk1001                                      MOV k12, BRC0
+0001011E kkkkkkkk kkkk1010                                      MOV k12, BRC1
+0001100E kkkkkkkk FDDDFSSS                                      AND k8, src, dst
+0001101E kkkkkkkk FDDDFSSS                                      OR k8, src, dst
+0001110E kkkkkkkk FDDDFSSS                                      XOR k8, src, dst
+0001111E KKKKKKKK SSDDxx0%                                      MPYK[R] K8, [ACx,] ACy
+0001111E KKKKKKKK SSDDss1%                                      MACK[R] Tx, K8, [ACx,] ACy
+0010000E                                                        NOP
+0010001E FSSSFDDD                                               MOV src, dst
+0010010E FSSSFDDD                                               ADD [src,] dst
+0010011E FSSSFDDD                                               SUB [src,] dst
+0010100E FSSSFDDD                                               AND src, dst
+0010101E FSSSFDDD                                               OR src, dst
+0010110E FSSSFDDD                                               XOR src, dst
+0010111E FSSSFDDD                                               MAX [src,] dst
+0011000E FSSSFDDD                                               MIN [src,] dst
+0011001E FSSSFDDD                                               ABS [src,] dst
+0011010E FSSSFDDD                                               NEG [src,] dst
+0011011E FSSSFDDD                                               NOT [src,] dst
+0011100E FSSSFDDD                                               PSH src1, src2
+0011101E FSSSFDDD                                               POP dst1, dst2
+0011110E kkkkFDDD                                               MOV k4, dst
+0011111E kkkkFDDD                                               MOV –k4, dst
+0100000E kkkkFDDD                                               ADD k4, dst
+01000101 11110010                                               .LK
+0100001E kkkkFDDD                                               SUB k4, dst
+0100010E 00SSFDDD                                               MOV HI(ACx), TAx
+0100010E 01x0FDDD                                               SFTS dst, #−1
+0100010E 01x1FDDD                                               SFTS dst, #1
+0100010E 1000FDDD                                               MOV SP, TAx
+0100010E 1001FDDD                                               MOV SSP, TAx
+0100010E 1010FDDD                                               MOV CDP, TAx
+0100010E 1100FDDD                                               MOV BRC0, TAx
+0100010E 1101FDDD                                               MOV BRC1, TAx
+0100010E 1110FDDD                                               MOV RPTC, TAx
+0100011E kkkk0000                                               BCLR k4, ST0_55
+0100011E kkkk0001                                               BSET k4, ST0_55
+0100011E kkkk0010                                               BCLR k4, ST1_55
+0100011E kkkk0011                                               BSET k4, ST1_55
+0100011E kkkk0100                                               BCLR k4, ST2_55
+0100011E kkkk0101                                               BSET k4, ST2_55
+0100011E kkkk0110                                               BCLR k4, ST3_55
+0100011E kkkk0111                                               BSET k4, ST3_55
+0100100E xxxxx000                                               RPT CSR
+0100100E FSSSx001                                               RPTADD CSR, TAx
+0100100E kkkkx010                                               RPTADD CSR, k4
+0100100E kkkkx011                                               RPTSUB CSR, k4
+0100100E xxxxx100                                               RET
+01001000 xxxxx100                                               RETI
+0100101E 0LLLLLLL                                               B L7
+0100101E 1lllllll                                               RPTBLOCAL pmad
+0100110E kkkkkkkk                                               RPT k8
+0100111E KKKKKKKK                                               AADD K8,SP
+0101000E FDDDx000                                               SFTL dst, #1
+0101000E FDDDx001                                               SFTL dst, #−1
+0101000E FDDDx010                                               POP dst
+0101000E xxDDx011                                               POP dbl(ACx)
+0101000E FSSSx110                                               PSH src
+0101000E xxSSx111                                               PSH dbl(ACx)
+0101000E XDDD0100                                               POPBOTH xdst
+0101000E XSSS0101                                               PSHBOTH xsrc
+0101001E FSSS00DD                                               MOV TAx, HI(ACx)
+0101001E FSSS1000                                               MOV TAx, SP
+0101001E FSSS1001                                               MOV TAx, SSP
+0101001E FSSS1010                                               MOV TAx, CDP
+0101001E FSSS1100                                               MOV TAx, CSR
+0101001E FSSS1101                                               MOV TAx, BRC1
+0101001E FSSS1110                                               MOV TAx, BRC0
+0101010E DDSS000%                                               ADD[R]V [ACx,] ACy
+0101010E DDSS001%                                               SQA[R] [ACx,] ACy
+0101010E DDSS010%                                               SQS[R] [ACx,] ACy
+0101010E DDSS011%                                               MPY[R] [ACx,] ACy
+0101010E DDSS100%                                               SQR[R] [ACx,] ACy
+0101010E DDSS101%                                               ROUND [ACx,] ACy
+0101010E DDSS110%                                               SAT[R] [ACx,] ACy
+0101011E DDSSss0%                                               MAC[R] ACx, Tx, ACy[, ACy]
+0101011E DDSSss1%                                               MAS[R] Tx, [ACx,] ACy
+0101100E DDSSss0%                                               MPY[R] Tx, [ACx,] ACy
+0101100E DDSSss1%                                               MAC[R] ACy, Tx, ACx, ACy
+0101101E DDSSss00                                               ADD ACx << Tx, ACy
+0101101E DDSSss01                                               SUB ACx << Tx, ACy
+0101101E DDxxxx1t                                               SFTCC ACx, TCx
+0101110E DDSSss00                                               SFTL ACx, Tx[, ACy]
+0101110E DDSSss01                                               SFTS ACx, Tx[, ACy]
+0101110E DDSSss10                                               SFTSC ACx, Tx[, ACy]
+0101111E 00kkkkkk                                               SWAP ( )
+01100lll lCCCCCCC                                               BCC l4, cond
+01101000 xCCCCCCC PPPPPPPP PPPPPPPP PPPPPPPP                    BCC P24, cond
+01101001 xCCCCCCC PPPPPPPP PPPPPPPP PPPPPPPP                    CALLCC P24, cond
+01101010 PPPPPPPP PPPPPPPP PPPPPPPP                             B P24
+01101100 PPPPPPPP PPPPPPPP PPPPPPPP                             CALL P24
+01101101 xCCCCCCC LLLLLLLL LLLLLLLL                             BCC L16, cond
+01101110 xCCCCCCC LLLLLLLL LLLLLLLL                             CALLCC L16, cond
+01101111 FSSSccxu KKKKKKKK LLLLLLLL                             BCC[U] L8, src RELOP K8
+01110000 KKKKKKKK KKKKKKKK SSDDSHFT                             ADD K16 << #SHFT, [ACx,] ACy
+01110001 KKKKKKKK KKKKKKKK SSDDSHFT                             SUB K16 << #SHFT, [ACx,] ACy
+01110010 kkkkkkkk kkkkkkkk SSDDSHFT                             AND k16 << #SHFT, [ACx,] ACy
+01110011 kkkkkkkk kkkkkkkk SSDDSHFT                             OR k16 << #SHFT, [ACx,] ACy
+01110100 kkkkkkkk kkkkkkkk SSDDSHFT                             XOR k16 << #SHFT, [ACx,] ACy
+01110101 KKKKKKKK KKKKKKKK xxDDSHFT                             MOV K16 << #SHFT, ACx
+01110110 kkkkkkkk kkkkkkkk FDDD00SS                             BFXTR k16, ACx, dst
+01110110 kkkkkkkk kkkkkkkk FDDD01SS                             BFXPA k16, ACx, dst
+01110110 KKKKKKKK KKKKKKKK FDDD10xx                             MOV K16, dst
+01110111 DDDDDDDD DDDDDDDD FDDDxxxx                             AMOV D16, TAx
+01111000 kkkkkkkk kkkkkkkk xxx0000x                             MOV k16, DP
+01111000 kkkkkkkk kkkkkkkk xxx0001x                             MOV k16, SSP
+01111000 kkkkkkkk kkkkkkkk xxx0010x                             MOV k16, CDP
+01111000 kkkkkkkk kkkkkkkk xxx0011x                             MOV k16, BSA01
+01111000 kkkkkkkk kkkkkkkk xxx0100x                             MOV k16, BSA23
+01111000 kkkkkkkk kkkkkkkk xxx0101x                             MOV k16, BSA45
+01111000 kkkkkkkk kkkkkkkk xxx0110x                             MOV k16, BSA67
+01111000 kkkkkkkk kkkkkkkk xxx0111x                             MOV k16, BSAC
+01111000 kkkkkkkk kkkkkkkk xxx1000x                             MOV k16, SP
+01111001 KKKKKKKK KKKKKKKK SSDDxx0%                             MPYK[R] K16, [ACx,] ACy
+01111001 KKKKKKKK KKKKKKKK SSDDss1%                             MACK[R] Tx, K16, [ACx,] ACy
+01111010 KKKKKKKK KKKKKKKK SSDD000x                             ADD K16 << #16, [ACx,] ACy
+01111010 KKKKKKKK KKKKKKKK SSDD001x                             SUB K16 << #16, [ACx,] ACy
+01111010 kkkkkkkk kkkkkkkk SSDD010x                             AND k16 << #16, [ACx,] ACy
+01111010 kkkkkkkk kkkkkkkk SSDD011x                             OR k16 << #16, [ACx,] ACy
+01111010 kkkkkkkk kkkkkkkk SSDD100x                             XOR k16 << #16, [ACx,] ACy
+01111010 KKKKKKKK KKKKKKKK xxDD101x                             MOV K16 << #16, ACx
+01111010 xxxxxxxx xxxxxxxx xxxx110x                             IDLE
+01111011 KKKKKKKK KKKKKKKK FDDDFSSS                             ADD K16, [src,] dst
+01111100 KKKKKKKK KKKKKKKK FDDDFSSS                             SUB K16, [src,] dst
+01111101 kkkkkkkk kkkkkkkk FDDDFSSS                             AND k16, src, dst
+01111110 kkkkkkkk kkkkkkkk FDDDFSSS                             OR k16, src, dst
+01111111 kkkkkkkk kkkkkkkk FDDDFSSS                             XOR k16, src, dst
+10000000 XXXMMMYY YMMM00xx                                      MOV dbl(Xmem), dbl(Ymem)
+10000000 XXXMMMYY YMMM01xx                                      MOV Xmem, Ymem
+10000000 XXXMMMYY YMMM10SS                                      MOV ACx, Xmem, Ymem
+10000001 XXXMMMYY YMMM00DD                                      ADD Xmem, Ymem, ACx
+10000001 XXXMMMYY YMMM01DD                                      SUB Xmem, Ymem, ACx
+10000001 XXXMMMYY YMMM10DD                                      MOV Xmem, Ymem, ACx
+10000010 XXXMMMYY YMMM00mm uuDDDDg%                             MPY[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx :: MPY[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy
+10000010 XXXMMMYY YMMM01mm uuDDDDg%                             MAC[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx :: MPY[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy
+10000010 XXXMMMYY YMMM10mm uuDDDDg%                             MAS[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx :: MPY[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy
+10000010 XXXMMMYY YMMM11mm uuxxDDg%                             AMAR Xmem :: MPY[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACx
+10000011 XXXMMMYY YMMM00mm uuDDDDg%                             MAC[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx :: MAC[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy
+10000011 XXXMMMYY YMMM01mm uuDDDDg%                             MAS[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx :: MAC[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy
+10000011 XXXMMMYY YMMM10mm uuDDDDg%                             MAC[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx >> #16 :: MAC[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy
+10000011 XXXMMMYY YMMM11mm uuxxDDg%                             AMAR Xmem :: MAC[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACx
+10000100 XXXMMMYY YMMM00mm uuDDDDg%                             MAS[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx :: MAC[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy >> #16
+10000100 XXXMMMYY YMMM01mm uuxxDDg%                             AMAR Xmem :: MAC[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACx >> #16
+10000100 XXXMMMYY YMMM10mm uuDDDDg%                             MPY[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx :: MAC[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy >> #16
+10000100 XXXMMMYY YMMM11mm uuDDDDg%                             MAC[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx >> #16 :: MAC[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy >> #16
+10000101 XXXMMMYY YMMM00mm uuxxDDg%                             AMAR Xmem :: MAS[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACx
+10000101 XXXMMMYY YMMM01mm uuDDDDg%                             MAS[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx :: MAS[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy
+10000101 XXXMMMYY YMMM10mm xxxxxxxx                             AMAR Xmem, Ymem, Cmem
+10000101 XXXMMMYY YMMM11mm DDx0DDU%                             FIRSADD Xmem, Ymem, Cmem, ACx, ACy
+10000101 XXXMMMYY YMMM11mm DDx1DDU%                             FIRSSUB Xmem, Ymem, Cmem, ACx, ACy
+10000110 XXXMMMYY YMMMxxDD 000guuU%                             MPYM[R][40] [T3 = ][uns(]Xmem[)], [uns(]Ymem[)], ACx
+10000110 XXXMMMYY YMMMSSDD 001guuU%                             MACM[R][40] [T3 = ][uns(]Xmem[)], [uns(]Ymem[)], [ACx,] ACy
+10000110 XXXMMMYY YMMMSSDD 010guuU%                             MACM[R][40] [T3 = ][uns(]Xmem[)], [uns(]Ymem[)], ACx >> #16[, ACy]
+10000110 XXXMMMYY YMMMSSDD 011guuU%                             MASM[R][40] [T3 = ][uns(]Xmem[)], [uns(]Ymem[)], [ACx,] ACy
+10000110 XXXMMMYY YMMMDDDD 100xssU%                             MASM[R] [T3 = ]Xmem, Tx, ACx :: MOV Ymem << #16, ACy
+10000110 XXXMMMYY YMMMDDDD 101xssU%                             MACM[R] [T3 = ]Xmem, Tx, ACx :: MOV Ymem << #16, ACy
+10000110 XXXMMMYY YMMMDDDD 110xxxx%                             LMS Xmem, Ymem, ACx, ACy
+10000110 XXXMMMYY YMMMDDDD 1110xxn%                             SQDST Xmem, Ymem, ACx, ACy
+10000110 XXXMMMYY YMMMDDDD 1111xxn%                             ABDST Xmem, Ymem, ACx, ACy
+10000111 XXXMMMYY YMMMSSDD 000xssU%                             MPYM[R] [T3 = ]Xmem, Tx, ACy :: MOV HI(ACx << T2), Ymem
+10000111 XXXMMMYY YMMMSSDD 001xssU%                             MACM[R] [T3 = ]Xmem, Tx, ACy :: MOV HI(ACx << T2), Ymem
+10000111 XXXMMMYY YMMMSSDD 010xssU%                             MASM[R] [T3 = ]Xmem, Tx, ACy :: MOV HI(ACx << T2), Ymem
+10000111 XXXMMMYY YMMMSSDD 01100001                             LMSF Xmem, Ymem, ACx, ACy
+10000111 XXXMMMYY YMMMSSDD 100xxxxx                             ADD Xmem << #16, ACx, ACy :: MOV HI(ACy << T2), Ymem
+10000111 XXXMMMYY YMMMSSDD 101xxxxx                             SUB Xmem << #16, ACx, ACy :: MOV HI(ACy << T2), Ymem
+10000111 XXXMMMYY YMMMSSDD 110xxxxx                             MOV Xmem << #16, ACy :: MOV HI(ACx << T2), Ymem
+10010000 XSSSXDDD                                               MOV xsrc, xdst
+10010001 xxxxxxSS                                               B ACx
+10010010 XXXMMMYY YMMM00mm uuDDDDg%                             MPY[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MPY[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx
+10010010 XXXMMMYY YMMM01mm uuDDDDg%                             MPY[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MAC[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx
+10010010 XXXMMMYY YMMM10mm uuDDDDg%                             MPY[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MAS[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx
+10010010 xxxxxxSS                                               CALL ACx
+10010011 XXXMMMYY YMMM00mm uuDDDDg%                             MAC[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MAC[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx
+10010011 XXXMMMYY YMMM01mm uuDDDDg%                             MAC[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MAS[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx
+10010011 XXXMMMYY YMMM10mm uuDDDDg%                             MAC[R][40] [uns(]HI(Ymem)[)], [uns(]HI(Cmem)[)], ACy, :: MAC[R][40] [uns(]LO(Xmem)[)], [uns(]LO(Cmem)[)], ACx >> #16
+10010011 XXXMMMYY YMMM11mm uuDDDDg%                             MAC[R][40] [uns(]HI(Ymem)[)], [uns(]HI(Cmem)[)], ACy >> #16, :: MAC[R][40] [uns(]LO(Xmem)[)], [uns(]LO(Cmem)[)], ACx >> #16
+10010100 XXXMMMYY YMMM00mm uuDDDDg%                             MAC[R][40] [uns(]HI(Ymem)[)], [uns(]HI(Cmem)[)], ACy >> #16, :: MAS[R][40] [uns(]LO(Xmem)[)], [uns(]LO(Cmem)[)], ACx
+10010100 XXXMMMYY YMMM10mm uuDDDDg%                             MAC[R][40] [uns(]HI(Ymem)[)], [uns(]HI(Cmem)[)], ACy >> #16, :: MPY[R][40] [uns(]LO(Xmem)[)], [uns(]LO(Cmem)[)], ACx
+10010100 xxxxxxxx                                               RESET
+10010101 0xxkkkkk                                               INTR k5
+10010101 1xxkkkkk                                               TRAP k5
+10010101 XXXMMMYY YMMM01mm uuDDDDg%                             MAS[R][40] [uns(]HI(Ymem)[)], [uns(]HI(Cmem)[)], ACy, :: MAS[R][40] [uns(]LO(Xmem)[)], [uns(]LO(Cmem)[)], ACx
+10010110 0CCCCCCC                                               XCC [label, ]cond
+10010110 1CCCCCCC                                               XCCPART [label, ]cond
+10011000                                                        mmap
+10011001                                                        port(Smem)
+10011010                                                        port(Smem)
+10011100                                                        <instruction>.LR
+10011101                                                        <instruction>.CR
+10011110 0CCCCCCC                                               XCC [label, ]cond
+10011110 1CCCCCCC                                               XCCPART [label, ]cond
+10011111 0CCCCCCC                                               XCC [label, ]cond
+10011111 1CCCCCCC                                               XCCPART [label, ]cond
+1010FDDD AAAAAAAI                                               MOV Smem, dst
+101100DD AAAAAAAI                                               MOV Smem << #16, ACx
+10110100 AAAAAAAI                                               AMAR Smem
+10110101 AAAAAAAI                                               PSH Smem
+10110110 AAAAAAAI                                               DELAY Smem
+10110111 AAAAAAAI                                               PSH dbl(Lmem)
+10111000 AAAAAAAI                                               POP dbl(Lmem)
+10111011 AAAAAAAI                                               POP Smem
+101111SS AAAAAAAI                                               MOV HI(ACx), Smem
+1100FSSS AAAAAAAI                                               MOV src, Smem
+11010000 AAAAAAAI 0%DD01mm                                      MPY[R] Smem, uns(Cmem), ACx
+11010000 AAAAAAAI 0%DD10mm                                      MAC[R] Smem, uns(Cmem), ACx
+11010000 AAAAAAAI 0%DD11mm                                      MAS[R] Smem, uns(Cmem), ACx
+11010000 AAAAAAAI U%DDxxmm                                      MACM[R]Z [T3 = ]Smem, Cmem, ACx
+11010001 AAAAAAAI U%DD00mm                                      MPYM[R] [T3 = ]Smem, Cmem, ACx
+11010001 AAAAAAAI U%DD01mm                                      MACM[R] [T3 = ]Smem, Cmem, ACx
+11010001 AAAAAAAI U%DD10mm                                      MASM[R] [T3 = ]Smem, Cmem, ACx
+11010010 AAAAAAAI U%DD00SS                                      MACM[R] [T3 = ]Smem, [ACx,] ACy
+11010010 AAAAAAAI U%DD01SS                                      MASM[R] [T3 = ]Smem, [ACx,] ACy
+11010010 AAAAAAAI U%DD10SS                                      SQAM[R] [T3 = ]Smem, [ACx,] ACy
+11010010 AAAAAAAI U%DD11SS                                      SQSM[R] [T3 = ]Smem, [ACx,] ACy
+11010011 AAAAAAAI U%DD00SS                                      MPYM[R] [T3 = ]Smem, [ACx,] ACy
+11010011 AAAAAAAI U%DD10xx                                      SQRM[R] [T3 = ]Smem, ACx
+11010011 AAAAAAAI U%DDu1ss                                      MPYM[R][U] [T3 = ]Smem, Tx, ACx
+11010100 AAAAAAAI U%DDssSS                                      MACM[R] [T3 = ]Smem, Tx, [ACx,] ACy
+11010101 AAAAAAAI U%DDssSS                                      MASM[R] [T3 = ]Smem, Tx, [ACx,] ACy
+11010110 AAAAAAAI FDDDFSSS                                      ADD Smem, [src,] dst
+11010111 AAAAAAAI FDDDFSSS                                      SUB Smem, [src,] dst
+11011000 AAAAAAAI FDDDFSSS                                      SUB src, Smem, dst
+11011001 AAAAAAAI FDDDFSSS                                      AND Smem, src, dst
+11011010 AAAAAAAI FDDDFSSS                                      OR Smem, src, dst
+11011011 AAAAAAAI FDDDFSSS                                      XOR Smem, src, dst
+11011100 AAAAAAAI kkkkxx00                                      BTST k4, Smem, TC1
+11011100 AAAAAAAI kkkkxx01                                      BTST k4, Smem, TC2
+11011100 AAAAAAAI 0000xx10                                      MOV Smem, DP
+11011100 AAAAAAAI 0001xx10                                      MOV Smem, CDP
+11011100 AAAAAAAI 0010xx10                                      MOV Smem, BSA01
+11011100 AAAAAAAI 0011xx10                                      MOV Smem, BSA23
+11011100 AAAAAAAI 0100xx10                                      MOV Smem, BSA45
+11011100 AAAAAAAI 0101xx10                                      MOV Smem, BSA67
+11011100 AAAAAAAI 0110xx10                                      MOV Smem, BSAC
+11011100 AAAAAAAI 0111xx10                                      MOV Smem, SP
+11011100 AAAAAAAI 1000xx10                                      MOV Smem, SSP
+11011100 AAAAAAAI 1001xx10                                      MOV Smem, BK03
+11011100 AAAAAAAI 1010xx10                                      MOV Smem, BK47
+11011100 AAAAAAAI 1011xx10                                      MOV Smem, BKC
+11011100 AAAAAAAI 1100xx10                                      MOV Smem, DPH
+11011100 AAAAAAAI 1111xx10                                      MOV Smem, PDP
+11011100 AAAAAAAI x000xx11                                      MOV Smem, CSR
+11011100 AAAAAAAI x001xx11                                      MOV Smem, BRC0
+11011100 AAAAAAAI x010xx11                                      MOV Smem, BRC1
+11011100 AAAAAAAI x011xx11                                      MOV Smem, TRN0
+11011100 AAAAAAAI x100xx11                                      MOV Smem, TRN1
+11011101 AAAAAAAI SSDDss00                                      ADD Smem << Tx, [ACx,] ACy
+11011101 AAAAAAAI SSDDss01                                      SUB Smem << Tx, [ACx,] ACy
+11011101 AAAAAAAI SSDDss10                                      ADDSUB2CC Smem, ACx, Tx, TC1, TC2, ACy
+11011101 AAAAAAAI x%DDss11                                      MOV [rnd(]Smem << Tx[)], ACx
+11011110 AAAAAAAI SSDD0000                                      ADDSUBCC Smem, ACx, TC1, ACy
+11011110 AAAAAAAI SSDD0001                                      ADDSUBCC Smem, ACx, TC2, ACy
+11011110 AAAAAAAI SSDD0010                                      ADDSUBCC Smem, ACx, TC1, TC2, ACy
+11011110 AAAAAAAI SSDD0011                                      SUBC Smem, [ACx,] ACy
+11011110 AAAAAAAI SSDD0100                                      ADD Smem << #16, [ACx,] ACy
+11011110 AAAAAAAI SSDD0101                                      SUB Smem << #16, [ACx,] ACy
+11011110 AAAAAAAI SSDD0110                                      SUB ACx, Smem << #16, ACy
+11011110 AAAAAAAI ssDD1000                                      ADDSUB Tx, Smem, ACx
+11011110 AAAAAAAI ssDD1001                                      SUBADD Tx, Smem, ACx
+11011111 AAAAAAAI FDDD000u                                      MOV [uns(]high_byte(Smem)[)], dst
+11011111 AAAAAAAI FDDD001u                                      MOV [uns(]low_byte(Smem)[)], dst
+11011111 AAAAAAAI xxDD010u                                      MOV [uns(]Smem[)], ACx
+11011111 AAAAAAAI SSDD100u                                      ADD [uns(]Smem[)], CARRY, [ACx,] ACy
+11011111 AAAAAAAI SSDD101u                                      SUB [uns(]Smem[)], BORROW, [ACx,] ACy
+11011111 AAAAAAAI SSDD110u                                      ADD [uns(]Smem[)], [ACx,] ACy
+11011111 AAAAAAAI SSDD111u                                      SUB [uns(]Smem[)], [ACx,] ACy
+11100000 AAAAAAAI FSSSxxxt                                      BTST src, Smem, TCx
+11100001 AAAAAAAI DDSHIFTW                                      MOV low_byte(Smem) << #SHIFTW, ACx
+11100010 AAAAAAAI DDSHIFTW                                      MOV high_byte(Smem) << #SHIFTW, ACx
+11100011 AAAAAAAI kkkk000x                                      BTSTSET k4, Smem, TC1
+11100011 AAAAAAAI kkkk001x                                      BTSTSET k4, Smem, TC2
+11100011 AAAAAAAI kkkk010x                                      BTSTCLR k4, Smem, TC1
+11100011 AAAAAAAI kkkk011x                                      BTSTCLR k4, Smem, TC2
+11100011 AAAAAAAI kkkk100x                                      BTSTNOT k4, Smem, TC1
+11100011 AAAAAAAI kkkk101x                                      BTSTNOT k4, Smem, TC2
+11100011 AAAAAAAI FSSS1100                                      BSET src, Smem
+11100011 AAAAAAAI FSSS1101                                      BCLR src, Smem
+11100011 AAAAAAAI FSSS111x                                      BNOT src, Smem
+11100100 AAAAAAAI FSSSx0xx                                      PSH src,Smem
+11100100 AAAAAAAI FDDDx1xx                                      POP dst, Smem
+11100101 AAAAAAAI FSSS01x0                                      MOV src, high_byte(Smem)
+11100101 AAAAAAAI FSSS01x1                                      MOV src, low_byte(Smem)
+11100101 AAAAAAAI 000010xx                                      MOV DP, Smem
+11100101 AAAAAAAI 000110xx                                      MOV CDP, Smem
+11100101 AAAAAAAI 001010xx                                      MOV BSA01, Smem
+11100101 AAAAAAAI 001110xx                                      MOV BSA23, Smem
+11100101 AAAAAAAI 010010xx                                      MOV BSA45, Smem
+11100101 AAAAAAAI 010110xx                                      MOV BSA67, Smem
+11100101 AAAAAAAI 011010xx                                      MOV BSAC, Smem
+11100101 AAAAAAAI 011110xx                                      MOV SP, Smem
+11100101 AAAAAAAI 100010xx                                      MOV SSP, Smem
+11100101 AAAAAAAI 100110xx                                      MOV BK03, Smem
+11100101 AAAAAAAI 101010xx                                      MOV BK47, Smem
+11100101 AAAAAAAI 101110xx                                      MOV BKC, Smem
+11100101 AAAAAAAI 110010xx                                      MOV DPH, Smem
+11100101 AAAAAAAI 111110xx                                      MOV PDP, Smem
+11100101 AAAAAAAI x00011xx                                      MOV CSR, Smem
+11100101 AAAAAAAI x00111xx                                      MOV BRC0, Smem
+11100101 AAAAAAAI x01011xx                                      MOV BRC1, Smem
+11100101 AAAAAAAI x01111xx                                      MOV TRN0, Smem
+11100101 AAAAAAAI x10011xx                                      MOV TRN1, Smem
+11100110 AAAAAAAI KKKKKKKK                                      MOV K8, Smem
+11100111 AAAAAAAI SSss00xx                                      MOV ACx << Tx, Smem
+11100111 AAAAAAAI SSss10x%                                      MOV [rnd(]HI(ACx << Tx)[)], Smem
+11100111 AAAAAAAI SSss11u%                                      MOV [uns(] [rnd(]HI[(saturate](ACx << Tx)[)))], Smem
+11101000 AAAAAAAI SSxxx0x%                                      MOV [rnd(]HI(ACx)[)], Smem
+11101000 AAAAAAAI SSxxx1u%                                      MOV [uns(] [rnd(]HI[(saturate](ACx)[)))], Smem
+11101001 AAAAAAAI SSSHIFTW                                      MOV ACx << #SHIFTW, Smem
+11101010 AAAAAAAI SSSHIFTW                                      MOV HI(ACx << #SHIFTW), Smem
+11101011 AAAAAAAI xxxx01xx                                      MOV RETA, dbl(Lmem)
+11101011 AAAAAAAI xxSS10x0                                      MOV ACx, dbl(Lmem)
+11101011 AAAAAAAI xxSS10u1                                      MOV [uns(]saturate(ACx)[)], dbl(Lmem)
+11101011 AAAAAAAI FSSS1100                                      MOV pair(TAx), dbl(Lmem)
+11101011 AAAAAAAI xxSS1101                                      MOV ACx >> #1, dual(Lmem)
+11101100 AAAAAAAI FSSS000x                                      BSET Baddr, src
+11101100 AAAAAAAI FSSS001x                                      BCLR Baddr, src
+11101100 AAAAAAAI FSSS010x                                      BTSTP Baddr, src
+11101100 AAAAAAAI FSSS011x                                      BNOT Baddr, src
+11101100 AAAAAAAI FSSS100t                                      BTST Baddr, src, TCx
+11101100 AAAAAAAI XDDD1110                                      AMAR Smem, XAdst
+11101101 AAAAAAAI 00DD1010                                      MOV dbl(Lmem), pair(HI(ACx))
+11101101 AAAAAAAI 00DD1100                                      MOV dbl(Lmem), pair(LO(ACx))
+11101101 AAAAAAAI 00SS1110                                      MOV pair(HI(ACx)), dbl(Lmem)
+11101101 AAAAAAAI 00SS1111                                      MOV pair(LO(ACx)), dbl(Lmem)
+11101101 AAAAAAAI SSDD000n                                      ADD dbl(Lmem), [ACx,] ACy
+11101101 AAAAAAAI SSDD001n                                      SUB dbl(Lmem), [ACx,] ACy
+11101101 AAAAAAAI SSDD010x                                      SUB ACx, dbl(Lmem), ACy
+11101101 AAAAAAAI xxxx011x                                      MOV dbl(Lmem), RETA
+11101101 AAAAAAAI xxDD100g                                      MOV[40] dbl(Lmem), ACx
+11101101 AAAAAAAI FDDD111x                                      MOV dbl(Lmem), pair(TAx)
+11101101 AAAAAAAI XDDD1111                                      MOV dbl(Lmem), XAdst
+11101101 AAAAAAAI XSSS0101                                      MOV XAsrc, dbl(Lmem)
+11101110 AAAAAAAI SSDD000x                                      ADD dual(Lmem), [ACx,] ACy
+11101110 AAAAAAAI SSDD001x                                      SUB dual(Lmem), [ACx,] ACy
+11101110 AAAAAAAI SSDD010x                                      SUB ACx, dual(Lmem), ACy
+11101110 AAAAAAAI ssDD011x                                      SUB dual(Lmem), Tx, ACx
+11101110 AAAAAAAI ssDD100x                                      ADD dual(Lmem), Tx, ACx
+11101110 AAAAAAAI ssDD101x                                      SUB Tx, dual(Lmem), ACx
+11101110 AAAAAAAI ssDD110x                                      ADDSUB Tx, dual(Lmem), ACx
+11101110 AAAAAAAI ssDD111x                                      SUBADD Tx, dual(Lmem), ACx
+11101111 AAAAAAAI xxxx00mm                                      MOV Cmem, Smem
+11101111 AAAAAAAI xxxx01mm                                      MOV Smem, Cmem
+11101111 AAAAAAAI xxxx10mm                                      MOV Cmem,dbl(Lmem)
+11101111 AAAAAAAI xxxx11mm                                      MOV dbl(Lmem), Cmem
+11110000 AAAAAAAI KKKKKKKK KKKKKKKK                             CMP Smem == K16, TC1
+11110001 AAAAAAAI KKKKKKKK KKKKKKKK                             CMP Smem == K16, TC2
+11110010 AAAAAAAI kkkkkkkk kkkkkkkk                             BAND Smem, k16, TC1
+11110011 AAAAAAAI kkkkkkkk kkkkkkkk                             BAND Smem, k16, TC2
+11110100 AAAAAAAI kkkkkkkk kkkkkkkk                             AND k16, Smem
+11110101 AAAAAAAI kkkkkkkk kkkkkkkk                             OR k16, Smem
+11110110 AAAAAAAI kkkkkkkk kkkkkkkk                             XOR k16, Smem
+11110111 AAAAAAAI KKKKKKKK KKKKKKKK                             ADD K16, Smem
+11111000 AAAAAAAI KKKKKKKK xxDDx0U%                             MPYMK[R] [T3 = ]Smem, K8, ACx
+11111000 AAAAAAAI KKKKKKKK SSDDx1U%                             MACMK[R] [T3 = ]Smem, K8, [ACx,] ACy
+11111001 AAAAAAAI uxSHIFTW SSDD00xx                             ADD [uns(]Smem[)] << #SHIFTW, [ACx,] ACy
+11111001 AAAAAAAI uxSHIFTW SSDD01xx                             SUB [uns(]Smem[)] << #SHIFTW, [ACx,] ACy
+11111001 AAAAAAAI uxSHIFTW xxDD10xx                             MOV [uns(]Smem[)] << #SHIFTW, ACx
+11111010 AAAAAAAI xxSHIFTW SSxxx0x%                             MOV [rnd(]HI(ACx << #SHIFTW)[)], Smem
+11111010 AAAAAAAI uxSHIFTW SSxxx1x%                             MOV [uns(] [rnd(]HI[(saturate](ACx << #SHIFTW)[)))], Smem
+11111011 AAAAAAAI KKKKKKKK KKKKKKKK                             MOV K16, Smem
+11111100 AAAAAAAI LLLLLLLL LLLLLLLL                             BCC L16, ARn_mod ! = #0
+11111101 AAAAAAAI 000000mm DDDDuug%                             MPY[R][40] [uns(]Smem[)], [uns(]HI(Cmem)[)], ACy :: MPY[R][40] [uns(]Smem[)], [uns(]LO(Cmem)[)], ACx
+11111101 AAAAAAAI 000001mm DDDDuug%                             MPY[R][40] [uns(]Smem[)], [uns(]HI(Cmem)[)], ACy :: MAC[R][40] [uns(]Smem[)], [uns(]LO(Cmem)[)], ACx
+11111101 AAAAAAAI 000010mm DDDDuug%                             MAC[R][40] [uns(]Smem[)], [uns(]HI(Cmem)[)], ACy :: MPY[R][40] [uns(]Smem[)], [uns(]LO(Cmem)[)], ACx
+11111101 AAAAAAAI 000011mm DDDDuug%                             MPY[R][40] [uns(]Smem[)], [uns(]HI(Cmem)[)], ACy :: MAS[R][40] [uns(]Smem[)], [uns(]LO(Cmem)[)], ACx
+11111101 AAAAAAAI 000100mm DDDDuug%                             MAS[R][40] [uns(]Smem[)], [uns(]HI(Cmem)[)], ACy :: MPY[R][40] [uns(]Smem[)], [uns(]LO(Cmem)[)], ACx
+11111101 AAAAAAAI 000101mm DDDDuug%                             MAC[R][40] [uns(]Smem[)], [uns(]HI(Cmem)[)], ACy :: MAC[R][40] [uns(]Smem[)], [uns(]LO(Cmem)[)], ACx
+11111101 AAAAAAAI 000110mm DDDDuug%                             MAC[R][40] [uns(]Smem[)], [uns(]HI(Cmem)[)], ACy :: MAS[R][40] [uns(]Smem[)], [uns(]LO(Cmem)[)], ACx
+11111101 AAAAAAAI 000111mm DDDDuug%                             MAS[R][40] [uns(]Smem[)], [uns(]HI(Cmem)[)], ACy :: MAC[R][40] [uns(]Smem[)], [uns(]LO(Cmem)[)], ACx
+11111101 AAAAAAAI 001000mm DDDDuug%                             MAC[R][40] [uns(]Smem[)], [uns(]HI(Cmem)[)], ACy :: MAC[R][40] [uns(]Smem[)], [uns(]LO(Cmem)[)], ACx>>#16
+11111101 AAAAAAAI 001001mm DDDDuug%                             MAC[R][40] [uns(]Smem[)], [uns(]HI(Cmem)[)], ACy>>#16 :: MAS[R][40] [uns(]Smem[)], [uns(]LO(Cmem)[)], ACx
+11111101 AAAAAAAI 001010mm DDDDuug%                             MAC[R][40] [uns(]Smem[)], [uns(]HI(Cmem)[)], ACy>>#16 :: MPY[R][40] [uns(]Smem[)], [uns(]LO(Cmem)[)], ACx
+11111101 AAAAAAAI 001011mm DDDDuug%                             MAC[R][40] [uns(]Smem[)], [uns(]HI(Cmem)[)], ACy>>#16 :: MAC[R][40] [uns(]Smem[)], [uns(]LO(Cmem)[)], ACx>>#16
+11111101 AAAAAAAI 001100mm DDDDuug%                             MAS[R][40] [uns(]Smem[)], [uns(]HI(Cmem)[)], ACy :: MAS[R][40] [uns(]Smem[)], [uns(]LO(Cmem)[)], ACx
+11111101 AAAAAAAI 010000mm DDDDuug%                             MPY[R][40] [uns(]HI(Lmem)[)], [uns(]HI(Cmem)[)], ACy :: MPY[R][40] [uns(]LO(Lmem)[)], [uns(]LO(Cmem)[)], ACx
+11111101 AAAAAAAI 010001mm DDDDuug%                             MPY[R][40] [uns(]HI(Lmem)[)], [uns(]HI(Cmem)[)], ACy :: MAC[R][40] [uns(]LO(Lmem)[)], [uns(]LO(Cmem)[)], ACx
+11111101 AAAAAAAI 010010mm DDDDuug%                             MAC[R][40] [uns(]HI(Lmem)[)], [uns(]HI(Cmem)[)], ACy :: MPY[R][40] [uns(]LO(Lmem)[)], [uns(]LO(Cmem)[)], ACx
+11111101 AAAAAAAI 010011mm DDDDuug%                             MPY[R][40] [uns(]HI(Lmem)[)], [uns(]HI(Cmem)[)], ACy :: MAS[R][40] [uns(]LO(Lmem)[)], [uns(]LO(Cmem)[)], ACx
+11111101 AAAAAAAI 010100mm DDDDuug%                             MAS[R][40] [uns(]HI(Lmem)[)], [uns(]HI(Cmem)[)], ACy :: MPY[R][40] [uns(]LO(Lmem)[)], [uns(]LO(Cmem)[)], ACx
+11111101 AAAAAAAI 010101mm DDDDuug%                             MAC[R][40] [uns(]HI(Lmem)[)], [uns(]HI(Cmem)[)], ACy :: MAC[R][40] [uns(]LO(Lmem)[)], [uns(]LO(Cmem)[)], ACx
+11111101 AAAAAAAI 010110mm DDDDuug%                             MAC[R][40] [uns(]HI(Lmem)[)], [uns(]HI(Cmem)[)], ACy :: MAS[R][40] [uns(]LO(Lmem)[)], [uns(]LO(Cmem)[)], ACx
+11111101 AAAAAAAI 010111mm DDDDuug%                             MAS[R][40] [uns(]HI(Lmem)[)], [uns(]HI(Cmem)[)], ACy :: MAC[R][40] [uns(]LO(Lmem)[)], [uns(]LO(Cmem)[)], ACx
+11111101 AAAAAAAI 011000mm DDDDuug%                             MAC[R][40] [uns(]HI(Lmem)[)], [uns(]HI(Cmem)[)], ACy :: MAC[R][40] [uns(]LO(Lmem)[)], [uns(]LO(Cmem)[)], ACx>>#16
+11111101 AAAAAAAI 011001mm DDDDuug%                             MAC[R][40] [uns(]HI(Lmem)[)], [uns(]HI(Cmem)[)], ACy>>#16 :: MAS[R][40] [uns(]LO(Lmem)[)], [uns(]LO(Cmem)[)], ACx
+11111101 AAAAAAAI 011010mm DDDDuug%                             MAC[R][40] [uns(]HI(Lmem)[)], [uns(]HI(Cmem)[)], ACy>>#16 :: MPY[R][40] [uns(]LO(Lmem)[)], [uns(]LO(Cmem)[)], ACx
+11111101 AAAAAAAI 011011mm DDDDuug%                             MAC[R][40] [uns(]HI(Lmem)[)], [uns(]HI(Cmem)[)], ACy>>#16 :: MAC[R][40] [uns(]LO(Lmem)[)], [uns(]LO(Cmem)[)], ACx>>#16
+11111101 AAAAAAAI 011100mm DDDDuug%                             MAS[R][40] [uns(]HI(Lmem)[)], [uns(]HI(Cmem)[)], ACy :: MAS[R][40] [uns(]LO(Lmem)[)], [uns(]LO(Cmem)[)], ACx
