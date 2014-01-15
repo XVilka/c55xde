@@ -44,30 +44,31 @@
 
 #define C55X_OPCODE_P8			31	/* Program or data address in 8 bits	*/
 #define C55X_OPCODE_P16			32	/*                         .. 16 bits	*/
-#define C55X_OPCODE_P32			33	/*                         .. 32 bits	*/
+#define C55X_OPCODE_P24			33	/*                         .. 16 bits	*/
+#define C55X_OPCODE_P32			34	/*                         .. 32 bits	*/
 
-#define C55X_OPCODE_r			34	/* TRNx					*/
+#define C55X_OPCODE_r			35	/* TRNx					*/
 
-#define C55X_OPCODE_SHFT		35	/* 4-bit immediate shift value		*/
-#define C55X_OPCODE_SHIFTW		36	/* 6-bit immediate shift value		*/
+#define C55X_OPCODE_SHFT		36	/* 4-bit immediate shift value		*/
+#define C55X_OPCODE_SHIFTW		37	/* 6-bit immediate shift value		*/
 
-#define C55X_OPCODE_ss			37	/* Source temporary register		*/
-#define C55X_OPCODE_SS			38	/* Source accumulator register		*/
+#define C55X_OPCODE_ss			38	/* Source temporary register		*/
+#define C55X_OPCODE_SS			39	/* Source accumulator register		*/
 
-#define C55X_OPCODE_tt			39	/* ?..					*/
+#define C55X_OPCODE_tt			40	/* ?..					*/
 
-#define C55X_OPCODE_u			40	/* U or uns keyword			*/
+#define C55X_OPCODE_u			41	/* U or uns keyword			*/
 
-#define C55X_OPCODE_U			41	/* T3 update selector			*/
+#define C55X_OPCODE_U			42	/* T3 update selector			*/
 
-#define C55X_OPCODE_vv			42	/* ?..					*/
+#define C55X_OPCODE_vv			43	/* ?..					*/
 
-#define C55X_OPCODE_x			43	/* Reserved bit				*/
+#define C55X_OPCODE_x			44	/* Reserved bit				*/
 
-#define C55X_OPCODE_XDDD		44	/* Destination or ..			*/
-#define C55X_OPCODE_XSSS		45	/*          .. or Source		*/
+#define C55X_OPCODE_XDDD		45	/* Destination or ..			*/
+#define C55X_OPCODE_XSSS		46	/*          .. or Source		*/
 
-#define C55X_OPCODE_XXX			46	/* Auxillary register designation Xmem	*/
-#define C55X_OPCODE_YYY			47	/* Auxillary register designation Ymem	*/
+#define C55X_OPCODE_XXX			47	/* Auxillary register designation Xmem	*/
+#define C55X_OPCODE_YYY			48	/* Auxillary register designation Ymem	*/
 
 #endif /* __C55XDE_H__ */
