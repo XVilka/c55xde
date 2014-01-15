@@ -44,7 +44,7 @@
 
 #define C55X_OPCODE_P8			31	/* Program or data address in 8 bits	*/
 #define C55X_OPCODE_P16			32	/*                         .. 16 bits	*/
-#define C55X_OPCODE_P32			33	/*                         .. 32 bits	*/
+#define C55X_OPCODE_P24			33	/*                         .. 24 bits	*/
 
 #define C55X_OPCODE_r			34	/* TRNx					*/
 
