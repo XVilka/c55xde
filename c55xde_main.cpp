@@ -3,107 +3,96 @@
 
 #include "c55xde.h"
 
-#if 0
-uint32_t get_insn_len(uint8_t opcode)
-{
-	return get_insn_len_fast(opcode);
-}
-
-uint32_t get_insn_len_fast(uint8_t opcode)
-{
-	//
-	// 1-bytes
-	//
-
-	switch (opcode) {
-	case 0x20:	// 0010 0000	NOP
-	case 0x21:	// 0010 0001	NOP +E
-	case 0x98:	// 1001 1000	mmap
-	case 0x99:	// 1001 1001	port(Smem)
-	case 0x9A:	// 1001 1010	port(Smem)
-	case 0x9C:	// 1001 1100	<instruction>.LR
-	case 0x9D:	// 1001 1101	<instruction>.CR
-		return 1;
-	}
-
-	//
-	// 2-bytes
-	//
-
-	switch (opcode) {
-	case 0x90:	// 1001 0000	MOV xsrc, xdst
-	case 0x91:	// 1001 0001	B ACx
-	case 0x92:	// 1001 0010	CALL ACx
-	case 0x94:	// 1001 0100	RESET
-	case 0x95:	// 1001 0101	INTR k5 / TRAP k5
-	case 0x96:	// 1001 0110	XCC / XCCPART
-		return 2;
-	}
-
-	// 0010 001E ... 0110 0lll
-	if (opcode >= 0x22 && opcode <= 0x67)
-		return 2;
-
-	// 1001 1110 ... 1100 llll
-	if (opcode >= 0x9E && opcode <= 0xCF)
-		return 2;
-
-	//
-	// 3-bytes
-	//
-
-	// TODO: 3, 4, 5
-}
-#endif
-
 #define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
 
+////////////////////////////////////////////////////////////////////////////////
 
 #include <map>
-#include <iostream>
 
 typedef struct {
-	int		length;
+	uint8_t		type;
+	uint8_t		addr;
+} insn_flag_t;
+
+typedef struct {
+	uint8_t		f, t, v;
+} insn_mask_t;
+
+typedef struct {
+	insn_mask_t	* masks;
+	insn_flag_t	* flags;
+
 	const char	* string;
-	uint8_t		* bytecode;
-} c55x_insn_t;
+} insn_item_t;
 
 typedef struct {
-	uint8_t		s_e;
-	uint8_t		s_r;
-} c55x_state_t;
+	uint8_t		key;
+	uint8_t		length;
 
-std::map<uint8_t, c55x_insn_t *> c55x_map;
+	insn_flag_t	* flags;
+	insn_item_t	* items;
+} insn_head_t;
 
-int c55x_decode_one(c55x_insn_t * insn, c55x_state_t * state)
-{
-	uint8_t * c = insn->bytecode;
+////////////////////////////////////////////////////////////////////////////////
 
-	for (uint8_t * c = insn->bytecode; c[0]; c += 2) {
+std::map< uint8_t,
+	  insn_head_t * > insn_head_map;
 
-		printf("bytecode %02x %02x\n", c[0], c[1]);
+insn_head_t heads[] = {
+	{
+		.key = 0x20,
+		.length = 0x01,
 
-		switch (c[0]) {
-		case C55X_OPCODE_E:
-			printf("TODO: C55X_OPCODE_E\n");
-			break;
-		case C55X_OPCODE_R:
-			printf("TODO: C55X_OPCODE_R\n");
-			break;
-		case C55X_OPCODE_AAAAAAAI:
-			printf("TODO: C55X_OPCODE_AAAAAAAI\n");
-			break;
-		default:
-			printf("unsupported bytecode: %02x\n", c[0]);
-			break;
+		.flags = (insn_flag_t []){
+			{ C55X_OPCODE_E, 7 },
+			{ 0 },
+		},
+
+		.items = (insn_item_t []){
+			{
+				.masks = 0,
+				.flags = 0,
+				.string = "NOP",
+			},
+			{ 0 },
+		},
+	},
+	{
+		.key = 0x56,
+		.length = 0x02,
+
+		.flags = (insn_flag_t []){
+			{ C55X_OPCODE_E, 7 },
+			{ C55X_OPCODE_DD, 8 },
+			{ C55X_OPCODE_SS, 10 },
+			{ C55X_OPCODE_ss, 12 },
+			{ C55X_OPCODE_R, 15 },
+			{ 0 },
+		},
+
+		.items = (insn_item_t []){
+			{
+				/* 0101011E DDSSss0% */
+				.masks = (insn_mask_t []) {
+					{ 14, 14, 0 },
+				},
+				.flags = 0,
+				.string = "MAC[R] ACx, Tx, ACy[, ACy]",
+			},
+			{
+				/* 0101100E DDSSss1% */
+				.masks = (insn_mask_t []) {
+					{ 14, 14, 1 },
+				},
+				.flags = 0,
+				.string = "MAC[R] ACy, Tx, ACx, ACy",
+			},
+			{ 0 }
 		}
-	}
+	},
+};
 
-	return 0;
-}
-
-
-c55x_insn_t * lookup(uint8_t opcode)
+insn_head_t * lookup_head(uint8_t opcode)
 {
 	static uint8_t exceptions[] = {
 		0xF8, 0x60,	/* 0110 0lll */
@@ -115,73 +104,88 @@ c55x_insn_t * lookup(uint8_t opcode)
 
 	for (int i = 0; i < ARRAY_SIZE(exceptions); i += 2) {
 		if ((opcode & exceptions[i]) == exceptions[i + 1])
-			return c55x_map[exceptions[i + 1]];
+			return insn_head_map[exceptions[i + 1]];
 	}
 
-	return c55x_map[opcode] ? : c55x_map[opcode & 0xFE];
+	return insn_head_map[opcode] ? : insn_head_map[opcode & 0xFE];
 }
 
-int decode(const uint8_t * p)
+insn_item_t * lookup_item(insn_head_t * head, uint8_t * stream)
 {
-	c55x_insn_t * insn;
-	c55x_state_t state;
+	insn_item_t * item;
 
-	insn = lookup(p[0]);
-	if (!insn) {
-		printf("unsupported opcode: %02x\n", p[0]);
+	for (item = head->items; item && item->string; item++) {
+		insn_mask_t * mask;
+
+		if (!item->masks)
+			break;
+
+		for (mask = item->masks; mask; mask++) {
+			printf("TODO: handle mask\n");
+		}
+	}
+
+	return item;
+}
+
+void decode_insn_flags(insn_flag_t * flags, uint8_t * stream)
+{
+	insn_flag_t * flag;
+
+	for (flag = flags; flag && flag->type != 0; flag++) {
+		switch (flag->type) {
+		case C55X_OPCODE_E:
+			printf("TODO: C55X_OPCODE_E\n");
+			break;
+		default:
+			printf("unsupported flag type: %02x\n", flag->type);
+			break;
+		}
+	}
+}
+
+void decode_item_flags(insn_item_t * item, uint8_t * stream)
+{
+	decode_insn_flags(item->flags, stream);
+}
+
+void decode_head_flags(insn_head_t * head, uint8_t * stream)
+{
+	decode_insn_flags(head->flags, stream);
+}
+
+int decode_head(insn_head_t * head, uint8_t * stream)
+{
+	insn_item_t * item;
+
+	item = lookup_item(head, stream);
+	if (item) {
+		decode_head_flags(head, stream);
+		decode_item_flags(item, stream);
+
+		printf("item %s\n", item->string);
+	}
+
+	return item ? head->length : -1;
+}
+
+int decode(uint8_t * stream)
+{
+	insn_head_t * head;
+
+	head = lookup_head(stream[0]);
+	if (!head) {
+		printf("unsupported insn: %02x\n", stream[0]);
 		return -1;
 	}
 
-	printf("insn = %s\n", insn->string);
-
-	c55x_decode_one(insn, &state);
-
-	return insn->length;
+	return decode_head(head, stream);
 }
-
-typedef struct {
-	uint8_t		key;
-	uint8_t		* flags;
-
-	const char	* string;
-} c55x_table_t;
-
-
-c55x_table_t c55x_table[] = {
-	{
-		.key = 0x20,
-		.flags = (uint8_t []){ C55X_OPCODE_E, 7,
-				       0x00 },
-		.string = "NOP",
-	},
-	{
-		.key = 0x56,
-		.flags = (uint8_t []){ C55X_OPCODE_E, 7,
-				       C55X_OPCODE_DD, 8,
-				       C55X_OPCODE_SS, 10,
-				       C55X_OPCODE_ss, 12,
-				       C55X_OPCODE_R, 15,
-				       0x00 },
-		.string = "MAC[R] ACx, Tx, ACy[, ACy]",
-	},
-};
-
 
 void initialize(void)
 {
-	for (int i = 0; i < ARRAY_SIZE(c55x_table); i++) {
-#if 1
-		c55x_insn_t * insn = new c55x_insn_t;
-
-		insn->length = 1;
-		insn->string = c55x_table[i].string;
-		insn->bytecode = c55x_table[i].flags;
-
-		c55x_map[c55x_table[i].key] = insn;
-#else
-		c55x_map[c55x_table[i].key] = c55x_table[i];
-#endif
-	}
+	for (int i = 0; i < ARRAY_SIZE(heads); i++)
+		insn_head_map[ heads[i].key ] = &heads[i];
 }
 
 int main(int argc, const char * argv[])
