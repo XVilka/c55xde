@@ -187,7 +187,7 @@ int run_m_list(insn_data_t * data, insn_item_t * insn)
 
 	for (mask = insn->m_list; !m_list_last(mask); mask++) {
 		/* match bits in range [f, f + n] with mask's value */
-		if (get_bits(data->opcode64, mask->f, mask->n) == mask->v)
+		if (get_bits(data->opcode64, mask->f, mask->n) != mask->v)
 			return -1;
 	}
 
