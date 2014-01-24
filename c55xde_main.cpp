@@ -1,100 +1,225 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <string.h>
 
 #include "c55xde.h"
 
 #define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
 
-////////////////////////////////////////////////////////////////////////////////
+struct instruction;
+typedef struct instruction insn_item_t;
 
-#include <map>
+struct instruction_mask;
+typedef struct instruction_mask insn_mask_t;
 
-typedef struct {
-	uint8_t		type;
-	uint8_t		addr;
-} insn_flag_t;
+struct instruction_flag;
+typedef struct instruction_flag insn_flag_t;
 
-typedef struct {
-	uint8_t		f, t, v;
-} insn_mask_t;
+struct instruction_head;
+typedef struct instruction_head insn_head_t;
 
-typedef struct {
-	insn_mask_t	* masks;
-	insn_flag_t	* flags;
+struct instruction_data;
+typedef struct instruction_data insn_data_t;
 
-	const char	* string;
-} insn_item_t;
+struct instruction {
+	insn_item_t	* i_list;
 
-typedef struct {
-	uint8_t		key;
-	uint8_t		length;
+	insn_mask_t	* m_list;
+	insn_flag_t	* f_list;
 
-	insn_flag_t	* flags;
-	insn_item_t	* items;
-} insn_head_t;
+	const char	* syntax;
+};
 
-////////////////////////////////////////////////////////////////////////////////
+struct instruction_mask {
+	uint8_t		f, n, v;	/* from, number, value */
+};
 
-std::map< uint8_t,
-	  insn_head_t * > insn_head_map;
+struct instruction_flag {
+	uint8_t		f, v;		/* from, value */
+};
 
-insn_head_t heads[] = {
+struct instruction_head {
+	uint8_t		byte;
+	uint8_t		size;
+	insn_item_t	insn;
+};
+
+struct instruction_data {
+	insn_head_t	* head;
+	insn_item_t	* insn;
+
+	union {
+		uint8_t		opcode;
+		uint8_t		stream[8];
+		uint64_t	opcode64;
+	};
+
+	// TODO: add specific fields
+
+	uint8_t		f_E;
+	uint8_t		f_R;
+	uint8_t		f_SS;
+	uint8_t		f_DD;
+	uint8_t		f_ss;
+};
+
+#define LIST_END			{ 0 }
+
+#define INSN_FLAG(a,b)			{ .f = a, .v = C55X_OPCODE_##b }
+#define INSN_MASK(a,b,c)		{ .f = a, .n = b, .v = c }
+
+#define INSN_SYNTAX(arg...)		(const char *)#arg
+
+#define f_list_last(x)			!(((x)->f || (x)->v))
+#define m_list_last(x)			!(((x)->f || (x)->n || (x)->v))
+#define i_list_last(x)			!(((x)->i_list || (x)->m_list || (x)->f_list || (x)->syntax))
+
+// список описателей команд
+
+insn_head_t insn_head_list[] = {
 	{
-		.key = 0x20,
-		.length = 0x01,
-
-		.flags = (insn_flag_t []){
-			{ C55X_OPCODE_E, 7 },
-			{ 0 },
-		},
-
-		.items = (insn_item_t []){
-			{
-				.masks = 0,
-				.flags = 0,
-				.string = "NOP",
+		.byte = 0x20,
+		.size = 0x01,
+		.insn = {
+			.i_list = NULL,
+			.m_list = NULL,
+			.f_list = (insn_flag_t []) {
+				INSN_FLAG(0, E),
+				LIST_END,
 			},
-			{ 0 },
+			.syntax = INSN_SYNTAX(NOP),
 		},
 	},
 	{
-		.key = 0x56,
-		.length = 0x02,
-
-		.flags = (insn_flag_t []){
-			{ C55X_OPCODE_E, 7 },
-			{ C55X_OPCODE_DD, 8 },
-			{ C55X_OPCODE_SS, 10 },
-			{ C55X_OPCODE_ss, 12 },
-			{ C55X_OPCODE_R, 15 },
-			{ 0 },
+		.byte = 0x56,
+		.size = 0x02,
+		.insn = {
+			.i_list = (insn_item_t []) {
+				{
+					.i_list = NULL,
+					.m_list = (insn_mask_t []) {
+						INSN_MASK(14, 1, 0),
+						LIST_END,
+					},
+					.f_list = NULL,
+					.syntax = INSN_SYNTAX(MAC[R] ACx, Tx, ACy[, ACy]),
+				},
+				{
+					.i_list = NULL,
+					.m_list = (insn_mask_t []) {
+						INSN_MASK(14, 1, 1),
+						LIST_END,
+					},
+					.f_list = NULL,
+					.syntax = INSN_SYNTAX(MAC[R] ACy, Tx, ACx, ACy),
+				},
+				LIST_END,
+			},
+			.m_list = NULL,
+			.f_list = (insn_flag_t []) {
+				INSN_FLAG(0, E),
+				INSN_FLAG(14, DD),
+				INSN_FLAG(12, SS),
+				INSN_FLAG(10, ss),
+				INSN_FLAG(8, R),
+				LIST_END,
+			},
+			.syntax = NULL,
 		},
-
-		.items = (insn_item_t []){
-			{
-				/* 0101011E DDSSss0% */
-				.masks = (insn_mask_t []) {
-					{ 14, 14, 0 },
-				},
-				.flags = 0,
-				.string = "MAC[R] ACx, Tx, ACy[, ACy]",
-			},
-			{
-				/* 0101100E DDSSss1% */
-				.masks = (insn_mask_t []) {
-					{ 14, 14, 1 },
-				},
-				.flags = 0,
-				.string = "MAC[R] ACy, Tx, ACx, ACy",
-			},
-			{ 0 }
-		}
 	},
 };
 
-insn_head_t * lookup_head(uint8_t opcode)
+#include <map>
+
+// хеш-таблица для трансляции опкодов
+
+std::map< uint8_t,
+	  insn_head_t * > insn_head_hash;
+
+#define get_bits(v, f, n)	(((v) >> (f)) & ((2 << (n - 1)) - 1))
+
+////////////////////////////////////////////////////////////////////////////////
+
+int run_f_list(insn_data_t * data, insn_item_t * insn)
 {
-	static uint8_t exceptions[] = {
+	insn_flag_t * flag;
+
+	if (!insn->f_list)
+		return 0;
+
+	for (flag = insn->f_list; !f_list_last(flag); flag++) {
+		switch (flag->v) {
+		case C55X_OPCODE_E:
+			data->f_E = get_bits(data->opcode64, flag->f, 1);
+			printf("  E = %d\n", data->f_E);
+			break;
+		case C55X_OPCODE_R:
+			data->f_R = get_bits(data->opcode64, flag->f, 1);
+			printf("  R = %d\n", data->f_R);
+			break;
+		case C55X_OPCODE_SS:
+			data->f_SS = get_bits(data->opcode64, flag->f, 2);
+			printf("  SS = %d\n", data->f_SS);
+			break;
+		case C55X_OPCODE_DD:
+			data->f_DD = get_bits(data->opcode64, flag->f, 2);
+			printf("  DD = %d\n", data->f_DD);
+			break;
+		case C55X_OPCODE_ss:
+			data->f_ss = get_bits(data->opcode64, flag->f, 2);
+			printf("  ss = %d\n", data->f_ss);
+			break;
+		default:
+			printf("TODO: unknown opcode flag %02x\n", flag->v);
+			break;
+		}
+	}
+
+	return 0;
+}
+
+int run_m_list(insn_data_t * data, insn_item_t * insn)
+{
+	insn_mask_t * mask;
+
+	if (!insn->m_list)
+		return 0;
+
+	for (mask = insn->m_list; !m_list_last(mask); mask++) {
+		/* match bits in range [f, f + n] with mask's value */
+		if (get_bits(data->opcode64, mask->f, mask->n) == mask->v)
+			return -1;
+	}
+
+	return 0;
+}
+
+int decode_insn(insn_data_t * data)
+{
+	insn_item_t * insn = &data->head->insn;
+
+	run_f_list(data, insn);
+
+	if (insn->i_list) {
+		for (insn = insn->i_list; !i_list_last(insn); insn++) {
+			if (!run_m_list(data, insn)) {
+				run_f_list(data, insn);
+				break;
+			}
+
+		}
+	}
+
+	printf("insn: %s\n", insn ? insn->syntax : "undef");
+
+	return data->head->size;
+}
+
+int lookup_insn(insn_data_t * data)
+{
+	uint8_t opcode = data->opcode;
+
+	static uint8_t e_list[] = {
 		0xF8, 0x60,	/* 0110 0lll */
 		0xF0, 0xA0,	/* 1010 FDDD */
 		0xFC, 0xB0,	/* 1011 00DD */
@@ -102,96 +227,52 @@ insn_head_t * lookup_head(uint8_t opcode)
 		0xFC, 0xBC,	/* 1011 11SS */
 	};
 
-	for (int i = 0; i < ARRAY_SIZE(exceptions); i += 2) {
-		if ((opcode & exceptions[i]) == exceptions[i + 1])
-			return insn_head_map[exceptions[i + 1]];
-	}
+	/* handle some exceptions */
 
-	return insn_head_map[opcode] ? : insn_head_map[opcode & 0xFE];
-}
-
-insn_item_t * lookup_item(insn_head_t * head, uint8_t * stream)
-{
-	insn_item_t * item;
-
-	for (item = head->items; item && item->string; item++) {
-		insn_mask_t * mask;
-
-		if (!item->masks)
-			break;
-
-		for (mask = item->masks; mask; mask++) {
-			printf("TODO: handle mask\n");
-		}
-	}
-
-	return item;
-}
-
-void decode_insn_flags(insn_flag_t * flags, uint8_t * stream)
-{
-	insn_flag_t * flag;
-
-	for (flag = flags; flag && flag->type != 0; flag++) {
-		switch (flag->type) {
-		case C55X_OPCODE_E:
-			printf("TODO: C55X_OPCODE_E\n");
-			break;
-		default:
-			printf("unsupported flag type: %02x\n", flag->type);
+	for (int i = 0; i < ARRAY_SIZE(e_list); i += 2) {
+		if ((opcode & e_list[i]) == e_list[i + 1]) {
+			data->head = insn_head_hash[e_list[i + 1]];
 			break;
 		}
 	}
+
+	data->head = data->head ? : \
+		(insn_head_hash[opcode] ? : insn_head_hash[opcode & 0xFE]);
+
+	return data->head ? 0 : -1;
 }
 
-void decode_item_flags(insn_item_t * item, uint8_t * stream)
+void insn_data_init(insn_data_t * data, const uint8_t * stream)
 {
-	decode_insn_flags(item->flags, stream);
+	memset(data, 0, sizeof(*data));
+	memcpy(data->stream, stream, sizeof(data->stream));
 }
 
-void decode_head_flags(insn_head_t * head, uint8_t * stream)
+int decode(const uint8_t * stream)
 {
-	decode_insn_flags(head->flags, stream);
-}
+	insn_data_t data;
 
-int decode_head(insn_head_t * head, uint8_t * stream)
-{
-	insn_item_t * item;
+	insn_data_init(&data, stream);
 
-	item = lookup_item(head, stream);
-	if (item) {
-		decode_head_flags(head, stream);
-		decode_item_flags(item, stream);
-
-		printf("item %s\n", item->string);
-	}
-
-	return item ? head->length : -1;
-}
-
-int decode(uint8_t * stream)
-{
-	insn_head_t * head;
-
-	head = lookup_head(stream[0]);
-	if (!head) {
+	if (lookup_insn(&data)) {
 		printf("unsupported insn: %02x\n", stream[0]);
 		return -1;
 	}
 
-	return decode_head(head, stream);
+	return decode_insn(&data);
 }
 
 void initialize(void)
 {
-	for (int i = 0; i < ARRAY_SIZE(heads); i++)
-		insn_head_map[ heads[i].key ] = &heads[i];
+	for (int i = 0; i < ARRAY_SIZE(insn_head_list); i++) {
+		insn_head_hash[ insn_head_list[i].byte ] = &insn_head_list[i];
+	}
 }
 
 int main(int argc, const char * argv[])
 {
 	int length;
-	uint8_t data[] = { 0x20, 0x21, 0xFF }, * p = data;
+	uint8_t data[] = { 0x20, 0x21, 0x56, 0xff, 0xFF }, * p = data;
 
 	initialize();
 
