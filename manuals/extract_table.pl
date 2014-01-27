@@ -182,7 +182,7 @@ sub insn_parse_opcode
 			substr($opcode_copy, $index, $length, 'x' x $length);
 
 			push @{$insn->{f_list}}, {
-				f => length($opcode_copy) - $index - 1, v => flag2name($flag),
+				f => length($opcode_copy) - length($flag) - $index, v => flag2name($flag),
 			};
 		}
 	}
