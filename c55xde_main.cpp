@@ -77,6 +77,7 @@ struct instruction_data {
 // список описателей команд
 
 insn_head_t insn_head_list[] = {
+#if 0
 	{
 		.byte = 0x20,
 		.size = 0x01,
@@ -127,6 +128,9 @@ insn_head_t insn_head_list[] = {
 			.syntax = NULL,
 		},
 	},
+#else
+#  include "c55xde.table.h"
+#endif
 };
 
 #include <map>
@@ -272,7 +276,13 @@ void initialize(void)
 int main(int argc, const char * argv[])
 {
 	int length;
-	uint8_t data[] = { 0x20, 0x21, 0x56, 0xff, 0xFF }, * p = data;
+	uint8_t data[] = { 0x20,			// NOP
+			   0x21,			// NOP E
+			   0x56, 0xFF,			// MAC[R] ...
+			   0xFA, 0x00, 0x00, 0x04,	// MOV [rnd ...
+			   0xFD, 0x00, 0x00, 0x00,	// MPY[R] ... :: MPY[R] ...
+			   0xFD, 0x00, 0x04, 0x00,	// MPY[R] ... :: MAC[R] ...
+			   0xFF }, * p = data;
 
 	initialize();
 
