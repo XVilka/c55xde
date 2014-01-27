@@ -9,7 +9,7 @@ typedef enum {
 
     /* 1bl */
 
-    C55X_OPCODE_E,
+    C55X_OPCODE_E = 1,
     C55X_OPCODE_R,
     C55X_OPCODE_U,
     C55X_OPCODE_Y,
