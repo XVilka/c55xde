@@ -9,21 +9,20 @@ typedef enum {
 
     /* 1bl */
 
-    C55X_OPCODE_E = 1,
+    C55X_OPCODE_E = 0x10,
     C55X_OPCODE_R,
     C55X_OPCODE_U,
     C55X_OPCODE_Y,
-
     C55X_OPCODE_u,
     C55X_OPCODE_g,
     C55X_OPCODE_r,
+    C55X_OPCODE_t,
     C55X_OPCODE_n,
     C55X_OPCODE_x,
-    C55X_OPCODE_t,
 
     /* 2bl */
 
-    C55X_OPCODE_mm,
+    C55X_OPCODE_mm = 0x20,
     C55X_OPCODE_cc,
     C55X_OPCODE_ss,
     C55X_OPCODE_dd,
@@ -35,14 +34,14 @@ typedef enum {
 
     /* 3bl */
 
-    C55X_OPCODE_k3,
+    C55X_OPCODE_k3 = 0x30,
     C55X_OPCODE_MMM,
     C55X_OPCODE_XXX,
     C55X_OPCODE_YYY,
 
     /* 4bl */
 
-    C55X_OPCODE_k4,
+    C55X_OPCODE_k4 = 0x40,
     C55X_OPCODE_l4,
     C55X_OPCODE_FDDD,
     C55X_OPCODE_FSSS,
@@ -54,23 +53,23 @@ typedef enum {
 
     /* 5bl */
 
-    C55X_OPCODE_k5,
+    C55X_OPCODE_k5 = 0x50,
 
     /* 6bl */
 
-    C55X_OPCODE_k6,
+    C55X_OPCODE_k6 = 0x60,
     C55X_OPCODE_SHIFTW,
 
     /* 7bl */
 
-    C55X_OPCODE_k7,
+    C55X_OPCODE_k7 = 0x70,
     C55X_OPCODE_l7,
     C55X_OPCODE_C7,
     C55X_OPCODE_L7,
 
     /* 8bl */
 
-    C55X_OPCODE_k8,
+    C55X_OPCODE_k8 = 0x80,
     C55X_OPCODE_K8,
     C55X_OPCODE_L8,
     C55X_OPCODE_P8,
@@ -78,15 +77,15 @@ typedef enum {
 
     /* 9bl */
 
-    C55X_OPCODE_k9,
+    C55X_OPCODE_k9 = 0x90,
 
     /* 12bl */
 
-    C55X_OPCODE_k12,
+    C55X_OPCODE_k12 = 0xA0,
 
     /* 16bl */
 
-    C55X_OPCODE_k16,
+    C55X_OPCODE_k16 = 0xB0,
     C55X_OPCODE_l16,
     C55X_OPCODE_K16,
     C55X_OPCODE_L16,
@@ -95,7 +94,7 @@ typedef enum {
 
     /* 24bl */
 
-    C55X_OPCODE_P24,
+    C55X_OPCODE_P24 = 0xC0,
 
     __C55_OPCODE_LAST
 } insn_flag_e;
