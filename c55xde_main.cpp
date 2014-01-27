@@ -58,9 +58,17 @@ struct instruction_data {
 
 	uint8_t		f_E;
 	uint8_t		f_R;
+	uint8_t		f_U;
+	uint8_t		f_u;
+	uint8_t		f_g;
+
 	uint8_t		f_SS;
 	uint8_t		f_DD;
 	uint8_t		f_ss;
+	uint8_t		f_mm;
+
+	uint8_t		f_SHIFTW;
+	uint8_t		f_AAAAAAAI;
 };
 
 #define LIST_END			{ 0 }
@@ -153,26 +161,62 @@ int run_f_list(insn_data_t * data, insn_item_t * insn)
 
 	for (flag = insn->f_list; !f_list_last(flag); flag++) {
 		switch (flag->v) {
+
+		/* 1bl parsing */
 		case C55X_OPCODE_E:
 			data->f_E = get_bits(data->opcode64, flag->f, 1);
-			printf("  E = %d\n", data->f_E);
+			printf("  E = %01x\n", data->f_E);
 			break;
 		case C55X_OPCODE_R:
 			data->f_R = get_bits(data->opcode64, flag->f, 1);
-			printf("  R = %d\n", data->f_R);
+			printf("  R = %01x\n", data->f_R);
 			break;
+		case C55X_OPCODE_U:
+			data->f_U = get_bits(data->opcode64, flag->f, 1);
+			printf("  U = %01x\n", data->f_U);
+			break;
+		case C55X_OPCODE_Y:
+			printf("  Y = %01x (FIXME)\n", (int)get_bits(data->opcode64, flag->f, 1));
+			break;
+		case C55X_OPCODE_u:
+			data->f_u = get_bits(data->opcode64, flag->f, 1);
+			printf("  u = %01x\n", data->f_R);
+			break;
+		case C55X_OPCODE_g:
+			data->f_g = get_bits(data->opcode64, flag->f, 1);
+			printf("  g = %01x\n", data->f_R);
+			break;
+
+		/* 2bl parsing */
 		case C55X_OPCODE_SS:
 			data->f_SS = get_bits(data->opcode64, flag->f, 2);
-			printf("  SS = %d\n", data->f_SS);
+			printf("  SS = %02x\n", data->f_SS);
 			break;
 		case C55X_OPCODE_DD:
 			data->f_DD = get_bits(data->opcode64, flag->f, 2);
-			printf("  DD = %d\n", data->f_DD);
+			printf("  DD = %02x\n", data->f_DD);
 			break;
 		case C55X_OPCODE_ss:
 			data->f_ss = get_bits(data->opcode64, flag->f, 2);
-			printf("  ss = %d\n", data->f_ss);
+			printf("  ss = %02x\n", data->f_ss);
 			break;
+		case C55X_OPCODE_mm:
+			data->f_mm = get_bits(data->opcode64, flag->f, 2);
+			printf("  mm = %02x\n", data->f_mm);
+			break;
+
+		/* 6bl parsing */
+		case C55X_OPCODE_SHIFTW:
+			data->f_SHIFTW = get_bits(data->opcode64, flag->f, 6);
+			printf("  SHIFTW = %02x\n", data->f_SHIFTW);
+			break;
+
+		/* 8bl parsing */
+		case C55X_OPCODE_AAAAAAAI:
+			data->f_AAAAAAAI = get_bits(data->opcode64, flag->f, 8);
+			printf("  AAAAAAAI = %02x\n", data->f_AAAAAAAI);
+			break;
+
 		default:
 			printf("TODO: unknown opcode flag %02x\n", flag->v);
 			break;
@@ -281,7 +325,7 @@ int main(int argc, const char * argv[])
 			   0x56, 0xFF,			// MAC[R] ...
 			   0xFA, 0x00, 0x00, 0x04,	// MOV [rnd ...
 			   0xFD, 0x00, 0x00, 0x00,	// MPY[R] ... :: MPY[R] ...
-			   0xFD, 0x00, 0x04, 0x00,	// MPY[R] ... :: MAC[R] ...
+			   0xFD, 0xff, 0x04, 0x00,	// MPY[R] ... :: MAC[R] ...
 			   0xFF }, * p = data;
 
 	initialize();
