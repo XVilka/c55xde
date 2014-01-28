@@ -326,10 +326,10 @@ void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 
 	/* [U], [R], [40] */
 
-	if (f_valid(data->f.U))
-		substitute(syntax, "[U]", "%s", data->f.U ? "U" : "");
 	if (f_valid(data->f.R))
 		substitute(syntax, "[R]", "%s", data->f.R ? "R" : "");
+	if (f_valid(data->f.u))
+		substitute(syntax, "[U]", "%s", data->f.u ? "U" : "");
 	if (f_valid(data->f.g))
 		substitute(syntax, "[40]", "%s", data->f.g ? "40" : "");
 
