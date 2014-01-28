@@ -95,6 +95,8 @@ struct instruction_data {
 		uint8_t		XXX;
 		uint8_t		YY;
 		uint8_t		Y;
+
+		uint8_t		C7;
 	} f;
 };
 
@@ -294,6 +296,9 @@ int run_f_list(insn_data_t * data, insn_item_t * insn)
 			data->f.l16 = get_bits(data->opcode64, flag->f, 16);
 			break;
 
+		case C55X_OPCODE_C7:
+			data->f.C7 = get_bits(data->opcode64, flag->f, 7);
+			break;
 
 		default:
 			printf("TODO: unknown opcode flag %02x\n", flag->v);
@@ -350,50 +355,97 @@ static const char * tbl_XDDD_XSSS[16] = {
 	"XAR4", "XAR5", "XAR6", "XAR7"
 };
 
-const char * get_SWAP_code(uint8_t key)
+const char * get_SWAP_str(uint8_t key, char * str)
 {
+	strcpy(str, "reserved");
+
 	switch (key) {
-	case 0:
-		return "SWAP AC0, AC2";
-	case 1:
-		return "SWAP AC1, AC3";
-	case 4:
-		return "SWAP T0, T2";
-	case 5:
-		return "SWAP T1, T3";
-	case 8:
-		return "SWAP AR0, AR2";
-	case 9:
-		return "SWAP AR1, AR3";
-	case 12:
-		return "SWAP AR4, T0";
-	case 13:
-		return "SWAP AR5, T1";
-	case 14:
-		return "SWAP AR6, T2";
-	case 15:
-		return "SWAP AR7, T3";
-	case 16:
-		return "SWAPP AC0, AC2";
-	case 20:
-		return "SWAPP T0, T2";
-	case 24:
-		return "SWAPP AR0, AR2";
-	case 28:
-		return "SWAPP AR4, T0";
-	case 30:
-		return "SWAPP AR6, T2";
-	case 44:
-		return "SWAP4 AR4, T0";
-	case 56:
-		return "SWAP AR0, AR1";
-	default:
-		return "reserverd";
+	case 0: return "SWAP AC0, AC2";
+	case 1: return "SWAP AC1, AC3";
+	case 4: return "SWAP T0, T2";
+	case 5: return "SWAP T1, T3";
+	case 8: return "SWAP AR0, AR2";
+	case 9: return "SWAP AR1, AR3";
+	case 12: return "SWAP AR4, T0";
+	case 13: return "SWAP AR5, T1";
+	case 14: return "SWAP AR6, T2";
+	case 15: return "SWAP AR7, T3";
+	case 16: return "SWAPP AC0, AC2";
+	case 20: return "SWAPP T0, T2";
+	case 24: return "SWAPP AR0, AR2";
+	case 28: return "SWAPP AR4, T0";
+	case 30: return "SWAPP AR6, T2";
+	case 44: return "SWAP4 AR4, T0";
+	case 56: return "SWAP AR0, AR1";
 	}
+
+	return str;
+}
+
+const char * get_FSSS_str(uint8_t key, char * str)
+{
+	static const char * table[16] = {
+		"AC0", "AC1", "AC2", "AC3", "T0", "T1", "T2", "T3",
+		"AR0", "AR1", "AR2", "AR3", "AR4", "AR5", "AR6", "AR7",
+	};
+
+	return table[key & 15];
+}
+
+const char * get_COND_str(uint8_t key, char * str)
+{
+	static const char * op[6] = { "==", "!=", "<", "<=", ">", ">=" };
+
+	strcpy(str, "reserved");
+
+	/* 000 FSSS ... 101 FSSS */
+	if ((key >> 4) >= 0 && (key >> 4) <= 5) {
+		sprintf(str, "%s %s 0", get_FSSS_str(key, NULL), op[(key >> 4) & 7]);
+		return str;
+	}
+
+	/* 110 00SS */
+	if ((key >> 2) == 0x18) {
+		sprintf(str, "overflow(AC%d)", key & 3);
+		return str;
+	}
+
+	/* 111 00SS */
+	if ((key >> 2) == 0x1C) {
+		sprintf(str, "!overflow(AC%d)", key & 3);
+		return str;
+	}
+
+	switch (key) {
+	case 0x64: return "TC1";
+	case 0x65: return "TC2";
+	case 0x66: return "CARRY";
+	case 0x74: return "!TC1";
+	case 0x75: return "!TC2";
+	case 0x76: return "!CARRY";
+		/* "&" operation */
+	case 0x68: return "TC1 & TC2";
+	case 0x69: return "TC1 & !TC2";
+	case 0x6A: return "!TC1 & TC2";
+	case 0x6B: return "!TC1 & !TC2";
+		/* "|" operation */
+	case 0x78: return "TC1 | TC2";
+	case 0x79: return "TC1 | !TC2";
+	case 0x7A: return "!TC1 | TC2";
+	case 0x7B: return "!TC1 | !TC2";
+		/* "^" operation */
+	case 0x7C: return "TC1 ^ TC2";
+	case 0x7D: return "TC1 ^ !TC2";
+	case 0x7E: return "!TC1 ^ TC2";
+	case 0x7F: return "!TC1 ^ !TC2";
+	}
+
+	return str;
 }
 
 void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 {
+	char temp[64];
 	char syntax[1024];
 
 	strcpy(syntax, insn->syntax);
@@ -424,7 +476,7 @@ void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 	/* SWAP */
 
 	if (f_valid(data->f.k6))
-		substitute(syntax, "SWAP ( )", get_SWAP_code(data->f.k6));
+		substitute(syntax, "SWAP ( )", get_SWAP_str(data->f.k6, temp));
 
 	/* RELOP */
 
@@ -496,6 +548,12 @@ void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 
 	if (f_valid(data->f.l16))
 		substitute(syntax, "pmad", "#%02X", data->f.l16);
+
+	/* cond */
+
+	if (f_valid(data->f.C7))
+		substitute(syntax, "cond", "%s", get_COND_str(data->f.C7, temp));
+
 
 	printf("%s\n", syntax);
 }
