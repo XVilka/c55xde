@@ -97,6 +97,10 @@ struct instruction_data {
 		uint8_t		Y;
 
 		uint8_t		C7;
+
+		uint8_t		L7;
+		uint16_t	L8;
+		uint32_t	L16;
 	} f;
 };
 
@@ -300,6 +304,16 @@ int run_f_list(insn_data_t * data, insn_item_t * insn)
 			data->f.C7 = get_bits(data->opcode64, flag->f, 7);
 			break;
 
+		case C55X_OPCODE_L7:
+			data->f.L7 = get_bits(data->opcode64, flag->f, 7);
+			break;
+		case C55X_OPCODE_L8:
+			data->f.L8 = get_bits(data->opcode64, flag->f, 8);
+			break;
+		case C55X_OPCODE_L16:
+			data->f.L16 = get_bits(data->opcode64, flag->f, 16);
+			break;
+
 		default:
 			printf("TODO: unknown opcode flag %02x\n", flag->v);
 			break;
@@ -467,6 +481,13 @@ void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 		substitute(syntax, "k8", "#%02Xh", data->f.k8);
 	if (f_valid(data->f.k16))
 		substitute(syntax, "k16", "#%02Xh", data->f.k16);
+
+	if (f_valid(data->f.L7))
+		substitute(syntax, "L7", "#%02Xh", data->f.L7);
+	if (f_valid(data->f.L8))
+		substitute(syntax, "L8", "#%02Xh", data->f.L8);
+	if (f_valid(data->f.L16))
+		substitute(syntax, "L16", "#%04Xh", data->f.L16);
 
 	/* l4 */
 
@@ -640,7 +661,7 @@ int main(int argc, const char * argv[])
 	uint8_t data[] = { 0x20,			// NOP
 			   0x21,			// NOP E
 			   0x5F, 0x00,			// SWAP (...)
-			   0x60, 0x00,			// BCC l4, cond
+			   0x60, 0x07,			// BCC l4, cond
 			   0x16, 0x07, 0xF0,		// MOV #7Fh, DPH
 			   0x00, 0x00, 0xFF,		// RPTCC #FFh, cond
 			   0x12, 0x00, 0x00,		// CMP[U] src RELOP dst, TCx
