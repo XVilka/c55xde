@@ -73,14 +73,14 @@ struct instruction_data {
 
 		uint8_t		SHFT;
 		uint8_t		SHIFTW;
-		uint8_t		AAAAAAAI;
+		uint16_t	AAAAAAAI;
 
 		uint8_t		k3;
 		uint8_t		k4;
 		uint8_t		k5;
 		uint8_t		k6;
 		uint8_t		k8;
-		uint8_t		k16;
+		uint16_t	k16;
 	} f;
 };
 
