@@ -350,6 +350,40 @@ static const char * tbl_XDDD_XSSS[] = {
 	"XAR4", "XAR5", "XAR6", "XAR7"
 };
 
+static const char * tbl_SWAP[] = {
+	"SWAP AC1, AC3",
+	"SWAP T0, T2",
+	"SWAP T1, T3",
+	"SWAP AR0, AR2",
+	"SWAP AR1, AR3",
+	"SWAP AR4, T0",
+	"SWAP AR5, T1",
+	"SWAP AR6, T2",
+	"SWAP AR7, T3",
+	"SWAPP AC0, AC2",
+	"Reserved",
+	"SWAPP T0, T2",
+	"Reserved",
+	"SWAPP AR0, AR2",
+	"Reserved",
+	"SWAPP AR4, T0",
+	"Reserved",
+	"SWAPP AR6, T2",
+	"Reserved",
+	"Reserved",
+	"SWAP4 AR4, T0",
+	"SWAP AR0, AR1",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+	"Reserved",
+};
+
 void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 {
 	char syntax[1024];
@@ -378,6 +412,11 @@ void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 
 	if (f_valid(data->f.l) && f_valid(data->f.l3))
 		substitute(syntax, "l4", "#%02X", (data->f.l3 << 1) | data->f.l);
+
+	/* SWAP */
+
+	if (f_valid(data->f.k6))
+		substitute(syntax, "SWAP ( )", tbl_SWAP[data->f.k6 & 15]);
 
 	/* RELOP */
 
@@ -534,6 +573,7 @@ int main(int argc, const char * argv[])
 	int length;
 	uint8_t data[] = { 0x20,			// NOP
 			   0x21,			// NOP E
+			   0x5F, 0x00,			// SWAP (...)
 			   0x60, 0x00,			// BCC l4, cond
 			   0x16, 0x07, 0xF0,		// MOV #7Fh, DPH
 			   0x00, 0x00, 0xFF,		// RPTCC #FFh, cond
