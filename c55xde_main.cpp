@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include <stdarg.h>
 
 #include "c55xde.h"
 
@@ -69,6 +70,13 @@ struct instruction_data {
 
 	uint8_t		f_SHIFTW;
 	uint8_t		f_AAAAAAAI;
+
+	uint8_t		f_k3;
+	uint8_t		f_k4;
+	uint8_t		f_k5;
+	uint8_t		f_k6;
+	uint8_t		f_k8;
+	uint8_t		f_k16;
 };
 
 #define LIST_END			{ 0 }
@@ -217,6 +225,25 @@ int run_f_list(insn_data_t * data, insn_item_t * insn)
 			printf("  AAAAAAAI = %02x\n", data->f_AAAAAAAI);
 			break;
 
+		case C55X_OPCODE_k3:
+			data->f_k3 = get_bits(data->opcode64, flag->f, 3);
+			break;
+		case C55X_OPCODE_k4:
+			data->f_k4 = get_bits(data->opcode64, flag->f, 4);
+			break;
+		case C55X_OPCODE_k5:
+			data->f_k5 = get_bits(data->opcode64, flag->f, 5);
+			break;
+		case C55X_OPCODE_k6:
+			data->f_k6 = get_bits(data->opcode64, flag->f, 6);
+			break;
+		case C55X_OPCODE_k8:
+			data->f_k8 = get_bits(data->opcode64, flag->f, 8);
+			break;
+		case C55X_OPCODE_k16:
+			data->f_k16 = get_bits(data->opcode64, flag->f, 16);
+			break;
+
 		default:
 			printf("TODO: unknown opcode flag %02x\n", flag->v);
 			break;
@@ -242,6 +269,42 @@ int run_m_list(insn_data_t * data, insn_item_t * insn)
 	return 0;
 }
 
+void substitute(char * string, const char * token, const char * fmt, ...)
+{
+	va_list args;
+	char data[64];
+	char * pos;
+
+	pos = strstr(string, token);
+	if (!pos)
+		return;
+
+	va_start(args, fmt);
+	vsprintf(data, fmt, args);
+	va_end(args);
+
+	memmove(pos + strlen(data), pos + strlen(token), strlen(pos + strlen(token)) + 1);
+	memmove(pos, data, strlen(data));
+}
+
+void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
+{
+	char syntax[1024];
+
+	strcpy(syntax, insn->syntax);
+
+	/* constants */
+
+	substitute(syntax,  "k4", "#%02Xh", data->f_k4);
+	substitute(syntax,  "k5", "#%02Xh", data->f_k5);
+	substitute(syntax,  "k7", "#%02Xh", data->f_k4 | (data->f_k3 << 4));
+	substitute(syntax,  "k8", "#%02Xh", data->f_k8);
+	substitute(syntax,  "k9", "#%02Xh", data->f_k4 | (data->f_k5 << 5));
+	substitute(syntax, "k16", "#%02Xh", data->f_k16);
+
+	printf("%s\n", syntax);
+}
+
 int decode_insn(insn_data_t * data)
 {
 	insn_item_t * insn = &data->head->insn;
@@ -258,7 +321,7 @@ int decode_insn(insn_data_t * data)
 		}
 	}
 
-	printf("insn: %s\n", insn ? insn->syntax : "undef");
+	decode_insn_syntax(data, insn);
 
 	return data->head->size;
 }
@@ -322,6 +385,8 @@ int main(int argc, const char * argv[])
 	int length;
 	uint8_t data[] = { 0x20,			// NOP
 			   0x21,			// NOP E
+			   0x16, 0x07, 0xF0,		// MOV #7Fh, DPH
+			   0x00, 0x00, 0xFF,		// RPTCC #FFh, cond
 			   0x56, 0xFF,			// MAC[R] ...
 			   0xFA, 0x00, 0x00, 0x04,	// MOV [rnd ...
 			   0xFD, 0x00, 0x00, 0x00,	// MPY[R] ... :: MPY[R] ...
