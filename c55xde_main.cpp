@@ -165,7 +165,7 @@ std::map< uint8_t,
 #define get_bits(v, f, n)	(((v) >> (f)) & ((2 << (n - 1)) - 1))
 
 #define F_INVAL			-1
-#define f_valid(x)		((x) != F_INVAL)
+#define f_valid(x)		((x) != (typeof(x))F_INVAL)
 
 ////////////////////////////////////////////////////////////////////////////////
 
