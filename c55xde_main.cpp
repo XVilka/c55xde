@@ -70,6 +70,7 @@ struct instruction_data {
 		uint8_t		dd;
 		uint8_t		mm;
 		uint8_t		cc;
+		uint8_t		vv;
 
 		uint8_t		SHFT;
 		uint8_t		SHIFTW;
@@ -217,6 +218,9 @@ int run_f_list(insn_data_t * data, insn_item_t * insn)
 		case C55X_OPCODE_cc:
 			data->f.cc = get_bits(data->opcode64, flag->f, 2);
 			break;
+		case C55X_OPCODE_vv:
+			data->f.vv = get_bits(data->opcode64, flag->f, 2);
+			break;
 
 		/* 6bl parsing */
 		case C55X_OPCODE_SHIFTW:
@@ -293,6 +297,7 @@ void substitute(char * string, const char * token, const char * fmt, ...)
 }
 
 static const char * tbl_RELOP[] = { "==", "<", ">=", "!=" };
+static const char * tbl_v[] = { "CARRY", "TC2" };
 
 void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 {
@@ -337,6 +342,14 @@ void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 
 	if (f_valid(data->f.SHIFTW))
 		substitute(syntax, "SHIFTW", "%02Xh", data->f.SHIFTW);
+
+	/* vv */
+
+	if (f_valid(data->f.vv)) {
+		substitute(syntax, "BitIn", tbl_v[(data->f.vv >> 1) & 1]);
+		substitute(syntax, "BitOut", tbl_v[(data->f.vv >> 0) & 1]);
+	}
+
 
 	printf("%s\n", syntax);
 }
@@ -425,6 +438,8 @@ int main(int argc, const char * argv[])
 			   0x16, 0x07, 0xF0,		// MOV #7Fh, DPH
 			   0x00, 0x00, 0xFF,		// RPTCC #FFh, cond
 			   0x12, 0x00, 0x00,		// CMP[U] src RELOP dst, TCx
+			   0x12, 0x03, 0x01,		// ROL TC2, src, CARRY, dst
+			   0x12, 0x03, 0x09,		// ROR CARRY, src, TC2, dst
 			   0x56, 0xFF,			// MAC[R] ...
 			   0xFA, 0x00, 0x00, 0x04,	// MOV [rnd ...
 			   0xFD, 0x00, 0x00, 0x00,	// MPY[R] ... :: MPY[R] ...
