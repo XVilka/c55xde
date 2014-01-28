@@ -62,8 +62,7 @@ typedef enum {
 
     /* 7bl */
 
-    C55X_OPCODE_k7 = 0x70,
-    C55X_OPCODE_l7,
+    C55X_OPCODE_l7 = 0x70,
     C55X_OPCODE_C7,
     C55X_OPCODE_L7,
 
@@ -75,17 +74,9 @@ typedef enum {
     C55X_OPCODE_P8,
     C55X_OPCODE_AAAAAAAI,
 
-    /* 9bl */
-
-    C55X_OPCODE_k9 = 0x90,
-
-    /* 12bl */
-
-    C55X_OPCODE_k12 = 0xA0,
-
     /* 16bl */
 
-    C55X_OPCODE_k16 = 0xB0,
+    C55X_OPCODE_k16 = 0x90,
     C55X_OPCODE_l16,
     C55X_OPCODE_K16,
     C55X_OPCODE_L16,
@@ -94,7 +85,7 @@ typedef enum {
 
     /* 24bl */
 
-    C55X_OPCODE_P24 = 0xC0,
+    C55X_OPCODE_P24 = 0xA0,
 
     __C55_OPCODE_LAST
 } insn_flag_e;
