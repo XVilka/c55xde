@@ -341,48 +341,56 @@ void substitute(char * string, const char * token, const char * fmt, ...)
 }
 
 static const char * tbl_RELOP[] = { "==", "<", ">=", "!=" };
-static const char * tbl_v[] = { "CARRY", "TC2" };
-static const char * tbl_t[] = { "TC1", "TC2" };
-static const char * tbl_XDDD_XSSS[] = {
+static const char * tbl_v[2] = { "CARRY", "TC2" };
+static const char * tbl_t[2] = { "TC1", "TC2" };
+static const char * tbl_XDDD_XSSS[16] = {
 	"AC0", "AC1", "AC2", "AC3",
 	"XSP", "XSSP", "XDP", "XCDP",
 	"XAR0", "XAR1", "XAR2", "XAR3",
 	"XAR4", "XAR5", "XAR6", "XAR7"
 };
 
-static const char * tbl_SWAP[] = {
-	"SWAP AC1, AC3",
-	"SWAP T0, T2",
-	"SWAP T1, T3",
-	"SWAP AR0, AR2",
-	"SWAP AR1, AR3",
-	"SWAP AR4, T0",
-	"SWAP AR5, T1",
-	"SWAP AR6, T2",
-	"SWAP AR7, T3",
-	"SWAPP AC0, AC2",
-	"Reserved",
-	"SWAPP T0, T2",
-	"Reserved",
-	"SWAPP AR0, AR2",
-	"Reserved",
-	"SWAPP AR4, T0",
-	"Reserved",
-	"SWAPP AR6, T2",
-	"Reserved",
-	"Reserved",
-	"SWAP4 AR4, T0",
-	"SWAP AR0, AR1",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-};
+const char * get_SWAP_code(uint8_t key)
+{
+	switch (key) {
+	case 0:
+		return "SWAP AC0, AC2";
+	case 1:
+		return "SWAP AC1, AC3";
+	case 4:
+		return "SWAP T0, T2";
+	case 5:
+		return "SWAP T1, T3";
+	case 8:
+		return "SWAP AR0, AR2";
+	case 9:
+		return "SWAP AR1, AR3";
+	case 12:
+		return "SWAP AR4, T0";
+	case 13:
+		return "SWAP AR5, T1";
+	case 14:
+		return "SWAP AR6, T2";
+	case 15:
+		return "SWAP AR7, T3";
+	case 16:
+		return "SWAPP AC0, AC2";
+	case 20:
+		return "SWAPP T0, T2";
+	case 24:
+		return "SWAPP AR0, AR2";
+	case 28:
+		return "SWAPP AR4, T0";
+	case 30:
+		return "SWAPP AR6, T2";
+	case 44:
+		return "SWAP4 AR4, T0";
+	case 56:
+		return "SWAP AR0, AR1";
+	default:
+		return "reserverd";
+	}
+}
 
 void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 {
@@ -416,7 +424,7 @@ void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 	/* SWAP */
 
 	if (f_valid(data->f.k6))
-		substitute(syntax, "SWAP ( )", tbl_SWAP[data->f.k6 & 15]);
+		substitute(syntax, "SWAP ( )", get_SWAP_code(data->f.k6));
 
 	/* RELOP */
 
