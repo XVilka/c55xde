@@ -81,7 +81,7 @@ struct instruction_data {
 		uint8_t		k4;
 		uint8_t		k5;
 		uint8_t		k6;
-		uint8_t		k8;
+		uint16_t	k8;
 		uint32_t	k16;
 
 		uint8_t		l;
@@ -358,12 +358,21 @@ void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 
 	/* constants */
 
-	substitute(syntax,  "k4", "#%02Xh", data->f.k4);
-	substitute(syntax,  "k5", "#%02Xh", data->f.k5);
-	substitute(syntax,  "k7", "#%02Xh", data->f.k4 | (data->f.k3 << 4));
-	substitute(syntax,  "k8", "#%02Xh", data->f.k8);
-	substitute(syntax,  "k9", "#%02Xh", data->f.k4 | (data->f.k5 << 5));
-	substitute(syntax, "k16", "#%02Xh", data->f.k16);
+	if (f_valid(data->f.k4)) {
+		if (f_valid(data->f.k3))
+			substitute(syntax, "k7", "#%02Xh", data->f.k4 | (data->f.k3 << 4));
+		else if (f_valid(data->f.k5))
+			substitute(syntax, "k9", "#%02Xh", data->f.k4 | (data->f.k5 << 5));
+		else
+			substitute(syntax, "k4", "#%02Xh", data->f.k4);
+	}
+
+	if (f_valid(data->f.k5))
+		substitute(syntax, "k5", "#%02Xh", data->f.k5);
+	if (f_valid(data->f.k8))
+		substitute(syntax, "k8", "#%02Xh", data->f.k8);
+	if (f_valid(data->f.k16))
+		substitute(syntax, "k16", "#%02Xh", data->f.k16);
 
 	/* l4 */
 
