@@ -89,6 +89,7 @@ sub dump_head
 		$byte =~ s/DD/00/;
 		$byte =~ s/FSSS/0000/;
 		$byte =~ s/SS/00/;
+		$byte =~ s/l/0/g;
 		unless ($byte =~ /^[01]+$/) {
 			warn "Unknown characters in \"$byte\", skipping...";
 			return;
