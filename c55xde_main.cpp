@@ -83,6 +83,9 @@ struct instruction_data {
 		uint8_t		k6;
 		uint8_t		k8;
 		uint16_t	k16;
+
+		uint8_t		XDDD;
+		uint8_t		XSSS;
 	} f;
 };
 
@@ -255,6 +258,13 @@ int run_f_list(insn_data_t * data, insn_item_t * insn)
 			data->f.k16 = get_bits(data->opcode64, flag->f, 16);
 			break;
 
+		case C55X_OPCODE_XDDD:
+			data->f.XDDD = get_bits(data->opcode64, flag->f, 4);
+			break;
+		case C55X_OPCODE_XSSS:
+			data->f.XSSS = get_bits(data->opcode64, flag->f, 4);
+			break;
+
 		default:
 			printf("TODO: unknown opcode flag %02x\n", flag->v);
 			break;
@@ -303,6 +313,12 @@ void substitute(char * string, const char * token, const char * fmt, ...)
 static const char * tbl_RELOP[] = { "==", "<", ">=", "!=" };
 static const char * tbl_v[] = { "CARRY", "TC2" };
 static const char * tbl_t[] = { "TC1", "TC2" };
+static const char * tbl_XDDD_XSSS[] = {
+	"AC0", "AC1", "AC2", "AC3",
+	"XSP", "XSSP", "XDP", "XCDP",
+	"XAR0", "XAR1", "XAR2", "XAR3",
+	"XAR4", "XAR5", "XAR6", "XAR7"
+};
 
 void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 {
@@ -360,6 +376,18 @@ void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 	if (f_valid(data->f.tt)) {
 		substitute(syntax, "TCx", tbl_t[(data->f.tt >> 1) & 1]);
 		substitute(syntax, "TCy", tbl_t[(data->f.tt >> 0) & 1]);
+	}
+
+	/* XDDD and XSSS */
+
+	if (f_valid(data->f.XDDD)) {
+		substitute(syntax, "xdst", "%s", tbl_XDDD_XSSS[data->f.XDDD & 15]);
+		substitute(syntax, "XAdst", "%s", tbl_XDDD_XSSS[data->f.XDDD & 15]);
+	}
+
+	if (f_valid(data->f.XSSS)) {
+		substitute(syntax, "xsrc", "%s", tbl_XDDD_XSSS[data->f.XSSS & 15]);
+		substitute(syntax, "XAsrc", "%s", tbl_XDDD_XSSS[data->f.XSSS & 15]);
 	}
 
 	printf("%s\n", syntax);
@@ -453,6 +481,7 @@ int main(int argc, const char * argv[])
 			   0x12, 0x03, 0x09,		// ROR CARRY, src, TC2, dst
 			   0x12, 0x01, 0x08,		// CMPAND[U] src RELOP dst, !TCy, TCx
 			   0x12, 0x02, 0x00,		// CMPOR[U] src RELOP dst, TCy, TCx
+			   0x90, 0x5A,			// MOV xsrc, xdst
 			   0x56, 0xFF,			// MAC[R] ...
 			   0xFA, 0x00, 0x00, 0x04,	// MOV [rnd ...
 			   0xFD, 0x00, 0x00, 0x00,	// MPY[R] ... :: MPY[R] ...
