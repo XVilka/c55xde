@@ -196,11 +196,61 @@
 	.byte = 0x12,
 	.size = 0x03,
 	.insn = {
-		// FDDDxuxtFSSScc000001001E
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(8,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(10,cc), INSN_FLAG(12,FSSS), INSN_FLAG(16,t), INSN_FLAG(18,u), INSN_FLAG(20,FDDD),  LIST_END },
-		.syntax = INSN_SYNTAX(CMP[U] src RELOP dst, TCx),
+		.i_list = (insn_item_t []) {
+			{
+				// FDDDxuxtFSSScc000001001E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(10,cc), INSN_FLAG(12,FSSS), INSN_FLAG(16,t), INSN_FLAG(18,u), INSN_FLAG(20,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(CMP[U] src RELOP dst, TCx),
+			},
+			{
+				// FDDD0uttFSSScc010001001E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,2,1), INSN_MASK(19,1,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(10,cc), INSN_FLAG(12,FSSS), INSN_FLAG(16,tt), INSN_FLAG(18,u), INSN_FLAG(20,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(CMPAND[U] src RELOP dst, TCy, TCx),
+			},
+			{
+				// FDDD1uttFSSScc010001001E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,2,1), INSN_MASK(19,1,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(10,cc), INSN_FLAG(12,FSSS), INSN_FLAG(16,tt), INSN_FLAG(18,u), INSN_FLAG(20,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(CMPAND[U] src RELOP dst, !TCy, TCx),
+			},
+			{
+				// FDDD0uttFSSScc100001001E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,2,2), INSN_MASK(19,1,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(10,cc), INSN_FLAG(12,FSSS), INSN_FLAG(16,tt), INSN_FLAG(18,u), INSN_FLAG(20,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(CMPOR[U] src RELOP dst, TCy, TCx),
+			},
+			{
+				// FDDD1uttFSSScc100001001E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,2,2), INSN_MASK(19,1,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(10,cc), INSN_FLAG(12,FSSS), INSN_FLAG(16,tt), INSN_FLAG(18,u), INSN_FLAG(20,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(CMPOR[U] src RELOP dst, !TCy, TCx),
+			},
+			{
+				// FDDD0xvvFSSSxx110001001E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,2,3), INSN_MASK(19,1,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,FSSS), INSN_FLAG(16,vv), INSN_FLAG(20,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(ROL BitOut, src, BitIn, dst),
+			},
+			{
+				// FDDD1xvvFSSSxx110001001E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,2,3), INSN_MASK(19,1,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,FSSS), INSN_FLAG(16,vv), INSN_FLAG(20,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(ROR BitIn, src, BitOut, dst),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
@@ -345,11 +395,68 @@
 	.byte = 0x16,
 	.size = 0x03,
 	.insn = {
-		// kkkk0000xxxxxkkk0001011E
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(16,4,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,k3), INSN_FLAG(20,k4),  LIST_END },
-		.syntax = INSN_SYNTAX(MOV k7, DPH),
+		.i_list = (insn_item_t []) {
+			{
+				// kkkk0000xxxxxkkk0001011E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,k3), INSN_FLAG(20,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV k7, DPH),
+			},
+			{
+				// kkkk0011xxxkkkkk0001011E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,3),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,k5), INSN_FLAG(20,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV k9, PDP),
+			},
+			{
+				// kkkk0100kkkkkkkk0001011E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,4),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,k8), INSN_FLAG(20,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV k12, BK03),
+			},
+			{
+				// kkkk0101kkkkkkkk0001011E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,5),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,k8), INSN_FLAG(20,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV k12, BK47),
+			},
+			{
+				// kkkk0110kkkkkkkk0001011E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,6),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,k8), INSN_FLAG(20,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV k12, BKC),
+			},
+			{
+				// kkkk1000kkkkkkkk0001011E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,8),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,k8), INSN_FLAG(20,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV k12, CSR),
+			},
+			{
+				// kkkk1001kkkkkkkk0001011E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,9),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,k8), INSN_FLAG(20,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV k12, BRC0),
+			},
+			{
+				// kkkk1010kkkkkkkk0001011E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,10),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,k8), INSN_FLAG(20,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV k12, BRC1),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
@@ -389,11 +496,26 @@
 	.byte = 0x1e,
 	.size = 0x03,
 	.insn = {
-		// SSDDxx0%KKKKKKKK0001111E
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(17,1,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,k8), INSN_FLAG(16,R), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
-		.syntax = INSN_SYNTAX(MPYK[R] K8, [ACx,] ACy),
+		.i_list = (insn_item_t []) {
+			{
+				// SSDDxx0%KKKKKKKK0001111E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,1,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,k8), INSN_FLAG(16,R), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(MPYK[R] K8, [ACx,] ACy),
+			},
+			{
+				// SSDDss1%KKKKKKKK0001111E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,1,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,k8), INSN_FLAG(16,R), INSN_FLAG(18,ss), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(MACK[R] Tx, K8, [ACx,] ACy),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
@@ -609,22 +731,143 @@
 	.byte = 0x44,
 	.size = 0x02,
 	.insn = {
-		// 00SSFDDD0100010E
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(14,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,FDDD), INSN_FLAG(12,SS),  LIST_END },
-		.syntax = INSN_SYNTAX(MOV HI(ACx), TAx),
+		.i_list = (insn_item_t []) {
+			{
+				// 00SSFDDD0100010E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(14,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,FDDD), INSN_FLAG(12,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV HI(ACx), TAx),
+			},
+			{
+				// 01x0FDDD0100010E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(12,1,0), INSN_MASK(14,2,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(SFTS dst, #−1),
+			},
+			{
+				// 01x1FDDD0100010E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(12,1,1), INSN_MASK(14,2,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(SFTS dst, #1),
+			},
+			{
+				// 1000FDDD0100010E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(12,4,8),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV SP, TAx),
+			},
+			{
+				// 1001FDDD0100010E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(12,4,9),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV SSP, TAx),
+			},
+			{
+				// 1010FDDD0100010E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(12,4,10),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV CDP, TAx),
+			},
+			{
+				// 1100FDDD0100010E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(12,4,12),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV BRC0, TAx),
+			},
+			{
+				// 1101FDDD0100010E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(12,4,13),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV BRC1, TAx),
+			},
+			{
+				// 1110FDDD0100010E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(12,4,14),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV RPTC, TAx),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x46,
 	.size = 0x02,
 	.insn = {
-		// kkkk00000100011E
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(8,4,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,k4),  LIST_END },
-		.syntax = INSN_SYNTAX(BCLR k4, ST0_55),
+		.i_list = (insn_item_t []) {
+			{
+				// kkkk00000100011E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,4,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(BCLR k4, ST0_55),
+			},
+			{
+				// kkkk00010100011E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,4,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(BSET k4, ST0_55),
+			},
+			{
+				// kkkk00100100011E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,4,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(BCLR k4, ST1_55),
+			},
+			{
+				// kkkk00110100011E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,4,3),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(BSET k4, ST1_55),
+			},
+			{
+				// kkkk01000100011E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,4,4),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(BCLR k4, ST2_55),
+			},
+			{
+				// kkkk01010100011E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,4,5),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(BSET k4, ST2_55),
+			},
+			{
+				// kkkk01100100011E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,4,6),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(BCLR k4, ST3_55),
+			},
+			{
+				// kkkk01110100011E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,4,7),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(BSET k4, ST3_55),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
@@ -642,22 +885,73 @@
 	.byte = 0x48,
 	.size = 0x02,
 	.insn = {
-		// xxxxx0000100100E
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(8,3,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(0,E),  LIST_END },
-		.syntax = INSN_SYNTAX(RPT CSR),
+		.i_list = (insn_item_t []) {
+			{
+				// xxxxx0000100100E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,3,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E),  LIST_END },
+				.syntax = INSN_SYNTAX(RPT CSR),
+			},
+			{
+				// FSSSx0010100100E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,3,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,FSSS),  LIST_END },
+				.syntax = INSN_SYNTAX(RPTADD CSR, TAx),
+			},
+			{
+				// kkkkx0100100100E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,3,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(RPTADD CSR, k4),
+			},
+			{
+				// kkkkx0110100100E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,3,3),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(RPTSUB CSR, k4),
+			},
+			{
+				// xxxxx1000100100E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,3,4),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E),  LIST_END },
+				.syntax = INSN_SYNTAX(RET),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x4a,
 	.size = 0x02,
 	.insn = {
-		// 0LLLLLLL0100101E
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(15,1,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,L7),  LIST_END },
-		.syntax = INSN_SYNTAX(B L7),
+		.i_list = (insn_item_t []) {
+			{
+				// 0LLLLLLL0100101E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(15,1,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,L7),  LIST_END },
+				.syntax = INSN_SYNTAX(B L7),
+			},
+			{
+				// 1lllllll0100101E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(15,1,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,l7),  LIST_END },
+				.syntax = INSN_SYNTAX(RPTBLOCAL pmad),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
@@ -686,77 +980,308 @@
 	.byte = 0x50,
 	.size = 0x02,
 	.insn = {
-		// FDDDx0000101000E
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(8,3,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,FDDD),  LIST_END },
-		.syntax = INSN_SYNTAX(SFTL dst, #1),
+		.i_list = (insn_item_t []) {
+			{
+				// FDDDx0000101000E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,3,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(SFTL dst, #1),
+			},
+			{
+				// FDDDx0010101000E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,3,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(SFTL dst, #−1),
+			},
+			{
+				// FDDDx0100101000E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,3,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(POP dst),
+			},
+			{
+				// xxDDx0110101000E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,3,3),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(POP dbl(ACx)),
+			},
+			{
+				// FSSSx1100101000E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,3,6),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,FSSS),  LIST_END },
+				.syntax = INSN_SYNTAX(PSH src),
+			},
+			{
+				// xxSSx1110101000E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,3,7),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(PSH dbl(ACx)),
+			},
+			{
+				// XDDD01000101000E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,4,4),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,XDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(POPBOTH xdst),
+			},
+			{
+				// XSSS01010101000E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,4,5),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,XSSS),  LIST_END },
+				.syntax = INSN_SYNTAX(PSHBOTH xsrc),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x52,
 	.size = 0x02,
 	.insn = {
-		// FSSS00DD0101001E
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(10,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,DD), INSN_FLAG(12,FSSS),  LIST_END },
-		.syntax = INSN_SYNTAX(MOV TAx, HI(ACx)),
+		.i_list = (insn_item_t []) {
+			{
+				// FSSS00DD0101001E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(10,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,DD), INSN_FLAG(12,FSSS),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV TAx, HI(ACx)),
+			},
+			{
+				// FSSS10000101001E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,4,8),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,FSSS),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV TAx, SP),
+			},
+			{
+				// FSSS10010101001E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,4,9),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,FSSS),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV TAx, SSP),
+			},
+			{
+				// FSSS10100101001E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,4,10),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,FSSS),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV TAx, CDP),
+			},
+			{
+				// FSSS11000101001E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,4,12),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,FSSS),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV TAx, CSR),
+			},
+			{
+				// FSSS11010101001E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,4,13),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,FSSS),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV TAx, BRC1),
+			},
+			{
+				// FSSS11100101001E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,4,14),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(12,FSSS),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV TAx, BRC0),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x54,
 	.size = 0x02,
 	.insn = {
-		// DDSS000%0101010E
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(9,3,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,R), INSN_FLAG(12,SS), INSN_FLAG(14,DD),  LIST_END },
-		.syntax = INSN_SYNTAX(ADD[R]V [ACx,] ACy),
+		.i_list = (insn_item_t []) {
+			{
+				// DDSS000%0101010E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(9,3,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,R), INSN_FLAG(12,SS), INSN_FLAG(14,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(ADD[R]V [ACx,] ACy),
+			},
+			{
+				// DDSS001%0101010E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(9,3,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,R), INSN_FLAG(12,SS), INSN_FLAG(14,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(SQA[R] [ACx,] ACy),
+			},
+			{
+				// DDSS010%0101010E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(9,3,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,R), INSN_FLAG(12,SS), INSN_FLAG(14,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(SQS[R] [ACx,] ACy),
+			},
+			{
+				// DDSS011%0101010E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(9,3,3),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,R), INSN_FLAG(12,SS), INSN_FLAG(14,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(MPY[R] [ACx,] ACy),
+			},
+			{
+				// DDSS100%0101010E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(9,3,4),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,R), INSN_FLAG(12,SS), INSN_FLAG(14,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(SQR[R] [ACx,] ACy),
+			},
+			{
+				// DDSS101%0101010E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(9,3,5),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,R), INSN_FLAG(12,SS), INSN_FLAG(14,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(ROUND [ACx,] ACy),
+			},
+			{
+				// DDSS110%0101010E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(9,3,6),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,R), INSN_FLAG(12,SS), INSN_FLAG(14,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(SAT[R] [ACx,] ACy),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x56,
 	.size = 0x02,
 	.insn = {
-		// DDSSss0%0101011E
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(9,1,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,R), INSN_FLAG(10,ss), INSN_FLAG(12,SS), INSN_FLAG(14,DD),  LIST_END },
-		.syntax = INSN_SYNTAX(MAC[R] ACx, Tx, ACy[, ACy]),
+		.i_list = (insn_item_t []) {
+			{
+				// DDSSss0%0101011E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(9,1,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,R), INSN_FLAG(10,ss), INSN_FLAG(12,SS), INSN_FLAG(14,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(MAC[R] ACx, Tx, ACy[, ACy]),
+			},
+			{
+				// DDSSss1%0101011E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(9,1,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,R), INSN_FLAG(10,ss), INSN_FLAG(12,SS), INSN_FLAG(14,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(MAS[R] Tx, [ACx,] ACy),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x58,
 	.size = 0x02,
 	.insn = {
-		// DDSSss0%0101100E
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(9,1,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,R), INSN_FLAG(10,ss), INSN_FLAG(12,SS), INSN_FLAG(14,DD),  LIST_END },
-		.syntax = INSN_SYNTAX(MPY[R] Tx, [ACx,] ACy),
+		.i_list = (insn_item_t []) {
+			{
+				// DDSSss0%0101100E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(9,1,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,R), INSN_FLAG(10,ss), INSN_FLAG(12,SS), INSN_FLAG(14,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(MPY[R] Tx, [ACx,] ACy),
+			},
+			{
+				// DDSSss1%0101100E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(9,1,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,R), INSN_FLAG(10,ss), INSN_FLAG(12,SS), INSN_FLAG(14,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(MAC[R] ACy, Tx, ACx, ACy),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x5a,
 	.size = 0x02,
 	.insn = {
-		// DDSSss000101101E
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(8,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(10,ss), INSN_FLAG(12,SS), INSN_FLAG(14,DD),  LIST_END },
-		.syntax = INSN_SYNTAX(ADD ACx << Tx, ACy),
+		.i_list = (insn_item_t []) {
+			{
+				// DDSSss000101101E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(10,ss), INSN_FLAG(12,SS), INSN_FLAG(14,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(ADD ACx << Tx, ACy),
+			},
+			{
+				// DDSSss010101101E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,2,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(10,ss), INSN_FLAG(12,SS), INSN_FLAG(14,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(SUB ACx << Tx, ACy),
+			},
+			{
+				// DDxxxx1t0101101E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(9,1,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(8,t), INSN_FLAG(14,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(SFTCC ACx, TCx),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x5c,
 	.size = 0x02,
 	.insn = {
-		// DDSSss000101110E
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(8,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(10,ss), INSN_FLAG(12,SS), INSN_FLAG(14,DD),  LIST_END },
-		.syntax = INSN_SYNTAX(SFTL ACx, Tx[, ACy]),
+		.i_list = (insn_item_t []) {
+			{
+				// DDSSss000101110E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(10,ss), INSN_FLAG(12,SS), INSN_FLAG(14,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(SFTL ACx, Tx[, ACy]),
+			},
+			{
+				// DDSSss010101110E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,2,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(10,ss), INSN_FLAG(12,SS), INSN_FLAG(14,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(SFTS ACx, Tx[, ACy]),
+			},
+			{
+				// DDSSss100101110E
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(8,2,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(0,E), INSN_FLAG(10,ss), INSN_FLAG(12,SS), INSN_FLAG(14,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(SFTSC ACx, Tx[, ACy]),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
@@ -917,11 +1442,33 @@
 	.byte = 0x76,
 	.size = 0x04,
 	.insn = {
-		// FDDD00SSkkkkkkkkkkkkkkkk01110110
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(26,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,k16), INSN_FLAG(24,SS), INSN_FLAG(28,FDDD),  LIST_END },
-		.syntax = INSN_SYNTAX(BFXTR k16, ACx, dst),
+		.i_list = (insn_item_t []) {
+			{
+				// FDDD00SSkkkkkkkkkkkkkkkk01110110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(26,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k16), INSN_FLAG(24,SS), INSN_FLAG(28,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(BFXTR k16, ACx, dst),
+			},
+			{
+				// FDDD01SSkkkkkkkkkkkkkkkk01110110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(26,2,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k16), INSN_FLAG(24,SS), INSN_FLAG(28,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(BFXPA k16, ACx, dst),
+			},
+			{
+				// FDDD10xxKKKKKKKKKKKKKKKK01110110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(26,2,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k8), INSN_FLAG(16,k8), INSN_FLAG(28,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV K16, dst),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
@@ -939,33 +1486,162 @@
 	.byte = 0x78,
 	.size = 0x04,
 	.insn = {
-		// xxx0000xkkkkkkkkkkkkkkkk01111000
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(25,4,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,k16),  LIST_END },
-		.syntax = INSN_SYNTAX(MOV k16, DP),
+		.i_list = (insn_item_t []) {
+			{
+				// xxx0000xkkkkkkkkkkkkkkkk01111000
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(25,4,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k16),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV k16, DP),
+			},
+			{
+				// xxx0001xkkkkkkkkkkkkkkkk01111000
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(25,4,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k16),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV k16, SSP),
+			},
+			{
+				// xxx0010xkkkkkkkkkkkkkkkk01111000
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(25,4,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k16),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV k16, CDP),
+			},
+			{
+				// xxx0011xkkkkkkkkkkkkkkkk01111000
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(25,4,3),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k16),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV k16, BSA01),
+			},
+			{
+				// xxx0100xkkkkkkkkkkkkkkkk01111000
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(25,4,4),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k16),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV k16, BSA23),
+			},
+			{
+				// xxx0101xkkkkkkkkkkkkkkkk01111000
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(25,4,5),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k16),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV k16, BSA45),
+			},
+			{
+				// xxx0110xkkkkkkkkkkkkkkkk01111000
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(25,4,6),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k16),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV k16, BSA67),
+			},
+			{
+				// xxx0111xkkkkkkkkkkkkkkkk01111000
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(25,4,7),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k16),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV k16, BSAC),
+			},
+			{
+				// xxx1000xkkkkkkkkkkkkkkkk01111000
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(25,4,8),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k16),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV k16, SP),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x79,
 	.size = 0x04,
 	.insn = {
-		// SSDDxx0%KKKKKKKKKKKKKKKK01111001
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(25,1,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,k8), INSN_FLAG(16,k8), INSN_FLAG(24,R), INSN_FLAG(28,DD), INSN_FLAG(30,SS),  LIST_END },
-		.syntax = INSN_SYNTAX(MPYK[R] K16, [ACx,] ACy),
+		.i_list = (insn_item_t []) {
+			{
+				// SSDDxx0%KKKKKKKKKKKKKKKK01111001
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(25,1,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k8), INSN_FLAG(16,k8), INSN_FLAG(24,R), INSN_FLAG(28,DD), INSN_FLAG(30,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(MPYK[R] K16, [ACx,] ACy),
+			},
+			{
+				// SSDDss1%KKKKKKKKKKKKKKKK01111001
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(25,1,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k8), INSN_FLAG(16,k8), INSN_FLAG(24,R), INSN_FLAG(26,ss), INSN_FLAG(28,DD), INSN_FLAG(30,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(MACK[R] Tx, K16, [ACx,] ACy),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x7a,
 	.size = 0x04,
 	.insn = {
-		// SSDD000xKKKKKKKKKKKKKKKK01111010
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(25,3,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,k8), INSN_FLAG(16,k8), INSN_FLAG(28,DD), INSN_FLAG(30,SS),  LIST_END },
-		.syntax = INSN_SYNTAX(ADD K16 << #16, [ACx,] ACy),
+		.i_list = (insn_item_t []) {
+			{
+				// SSDD000xKKKKKKKKKKKKKKKK01111010
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(25,3,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k8), INSN_FLAG(16,k8), INSN_FLAG(28,DD), INSN_FLAG(30,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(ADD K16 << #16, [ACx,] ACy),
+			},
+			{
+				// SSDD001xKKKKKKKKKKKKKKKK01111010
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(25,3,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k8), INSN_FLAG(16,k8), INSN_FLAG(28,DD), INSN_FLAG(30,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(SUB K16 << #16, [ACx,] ACy),
+			},
+			{
+				// SSDD010xkkkkkkkkkkkkkkkk01111010
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(25,3,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k16), INSN_FLAG(28,DD), INSN_FLAG(30,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(AND k16 << #16, [ACx,] ACy),
+			},
+			{
+				// SSDD011xkkkkkkkkkkkkkkkk01111010
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(25,3,3),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k16), INSN_FLAG(28,DD), INSN_FLAG(30,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(OR k16 << #16, [ACx,] ACy),
+			},
+			{
+				// SSDD100xkkkkkkkkkkkkkkkk01111010
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(25,3,4),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k16), INSN_FLAG(28,DD), INSN_FLAG(30,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(XOR k16 << #16, [ACx,] ACy),
+			},
+			{
+				// xxDD101xKKKKKKKKKKKKKKKK01111010
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(25,3,5),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k8), INSN_FLAG(16,k8), INSN_FLAG(28,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV K16 << #16, ACx),
+			},
+			{
+				// xxxx110xxxxxxxxxxxxxxxxx01111010
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(25,3,6),  LIST_END },
+				.f_list = NULL,
+				.syntax = INSN_SYNTAX(IDLE),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
@@ -1027,88 +1703,369 @@
 	.byte = 0x80,
 	.size = 0x03,
 	.insn = {
-		// YMMM00xxXXXMMMYY10000000
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(20,MMM), INSN_FLAG(23,Y),  LIST_END },
-		.syntax = INSN_SYNTAX(MOV dbl(Xmem), dbl(Ymem)),
+		.i_list = (insn_item_t []) {
+			{
+				// YMMM00xxXXXMMMYY10000000
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(20,MMM), INSN_FLAG(23,Y),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV dbl(Xmem), dbl(Ymem)),
+			},
+			{
+				// YMMM01xxXXXMMMYY10000000
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(20,MMM), INSN_FLAG(23,Y),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV Xmem, Ymem),
+			},
+			{
+				// YMMM10SSXXXMMMYY10000000
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,SS), INSN_FLAG(20,MMM), INSN_FLAG(23,Y),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV ACx, Xmem, Ymem),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x81,
 	.size = 0x03,
 	.insn = {
-		// YMMM00DDXXXMMMYY10000001
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(20,MMM), INSN_FLAG(23,Y),  LIST_END },
-		.syntax = INSN_SYNTAX(ADD Xmem, Ymem, ACx),
+		.i_list = (insn_item_t []) {
+			{
+				// YMMM00DDXXXMMMYY10000001
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(20,MMM), INSN_FLAG(23,Y),  LIST_END },
+				.syntax = INSN_SYNTAX(ADD Xmem, Ymem, ACx),
+			},
+			{
+				// YMMM01DDXXXMMMYY10000001
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(20,MMM), INSN_FLAG(23,Y),  LIST_END },
+				.syntax = INSN_SYNTAX(SUB Xmem, Ymem, ACx),
+			},
+			{
+				// YMMM10DDXXXMMMYY10000001
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(20,MMM), INSN_FLAG(23,Y),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV Xmem, Ymem, ACx),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x82,
 	.size = 0x04,
 	.insn = {
-		// uuDDDDg%YMMM00mmXXXMMMYY10000010
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
-		.syntax = INSN_SYNTAX(MPY[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx :: MPY[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy),
+		.i_list = (insn_item_t []) {
+			{
+				// uuDDDDg%YMMM00mmXXXMMMYY10000010
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(MPY[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx :: MPY[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy),
+			},
+			{
+				// uuDDDDg%YMMM01mmXXXMMMYY10000010
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(MAC[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx :: MPY[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy),
+			},
+			{
+				// uuDDDDg%YMMM10mmXXXMMMYY10000010
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(MAS[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx :: MPY[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy),
+			},
+			{
+				// uuxxDDg%YMMM11mmXXXMMMYY10000010
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,3),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(AMAR Xmem :: MPY[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACx),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x83,
 	.size = 0x04,
 	.insn = {
-		// uuDDDDg%YMMM00mmXXXMMMYY10000011
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
-		.syntax = INSN_SYNTAX(MAC[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx :: MAC[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy),
+		.i_list = (insn_item_t []) {
+			{
+				// uuDDDDg%YMMM00mmXXXMMMYY10000011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(MAC[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx :: MAC[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy),
+			},
+			{
+				// uuDDDDg%YMMM01mmXXXMMMYY10000011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(MAS[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx :: MAC[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy),
+			},
+			{
+				// uuDDDDg%YMMM10mmXXXMMMYY10000011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(MAC[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx >> #16 :: MAC[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy),
+			},
+			{
+				// uuxxDDg%YMMM11mmXXXMMMYY10000011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,3),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(AMAR Xmem :: MAC[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACx),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x84,
 	.size = 0x04,
 	.insn = {
-		// uuDDDDg%YMMM00mmXXXMMMYY10000100
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
-		.syntax = INSN_SYNTAX(MAS[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx :: MAC[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy >> #16),
+		.i_list = (insn_item_t []) {
+			{
+				// uuDDDDg%YMMM00mmXXXMMMYY10000100
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(MAS[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx :: MAC[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy >> #16),
+			},
+			{
+				// uuxxDDg%YMMM01mmXXXMMMYY10000100
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(AMAR Xmem :: MAC[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACx >> #16),
+			},
+			{
+				// uuDDDDg%YMMM10mmXXXMMMYY10000100
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(MPY[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx :: MAC[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy >> #16),
+			},
+			{
+				// uuDDDDg%YMMM11mmXXXMMMYY10000100
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,3),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(MAC[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx >> #16 :: MAC[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy >> #16),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x85,
 	.size = 0x04,
 	.insn = {
-		// uuxxDDg%YMMM00mmXXXMMMYY10000101
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
-		.syntax = INSN_SYNTAX(AMAR Xmem :: MAS[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACx),
+		.i_list = (insn_item_t []) {
+			{
+				// uuxxDDg%YMMM00mmXXXMMMYY10000101
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(AMAR Xmem :: MAS[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACx),
+			},
+			{
+				// uuDDDDg%YMMM01mmXXXMMMYY10000101
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(MAS[R][40] [uns(]Xmem[)], [uns(]Cmem[)], ACx :: MAS[R][40] [uns(]Ymem[)], [uns(]Cmem[)], ACy),
+			},
+			{
+				// xxxxxxxxYMMM10mmXXXMMMYY10000101
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y),  LIST_END },
+				.syntax = INSN_SYNTAX(AMAR Xmem, Ymem, Cmem),
+			},
+			{
+				// DDx0DDU%YMMM11mmXXXMMMYY10000101
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,3), INSN_MASK(28,1,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,U), INSN_FLAG(26,DD), INSN_FLAG(30,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(FIRSADD Xmem, Ymem, Cmem, ACx, ACy),
+			},
+			{
+				// DDx1DDU%YMMM11mmXXXMMMYY10000101
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,3), INSN_MASK(28,1,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,U), INSN_FLAG(26,DD), INSN_FLAG(30,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(FIRSSUB Xmem, Ymem, Cmem, ACx, ACy),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x86,
 	.size = 0x04,
 	.insn = {
-		// 000guuU%YMMMxxDDXXXMMMYY10000110
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(29,3,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,U), INSN_FLAG(26,u), INSN_FLAG(27,u), INSN_FLAG(28,g),  LIST_END },
-		.syntax = INSN_SYNTAX(MPYM[R][40] [T3 = ][uns(]Xmem[)], [uns(]Ymem[)], ACx),
+		.i_list = (insn_item_t []) {
+			{
+				// 000guuU%YMMMxxDDXXXMMMYY10000110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(29,3,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,U), INSN_FLAG(26,u), INSN_FLAG(27,u), INSN_FLAG(28,g),  LIST_END },
+				.syntax = INSN_SYNTAX(MPYM[R][40] [T3 = ][uns(]Xmem[)], [uns(]Ymem[)], ACx),
+			},
+			{
+				// 001guuU%YMMMSSDDXXXMMMYY10000110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(29,3,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(18,SS), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,U), INSN_FLAG(26,u), INSN_FLAG(27,u), INSN_FLAG(28,g),  LIST_END },
+				.syntax = INSN_SYNTAX(MACM[R][40] [T3 = ][uns(]Xmem[)], [uns(]Ymem[)], [ACx,] ACy),
+			},
+			{
+				// 010guuU%YMMMSSDDXXXMMMYY10000110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(29,3,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(18,SS), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,U), INSN_FLAG(26,u), INSN_FLAG(27,u), INSN_FLAG(28,g),  LIST_END },
+				.syntax = INSN_SYNTAX(MACM[R][40] [T3 = ][uns(]Xmem[)], [uns(]Ymem[)], ACx >> #16[, ACy]),
+			},
+			{
+				// 011guuU%YMMMSSDDXXXMMMYY10000110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(29,3,3),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(18,SS), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,U), INSN_FLAG(26,u), INSN_FLAG(27,u), INSN_FLAG(28,g),  LIST_END },
+				.syntax = INSN_SYNTAX(MASM[R][40] [T3 = ][uns(]Xmem[)], [uns(]Ymem[)], [ACx,] ACy),
+			},
+			{
+				// 100xssU%YMMMDDDDXXXMMMYY10000110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(29,3,4),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(18,DD), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,U), INSN_FLAG(26,ss),  LIST_END },
+				.syntax = INSN_SYNTAX(MASM[R] [T3 = ]Xmem, Tx, ACx :: MOV Ymem << #16, ACy),
+			},
+			{
+				// 101xssU%YMMMDDDDXXXMMMYY10000110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(29,3,5),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(18,DD), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,U), INSN_FLAG(26,ss),  LIST_END },
+				.syntax = INSN_SYNTAX(MACM[R] [T3 = ]Xmem, Tx, ACx :: MOV Ymem << #16, ACy),
+			},
+			{
+				// 110xxxx%YMMMDDDDXXXMMMYY10000110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(29,3,6),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(18,DD), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R),  LIST_END },
+				.syntax = INSN_SYNTAX(LMS Xmem, Ymem, ACx, ACy),
+			},
+			{
+				// 1110xxn%YMMMDDDDXXXMMMYY10000110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(28,4,14),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(18,DD), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R),  LIST_END },
+				.syntax = INSN_SYNTAX(SQDST Xmem, Ymem, ACx, ACy),
+			},
+			{
+				// 1111xxn%YMMMDDDDXXXMMMYY10000110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(28,4,15),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(18,DD), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R),  LIST_END },
+				.syntax = INSN_SYNTAX(ABDST Xmem, Ymem, ACx, ACy),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x87,
 	.size = 0x04,
 	.insn = {
-		// 000xssU%YMMMSSDDXXXMMMYY10000111
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(29,3,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(18,SS), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,U), INSN_FLAG(26,ss),  LIST_END },
-		.syntax = INSN_SYNTAX(MPYM[R] [T3 = ]Xmem, Tx, ACy :: MOV HI(ACx << T2), Ymem),
+		.i_list = (insn_item_t []) {
+			{
+				// 000xssU%YMMMSSDDXXXMMMYY10000111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(29,3,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(18,SS), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,U), INSN_FLAG(26,ss),  LIST_END },
+				.syntax = INSN_SYNTAX(MPYM[R] [T3 = ]Xmem, Tx, ACy :: MOV HI(ACx << T2), Ymem),
+			},
+			{
+				// 001xssU%YMMMSSDDXXXMMMYY10000111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(29,3,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(18,SS), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,U), INSN_FLAG(26,ss),  LIST_END },
+				.syntax = INSN_SYNTAX(MACM[R] [T3 = ]Xmem, Tx, ACy :: MOV HI(ACx << T2), Ymem),
+			},
+			{
+				// 010xssU%YMMMSSDDXXXMMMYY10000111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(29,3,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(18,SS), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,U), INSN_FLAG(26,ss),  LIST_END },
+				.syntax = INSN_SYNTAX(MASM[R] [T3 = ]Xmem, Tx, ACy :: MOV HI(ACx << T2), Ymem),
+			},
+			{
+				// 01100001YMMMSSDDXXXMMMYY10000111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(24,8,97),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(18,SS), INSN_FLAG(20,MMM), INSN_FLAG(23,Y),  LIST_END },
+				.syntax = INSN_SYNTAX(LMSF Xmem, Ymem, ACx, ACy),
+			},
+			{
+				// 100xxxxxYMMMSSDDXXXMMMYY10000111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(29,3,4),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(18,SS), INSN_FLAG(20,MMM), INSN_FLAG(23,Y),  LIST_END },
+				.syntax = INSN_SYNTAX(ADD Xmem << #16, ACx, ACy :: MOV HI(ACy << T2), Ymem),
+			},
+			{
+				// 101xxxxxYMMMSSDDXXXMMMYY10000111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(29,3,5),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(18,SS), INSN_FLAG(20,MMM), INSN_FLAG(23,Y),  LIST_END },
+				.syntax = INSN_SYNTAX(SUB Xmem << #16, ACx, ACy :: MOV HI(ACy << T2), Ymem),
+			},
+			{
+				// 110xxxxxYMMMSSDDXXXMMMYY10000111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(29,3,6),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,DD), INSN_FLAG(18,SS), INSN_FLAG(20,MMM), INSN_FLAG(23,Y),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV Xmem << #16, ACy :: MOV HI(ACx << T2), Ymem),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
@@ -1137,55 +2094,172 @@
 	.byte = 0x92,
 	.size = 0x04,
 	.insn = {
-		// uuDDDDg%YMMM00mmXXXMMMYY10010010
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
-		.syntax = INSN_SYNTAX(MPY[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MPY[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx),
+		.i_list = (insn_item_t []) {
+			{
+				// uuDDDDg%YMMM00mmXXXMMMYY10010010
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(MPY[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MPY[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx),
+			},
+			{
+				// uuDDDDg%YMMM01mmXXXMMMYY10010010
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(MPY[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MAC[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx),
+			},
+			{
+				// uuDDDDg%YMMM10mmXXXMMMYY10010010
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(MPY[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MAS[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx),
+			},
+			{
+				// xxxxxxSS10010010
+				.i_list = NULL,
+				.m_list = NULL,
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(CALL ACx),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x93,
 	.size = 0x04,
 	.insn = {
-		// uuDDDDg%YMMM00mmXXXMMMYY10010011
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
-		.syntax = INSN_SYNTAX(MAC[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MAC[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx),
+		.i_list = (insn_item_t []) {
+			{
+				// uuDDDDg%YMMM00mmXXXMMMYY10010011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(MAC[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MAC[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx),
+			},
+			{
+				// uuDDDDg%YMMM01mmXXXMMMYY10010011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(MAC[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MAS[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx),
+			},
+			{
+				// uuDDDDg%YMMM10mmXXXMMMYY10010011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(MAC[R][40] [uns(]HI(Ymem)[)], [uns(]HI(Cmem)[)], ACy, :: MAC[R][40] [uns(]LO(Xmem)[)], [uns(]LO(Cmem)[)], ACx >> #16),
+			},
+			{
+				// uuDDDDg%YMMM11mmXXXMMMYY10010011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,3),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(MAC[R][40] [uns(]HI(Ymem)[)], [uns(]HI(Cmem)[)], ACy >> #16, :: MAC[R][40] [uns(]LO(Xmem)[)], [uns(]LO(Cmem)[)], ACx >> #16),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x94,
 	.size = 0x04,
 	.insn = {
-		// uuDDDDg%YMMM00mmXXXMMMYY10010100
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
-		.syntax = INSN_SYNTAX(MAC[R][40] [uns(]HI(Ymem)[)], [uns(]HI(Cmem)[)], ACy >> #16, :: MAS[R][40] [uns(]LO(Xmem)[)], [uns(]LO(Cmem)[)], ACx),
+		.i_list = (insn_item_t []) {
+			{
+				// uuDDDDg%YMMM00mmXXXMMMYY10010100
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(MAC[R][40] [uns(]HI(Ymem)[)], [uns(]HI(Cmem)[)], ACy >> #16, :: MAS[R][40] [uns(]LO(Xmem)[)], [uns(]LO(Cmem)[)], ACx),
+			},
+			{
+				// uuDDDDg%YMMM10mmXXXMMMYY10010100
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(MAC[R][40] [uns(]HI(Ymem)[)], [uns(]HI(Cmem)[)], ACy >> #16, :: MPY[R][40] [uns(]LO(Xmem)[)], [uns(]LO(Cmem)[)], ACx),
+			},
+			{
+				// xxxxxxxx10010100
+				.i_list = NULL,
+				.m_list = NULL,
+				.f_list = NULL,
+				.syntax = INSN_SYNTAX(RESET),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x95,
 	.size = 0x02,
 	.insn = {
-		// 0xxkkkkk10010101
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(15,1,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,k5),  LIST_END },
-		.syntax = INSN_SYNTAX(INTR k5),
+		.i_list = (insn_item_t []) {
+			{
+				// 0xxkkkkk10010101
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(15,1,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k5),  LIST_END },
+				.syntax = INSN_SYNTAX(INTR k5),
+			},
+			{
+				// 1xxkkkkk10010101
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(15,1,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,k5),  LIST_END },
+				.syntax = INSN_SYNTAX(TRAP k5),
+			},
+			{
+				// uuDDDDg%YMMM01mmXXXMMMYY10010101
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,YY), INSN_FLAG(10,MMM), INSN_FLAG(13,XXX), INSN_FLAG(16,mm), INSN_FLAG(20,MMM), INSN_FLAG(23,Y), INSN_FLAG(24,R), INSN_FLAG(25,g), INSN_FLAG(26,DD), INSN_FLAG(28,DD), INSN_FLAG(30,u), INSN_FLAG(31,u),  LIST_END },
+				.syntax = INSN_SYNTAX(MAS[R][40] [uns(]HI(Ymem)[)], [uns(]HI(Cmem)[)], ACy, :: MAS[R][40] [uns(]LO(Xmem)[)], [uns(]LO(Cmem)[)], ACx),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x96,
 	.size = 0x02,
 	.insn = {
-		// 0CCCCCCC10010110
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(15,1,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,C7),  LIST_END },
-		.syntax = INSN_SYNTAX(XCC [label, ]cond),
+		.i_list = (insn_item_t []) {
+			{
+				// 0CCCCCCC10010110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(15,1,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,C7),  LIST_END },
+				.syntax = INSN_SYNTAX(XCC [label, ]cond),
+			},
+			{
+				// 1CCCCCCC10010110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(15,1,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,C7),  LIST_END },
+				.syntax = INSN_SYNTAX(XCCPART [label, ]cond),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
@@ -1247,22 +2321,52 @@
 	.byte = 0x9e,
 	.size = 0x02,
 	.insn = {
-		// 0CCCCCCC10011110
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(15,1,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,C7),  LIST_END },
-		.syntax = INSN_SYNTAX(XCC [label, ]cond),
+		.i_list = (insn_item_t []) {
+			{
+				// 0CCCCCCC10011110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(15,1,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,C7),  LIST_END },
+				.syntax = INSN_SYNTAX(XCC [label, ]cond),
+			},
+			{
+				// 1CCCCCCC10011110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(15,1,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,C7),  LIST_END },
+				.syntax = INSN_SYNTAX(XCCPART [label, ]cond),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0x9f,
 	.size = 0x02,
 	.insn = {
-		// 0CCCCCCC10011111
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(15,1,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,C7),  LIST_END },
-		.syntax = INSN_SYNTAX(XCC [label, ]cond),
+		.i_list = (insn_item_t []) {
+			{
+				// 0CCCCCCC10011111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(15,1,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,C7),  LIST_END },
+				.syntax = INSN_SYNTAX(XCC [label, ]cond),
+			},
+			{
+				// 1CCCCCCC10011111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(15,1,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,C7),  LIST_END },
+				.syntax = INSN_SYNTAX(XCCPART [label, ]cond),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
@@ -1379,44 +2483,146 @@
 	.byte = 0xd0,
 	.size = 0x03,
 	.insn = {
-		// 0%DD01mmAAAAAAAI11010000
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(18,2,1), INSN_MASK(23,1,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,mm), INSN_FLAG(20,DD), INSN_FLAG(22,R),  LIST_END },
-		.syntax = INSN_SYNTAX(MPY[R] Smem, uns(Cmem), ACx),
+		.i_list = (insn_item_t []) {
+			{
+				// 0%DD01mmAAAAAAAI11010000
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,1), INSN_MASK(23,1,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,mm), INSN_FLAG(20,DD), INSN_FLAG(22,R),  LIST_END },
+				.syntax = INSN_SYNTAX(MPY[R] Smem, uns(Cmem), ACx),
+			},
+			{
+				// 0%DD10mmAAAAAAAI11010000
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,2), INSN_MASK(23,1,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,mm), INSN_FLAG(20,DD), INSN_FLAG(22,R),  LIST_END },
+				.syntax = INSN_SYNTAX(MAC[R] Smem, uns(Cmem), ACx),
+			},
+			{
+				// 0%DD11mmAAAAAAAI11010000
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,3), INSN_MASK(23,1,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,mm), INSN_FLAG(20,DD), INSN_FLAG(22,R),  LIST_END },
+				.syntax = INSN_SYNTAX(MAS[R] Smem, uns(Cmem), ACx),
+			},
+			{
+				// U%DDxxmmAAAAAAAI11010000
+				.i_list = NULL,
+				.m_list = NULL,
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,mm), INSN_FLAG(20,DD), INSN_FLAG(22,R), INSN_FLAG(23,U),  LIST_END },
+				.syntax = INSN_SYNTAX(MACM[R]Z [T3 = ]Smem, Cmem, ACx),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0xd1,
 	.size = 0x03,
 	.insn = {
-		// U%DD00mmAAAAAAAI11010001
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,mm), INSN_FLAG(20,DD), INSN_FLAG(22,R), INSN_FLAG(23,U),  LIST_END },
-		.syntax = INSN_SYNTAX(MPYM[R] [T3 = ]Smem, Cmem, ACx),
+		.i_list = (insn_item_t []) {
+			{
+				// U%DD00mmAAAAAAAI11010001
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,mm), INSN_FLAG(20,DD), INSN_FLAG(22,R), INSN_FLAG(23,U),  LIST_END },
+				.syntax = INSN_SYNTAX(MPYM[R] [T3 = ]Smem, Cmem, ACx),
+			},
+			{
+				// U%DD01mmAAAAAAAI11010001
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,mm), INSN_FLAG(20,DD), INSN_FLAG(22,R), INSN_FLAG(23,U),  LIST_END },
+				.syntax = INSN_SYNTAX(MACM[R] [T3 = ]Smem, Cmem, ACx),
+			},
+			{
+				// U%DD10mmAAAAAAAI11010001
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,mm), INSN_FLAG(20,DD), INSN_FLAG(22,R), INSN_FLAG(23,U),  LIST_END },
+				.syntax = INSN_SYNTAX(MASM[R] [T3 = ]Smem, Cmem, ACx),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0xd2,
 	.size = 0x03,
 	.insn = {
-		// U%DD00SSAAAAAAAI11010010
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,SS), INSN_FLAG(20,DD), INSN_FLAG(22,R), INSN_FLAG(23,U),  LIST_END },
-		.syntax = INSN_SYNTAX(MACM[R] [T3 = ]Smem, [ACx,] ACy),
+		.i_list = (insn_item_t []) {
+			{
+				// U%DD00SSAAAAAAAI11010010
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,SS), INSN_FLAG(20,DD), INSN_FLAG(22,R), INSN_FLAG(23,U),  LIST_END },
+				.syntax = INSN_SYNTAX(MACM[R] [T3 = ]Smem, [ACx,] ACy),
+			},
+			{
+				// U%DD01SSAAAAAAAI11010010
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,SS), INSN_FLAG(20,DD), INSN_FLAG(22,R), INSN_FLAG(23,U),  LIST_END },
+				.syntax = INSN_SYNTAX(MASM[R] [T3 = ]Smem, [ACx,] ACy),
+			},
+			{
+				// U%DD10SSAAAAAAAI11010010
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,SS), INSN_FLAG(20,DD), INSN_FLAG(22,R), INSN_FLAG(23,U),  LIST_END },
+				.syntax = INSN_SYNTAX(SQAM[R] [T3 = ]Smem, [ACx,] ACy),
+			},
+			{
+				// U%DD11SSAAAAAAAI11010010
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,3),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,SS), INSN_FLAG(20,DD), INSN_FLAG(22,R), INSN_FLAG(23,U),  LIST_END },
+				.syntax = INSN_SYNTAX(SQSM[R] [T3 = ]Smem, [ACx,] ACy),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0xd3,
 	.size = 0x03,
 	.insn = {
-		// U%DD00SSAAAAAAAI11010011
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,SS), INSN_FLAG(20,DD), INSN_FLAG(22,R), INSN_FLAG(23,U),  LIST_END },
-		.syntax = INSN_SYNTAX(MPYM[R] [T3 = ]Smem, [ACx,] ACy),
+		.i_list = (insn_item_t []) {
+			{
+				// U%DD00SSAAAAAAAI11010011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,SS), INSN_FLAG(20,DD), INSN_FLAG(22,R), INSN_FLAG(23,U),  LIST_END },
+				.syntax = INSN_SYNTAX(MPYM[R] [T3 = ]Smem, [ACx,] ACy),
+			},
+			{
+				// U%DD10xxAAAAAAAI11010011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,DD), INSN_FLAG(22,R), INSN_FLAG(23,U),  LIST_END },
+				.syntax = INSN_SYNTAX(SQRM[R] [T3 = ]Smem, ACx),
+			},
+			{
+				// U%DDu1ssAAAAAAAI11010011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,1,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,ss), INSN_FLAG(19,u), INSN_FLAG(20,DD), INSN_FLAG(22,R), INSN_FLAG(23,U),  LIST_END },
+				.syntax = INSN_SYNTAX(MPYM[R][U] [T3 = ]Smem, Tx, ACx),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
@@ -1670,33 +2876,176 @@
 	.byte = 0xdd,
 	.size = 0x03,
 	.insn = {
-		// SSDDss00AAAAAAAI11011101
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(16,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(18,ss), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
-		.syntax = INSN_SYNTAX(ADD Smem << Tx, [ACx,] ACy),
+		.i_list = (insn_item_t []) {
+			{
+				// SSDDss00AAAAAAAI11011101
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(18,ss), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(ADD Smem << Tx, [ACx,] ACy),
+			},
+			{
+				// SSDDss01AAAAAAAI11011101
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,2,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(18,ss), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(SUB Smem << Tx, [ACx,] ACy),
+			},
+			{
+				// SSDDss10AAAAAAAI11011101
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,2,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(18,ss), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(ADDSUB2CC Smem, ACx, Tx, TC1, TC2, ACy),
+			},
+			{
+				// x%DDss11AAAAAAAI11011101
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,2,3),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(18,ss), INSN_FLAG(20,DD), INSN_FLAG(22,R),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV [rnd(]Smem << Tx[)], ACx),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0xde,
 	.size = 0x03,
 	.insn = {
-		// SSDD0000AAAAAAAI11011110
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(16,4,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
-		.syntax = INSN_SYNTAX(ADDSUBCC Smem, ACx, TC1, ACy),
+		.i_list = (insn_item_t []) {
+			{
+				// SSDD0000AAAAAAAI11011110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(ADDSUBCC Smem, ACx, TC1, ACy),
+			},
+			{
+				// SSDD0001AAAAAAAI11011110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(ADDSUBCC Smem, ACx, TC2, ACy),
+			},
+			{
+				// SSDD0010AAAAAAAI11011110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(ADDSUBCC Smem, ACx, TC1, TC2, ACy),
+			},
+			{
+				// SSDD0011AAAAAAAI11011110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,3),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(SUBC Smem, [ACx,] ACy),
+			},
+			{
+				// SSDD0100AAAAAAAI11011110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,4),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(ADD Smem << #16, [ACx,] ACy),
+			},
+			{
+				// SSDD0101AAAAAAAI11011110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,5),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(SUB Smem << #16, [ACx,] ACy),
+			},
+			{
+				// SSDD0110AAAAAAAI11011110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,6),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(SUB ACx, Smem << #16, ACy),
+			},
+			{
+				// ssDD1000AAAAAAAI11011110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,8),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,DD), INSN_FLAG(22,ss),  LIST_END },
+				.syntax = INSN_SYNTAX(ADDSUB Tx, Smem, ACx),
+			},
+			{
+				// ssDD1001AAAAAAAI11011110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,9),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,DD), INSN_FLAG(22,ss),  LIST_END },
+				.syntax = INSN_SYNTAX(SUBADD Tx, Smem, ACx),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0xdf,
 	.size = 0x03,
 	.insn = {
-		// FDDD000uAAAAAAAI11011111
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(17,3,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,u), INSN_FLAG(20,FDDD),  LIST_END },
-		.syntax = INSN_SYNTAX(MOV [uns(]high_byte(Smem)[)], dst),
+		.i_list = (insn_item_t []) {
+			{
+				// FDDD000uAAAAAAAI11011111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,u), INSN_FLAG(20,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV [uns(]high_byte(Smem)[)], dst),
+			},
+			{
+				// FDDD001uAAAAAAAI11011111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,u), INSN_FLAG(20,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV [uns(]low_byte(Smem)[)], dst),
+			},
+			{
+				// xxDD010uAAAAAAAI11011111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,u), INSN_FLAG(20,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV [uns(]Smem[)], ACx),
+			},
+			{
+				// SSDD100uAAAAAAAI11011111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,4),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,u), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(ADD [uns(]Smem[)], CARRY, [ACx,] ACy),
+			},
+			{
+				// SSDD101uAAAAAAAI11011111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,5),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,u), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(SUB [uns(]Smem[)], BORROW, [ACx,] ACy),
+			},
+			{
+				// SSDD110uAAAAAAAI11011111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,6),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,u), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(ADD [uns(]Smem[)], [ACx,] ACy),
+			},
+			{
+				// SSDD111uAAAAAAAI11011111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,7),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,u), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(SUB [uns(]Smem[)], [ACx,] ACy),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
@@ -1736,22 +3085,101 @@
 	.byte = 0xe3,
 	.size = 0x03,
 	.insn = {
-		// kkkk000xAAAAAAAI11100011
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(17,3,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,k4),  LIST_END },
-		.syntax = INSN_SYNTAX(BTSTSET k4, Smem, TC1),
+		.i_list = (insn_item_t []) {
+			{
+				// kkkk000xAAAAAAAI11100011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(BTSTSET k4, Smem, TC1),
+			},
+			{
+				// kkkk001xAAAAAAAI11100011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(BTSTSET k4, Smem, TC2),
+			},
+			{
+				// kkkk010xAAAAAAAI11100011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(BTSTCLR k4, Smem, TC1),
+			},
+			{
+				// kkkk011xAAAAAAAI11100011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,3),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(BTSTCLR k4, Smem, TC2),
+			},
+			{
+				// kkkk100xAAAAAAAI11100011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,4),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(BTSTNOT k4, Smem, TC1),
+			},
+			{
+				// kkkk101xAAAAAAAI11100011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,5),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,k4),  LIST_END },
+				.syntax = INSN_SYNTAX(BTSTNOT k4, Smem, TC2),
+			},
+			{
+				// FSSS1100AAAAAAAI11100011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,12),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,FSSS),  LIST_END },
+				.syntax = INSN_SYNTAX(BSET src, Smem),
+			},
+			{
+				// FSSS1101AAAAAAAI11100011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,13),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,FSSS),  LIST_END },
+				.syntax = INSN_SYNTAX(BCLR src, Smem),
+			},
+			{
+				// FSSS111xAAAAAAAI11100011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,7),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,FSSS),  LIST_END },
+				.syntax = INSN_SYNTAX(BNOT src, Smem),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0xe4,
 	.size = 0x03,
 	.insn = {
-		// FSSSx0xxAAAAAAAI11100100
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(18,1,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,FSSS),  LIST_END },
-		.syntax = INSN_SYNTAX(PSH src,Smem),
+		.i_list = (insn_item_t []) {
+			{
+				// FSSSx0xxAAAAAAAI11100100
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,1,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,FSSS),  LIST_END },
+				.syntax = INSN_SYNTAX(PSH src,Smem),
+			},
+			{
+				// FDDDx1xxAAAAAAAI11100100
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,1,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,FDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(POP dst, Smem),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
@@ -1928,22 +3356,59 @@
 	.byte = 0xe7,
 	.size = 0x03,
 	.insn = {
-		// SSss00xxAAAAAAAI11100111
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,ss), INSN_FLAG(22,SS),  LIST_END },
-		.syntax = INSN_SYNTAX(MOV ACx << Tx, Smem),
+		.i_list = (insn_item_t []) {
+			{
+				// SSss00xxAAAAAAAI11100111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,ss), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV ACx << Tx, Smem),
+			},
+			{
+				// SSss10x%AAAAAAAI11100111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,R), INSN_FLAG(20,ss), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV [rnd(]HI(ACx << Tx)[)], Smem),
+			},
+			{
+				// SSss11u%AAAAAAAI11100111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,3),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,R), INSN_FLAG(17,u), INSN_FLAG(20,ss), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV [uns(] [rnd(]HI[(saturate](ACx << Tx)[)))], Smem),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0xe8,
 	.size = 0x03,
 	.insn = {
-		// SSxxx0x%AAAAAAAI11101000
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(18,1,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,R), INSN_FLAG(22,SS),  LIST_END },
-		.syntax = INSN_SYNTAX(MOV [rnd(]HI(ACx)[)], Smem),
+		.i_list = (insn_item_t []) {
+			{
+				// SSxxx0x%AAAAAAAI11101000
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,1,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,R), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV [rnd(]HI(ACx)[)], Smem),
+			},
+			{
+				// SSxxx1u%AAAAAAAI11101000
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,1,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,R), INSN_FLAG(17,u), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV [uns(] [rnd(]HI[(saturate](ACx)[)))], Smem),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
@@ -1972,22 +3437,101 @@
 	.byte = 0xeb,
 	.size = 0x03,
 	.insn = {
-		// xxxx01xxAAAAAAAI11101011
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(18,2,1),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI),  LIST_END },
-		.syntax = INSN_SYNTAX(MOV RETA, dbl(Lmem)),
+		.i_list = (insn_item_t []) {
+			{
+				// xxxx01xxAAAAAAAI11101011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV RETA, dbl(Lmem)),
+			},
+			{
+				// xxSS10x0AAAAAAAI11101011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,1,0), INSN_MASK(18,2,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV ACx, dbl(Lmem)),
+			},
+			{
+				// xxSS10u1AAAAAAAI11101011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,1,1), INSN_MASK(18,2,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(17,u), INSN_FLAG(20,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV [uns(]saturate(ACx)[)], dbl(Lmem)),
+			},
+			{
+				// FSSS1100AAAAAAAI11101011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,12),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,FSSS),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV pair(TAx), dbl(Lmem)),
+			},
+			{
+				// xxSS1101AAAAAAAI11101011
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,13),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV ACx >> #1, dual(Lmem)),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0xec,
 	.size = 0x03,
 	.insn = {
-		// FSSS000xAAAAAAAI11101100
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(17,3,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,FSSS),  LIST_END },
-		.syntax = INSN_SYNTAX(BSET Baddr, src),
+		.i_list = (insn_item_t []) {
+			{
+				// FSSS000xAAAAAAAI11101100
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,FSSS),  LIST_END },
+				.syntax = INSN_SYNTAX(BSET Baddr, src),
+			},
+			{
+				// FSSS001xAAAAAAAI11101100
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,FSSS),  LIST_END },
+				.syntax = INSN_SYNTAX(BCLR Baddr, src),
+			},
+			{
+				// FSSS010xAAAAAAAI11101100
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,FSSS),  LIST_END },
+				.syntax = INSN_SYNTAX(BTSTP Baddr, src),
+			},
+			{
+				// FSSS011xAAAAAAAI11101100
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,3),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,FSSS),  LIST_END },
+				.syntax = INSN_SYNTAX(BNOT Baddr, src),
+			},
+			{
+				// FSSS100tAAAAAAAI11101100
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,4),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,t), INSN_FLAG(20,FSSS),  LIST_END },
+				.syntax = INSN_SYNTAX(BTST Baddr, src, TCx),
+			},
+			{
+				// XDDD1110AAAAAAAI11101100
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(16,4,14),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,XDDD),  LIST_END },
+				.syntax = INSN_SYNTAX(AMAR Smem, XAdst),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
@@ -2090,22 +3634,108 @@
 	.byte = 0xee,
 	.size = 0x03,
 	.insn = {
-		// SSDD000xAAAAAAAI11101110
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(17,3,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
-		.syntax = INSN_SYNTAX(ADD dual(Lmem), [ACx,] ACy),
+		.i_list = (insn_item_t []) {
+			{
+				// SSDD000xAAAAAAAI11101110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(ADD dual(Lmem), [ACx,] ACy),
+			},
+			{
+				// SSDD001xAAAAAAAI11101110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(SUB dual(Lmem), [ACx,] ACy),
+			},
+			{
+				// SSDD010xAAAAAAAI11101110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,DD), INSN_FLAG(22,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(SUB ACx, dual(Lmem), ACy),
+			},
+			{
+				// ssDD011xAAAAAAAI11101110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,3),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,DD), INSN_FLAG(22,ss),  LIST_END },
+				.syntax = INSN_SYNTAX(SUB dual(Lmem), Tx, ACx),
+			},
+			{
+				// ssDD100xAAAAAAAI11101110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,4),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,DD), INSN_FLAG(22,ss),  LIST_END },
+				.syntax = INSN_SYNTAX(ADD dual(Lmem), Tx, ACx),
+			},
+			{
+				// ssDD101xAAAAAAAI11101110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,5),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,DD), INSN_FLAG(22,ss),  LIST_END },
+				.syntax = INSN_SYNTAX(SUB Tx, dual(Lmem), ACx),
+			},
+			{
+				// ssDD110xAAAAAAAI11101110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,6),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,DD), INSN_FLAG(22,ss),  LIST_END },
+				.syntax = INSN_SYNTAX(ADDSUB Tx, dual(Lmem), ACx),
+			},
+			{
+				// ssDD111xAAAAAAAI11101110
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(17,3,7),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(20,DD), INSN_FLAG(22,ss),  LIST_END },
+				.syntax = INSN_SYNTAX(SUBADD Tx, dual(Lmem), ACx),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0xef,
 	.size = 0x03,
 	.insn = {
-		// xxxx00mmAAAAAAAI11101111
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,mm),  LIST_END },
-		.syntax = INSN_SYNTAX(MOV Cmem, Smem),
+		.i_list = (insn_item_t []) {
+			{
+				// xxxx00mmAAAAAAAI11101111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,mm),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV Cmem, Smem),
+			},
+			{
+				// xxxx01mmAAAAAAAI11101111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,mm),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV Smem, Cmem),
+			},
+			{
+				// xxxx10mmAAAAAAAI11101111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,mm),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV Cmem,dbl(Lmem)),
+			},
+			{
+				// xxxx11mmAAAAAAAI11101111
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(18,2,3),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,mm),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV dbl(Lmem), Cmem),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
@@ -2200,33 +3830,85 @@
 	.byte = 0xf8,
 	.size = 0x04,
 	.insn = {
-		// xxDDx0U%KKKKKKKKAAAAAAAI11111000
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(26,1,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,k8), INSN_FLAG(24,R), INSN_FLAG(25,U), INSN_FLAG(28,DD),  LIST_END },
-		.syntax = INSN_SYNTAX(MPYMK[R] [T3 = ]Smem, K8, ACx),
+		.i_list = (insn_item_t []) {
+			{
+				// xxDDx0U%KKKKKKKKAAAAAAAI11111000
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(26,1,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,k8), INSN_FLAG(24,R), INSN_FLAG(25,U), INSN_FLAG(28,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(MPYMK[R] [T3 = ]Smem, K8, ACx),
+			},
+			{
+				// SSDDx1U%KKKKKKKKAAAAAAAI11111000
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(26,1,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,k8), INSN_FLAG(24,R), INSN_FLAG(25,U), INSN_FLAG(28,DD), INSN_FLAG(30,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(MACMK[R] [T3 = ]Smem, K8, [ACx,] ACy),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0xf9,
 	.size = 0x04,
 	.insn = {
-		// SSDD00xxuxSHIFTWAAAAAAAI11111001
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(26,2,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,SHIFTW), INSN_FLAG(23,u), INSN_FLAG(28,DD), INSN_FLAG(30,SS),  LIST_END },
-		.syntax = INSN_SYNTAX(ADD [uns(]Smem[)] << #SHIFTW, [ACx,] ACy),
+		.i_list = (insn_item_t []) {
+			{
+				// SSDD00xxuxSHIFTWAAAAAAAI11111001
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(26,2,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,SHIFTW), INSN_FLAG(23,u), INSN_FLAG(28,DD), INSN_FLAG(30,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(ADD [uns(]Smem[)] << #SHIFTW, [ACx,] ACy),
+			},
+			{
+				// SSDD01xxuxSHIFTWAAAAAAAI11111001
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(26,2,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,SHIFTW), INSN_FLAG(23,u), INSN_FLAG(28,DD), INSN_FLAG(30,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(SUB [uns(]Smem[)] << #SHIFTW, [ACx,] ACy),
+			},
+			{
+				// xxDD10xxuxSHIFTWAAAAAAAI11111001
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(26,2,2),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,SHIFTW), INSN_FLAG(23,u), INSN_FLAG(28,DD),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV [uns(]Smem[)] << #SHIFTW, ACx),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {
 	.byte = 0xfa,
 	.size = 0x04,
 	.insn = {
-		// SSxxx0x%xxSHIFTWAAAAAAAI11111010
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(26,1,0),  LIST_END },
-		.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,SHIFTW), INSN_FLAG(24,R), INSN_FLAG(30,SS),  LIST_END },
-		.syntax = INSN_SYNTAX(MOV [rnd(]HI(ACx << #SHIFTW)[)], Smem),
+		.i_list = (insn_item_t []) {
+			{
+				// SSxxx0x%xxSHIFTWAAAAAAAI11111010
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(26,1,0),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,SHIFTW), INSN_FLAG(24,R), INSN_FLAG(30,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV [rnd(]HI(ACx << #SHIFTW)[)], Smem),
+			},
+			{
+				// SSxxx1x%uxSHIFTWAAAAAAAI11111010
+				.i_list = NULL,
+				.m_list = (insn_mask_t []) { INSN_MASK(26,1,1),  LIST_END },
+				.f_list = (insn_flag_t []) { INSN_FLAG(8,AAAAAAAI), INSN_FLAG(16,SHIFTW), INSN_FLAG(23,u), INSN_FLAG(24,R), INSN_FLAG(30,SS),  LIST_END },
+				.syntax = INSN_SYNTAX(MOV [uns(] [rnd(]HI[(saturate](ACx << #SHIFTW)[)))], Smem),
+			},
+			LIST_END,
+		},
+		.m_list = NULL,
+		.f_list = NULL,
+		.syntax = NULL,
 	},
 },
 {

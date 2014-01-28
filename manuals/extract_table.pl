@@ -99,7 +99,7 @@ sub dump_head
 	printf("\t.byte = 0x%02x,\n", oct("0b$byte"));
 	printf("\t.size = 0x%02x,\n", length($head->[0]->{opcode}) / 8);
 
-	if (length @{$head} == 1) {
+	if (scalar @{$head} == 1) {
 		printf("\t.insn = "), dump_insn($head->[0], "");
 	} else {
 		printf("\t.insn = {\n");
