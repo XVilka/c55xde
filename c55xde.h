@@ -19,6 +19,7 @@ typedef enum {
     C55X_OPCODE_t,
     C55X_OPCODE_n,
     C55X_OPCODE_x,
+    C55X_OPCODE_l,
 
     /* 2bl */
 
@@ -35,6 +36,7 @@ typedef enum {
     /* 3bl */
 
     C55X_OPCODE_k3 = 0x30,
+    C55X_OPCODE_l3,
     C55X_OPCODE_MMM,
     C55X_OPCODE_XXX,
     C55X_OPCODE_YYY,
@@ -42,7 +44,6 @@ typedef enum {
     /* 4bl */
 
     C55X_OPCODE_k4 = 0x40,
-    C55X_OPCODE_l4,
     C55X_OPCODE_FDDD,
     C55X_OPCODE_FSSS,
     C55X_OPCODE_SHFT,

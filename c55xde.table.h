@@ -1302,7 +1302,7 @@
 		// lCCCCCCC01100lll
 		.i_list = NULL,
 		.m_list = NULL,
-		.f_list = (insn_flag_t []) { INSN_FLAG(0,l3), INSN_FLAG(8,C7), INSN_FLAG(15,l1),  LIST_END },
+		.f_list = (insn_flag_t []) { INSN_FLAG(0,l3), INSN_FLAG(8,C7), INSN_FLAG(15,l),  LIST_END },
 		.syntax = INSN_SYNTAX(BCC l4, cond),
 	},
 },

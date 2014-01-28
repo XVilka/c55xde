@@ -82,10 +82,19 @@ struct instruction_data {
 		uint8_t		k5;
 		uint8_t		k6;
 		uint8_t		k8;
-		uint16_t	k16;
+		uint32_t	k16;
+
+		uint8_t		l;
+		uint8_t		l3;
+		uint8_t		l7;
+		uint32_t	l16;
 
 		uint8_t		XDDD;
 		uint8_t		XSSS;
+
+		uint8_t		XXX;
+		uint8_t		YY;
+		uint8_t		Y;
 	} f;
 };
 
@@ -193,9 +202,6 @@ int run_f_list(insn_data_t * data, insn_item_t * insn)
 		case C55X_OPCODE_U:
 			data->f.U = get_bits(data->opcode64, flag->f, 1);
 			break;
-		case C55X_OPCODE_Y:
-			printf("  Y = %01x (FIXME)\n", (int)get_bits(data->opcode64, flag->f, 1));
-			break;
 		case C55X_OPCODE_u:
 			data->f.u = get_bits(data->opcode64, flag->f, 1);
 			break;
@@ -264,6 +270,30 @@ int run_f_list(insn_data_t * data, insn_item_t * insn)
 		case C55X_OPCODE_XSSS:
 			data->f.XSSS = get_bits(data->opcode64, flag->f, 4);
 			break;
+
+		case C55X_OPCODE_XXX:
+			data->f.XXX = get_bits(data->opcode64, flag->f, 3);
+			break;
+		case C55X_OPCODE_YY:
+			data->f.YY = get_bits(data->opcode64, flag->f, 2);
+			break;
+		case C55X_OPCODE_Y:
+			data->f.Y = get_bits(data->opcode64, flag->f, 1);
+			break;
+
+		case C55X_OPCODE_l:
+			data->f.l = get_bits(data->opcode64, flag->f, 1);
+			break;
+		case C55X_OPCODE_l3:
+			data->f.l3 = get_bits(data->opcode64, flag->f, 3);
+			break;
+		case C55X_OPCODE_l7:
+			data->f.l7 = get_bits(data->opcode64, flag->f, 7);
+			break;
+		case C55X_OPCODE_l16:
+			data->f.l16 = get_bits(data->opcode64, flag->f, 16);
+			break;
+
 
 		default:
 			printf("TODO: unknown opcode flag %02x\n", flag->v);
@@ -335,6 +365,11 @@ void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 	substitute(syntax,  "k9", "#%02Xh", data->f.k4 | (data->f.k5 << 5));
 	substitute(syntax, "k16", "#%02Xh", data->f.k16);
 
+	/* l4 */
+
+	if (f_valid(data->f.l) && f_valid(data->f.l3))
+		substitute(syntax, "l4", "#%02X", (data->f.l3 << 1) | data->f.l);
+
 	/* RELOP */
 
 	if (f_valid(data->f.cc))
@@ -389,6 +424,22 @@ void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 		substitute(syntax, "xsrc", "%s", tbl_XDDD_XSSS[data->f.XSSS & 15]);
 		substitute(syntax, "XAsrc", "%s", tbl_XDDD_XSSS[data->f.XSSS & 15]);
 	}
+
+	/* XXX and YYY */
+
+	if (f_valid(data->f.XXX))
+		substitute(syntax, "Xmem", "AR%d", data->f.XXX);
+
+	if (f_valid(data->f.Y) && f_valid(data->f.YY))
+		substitute(syntax, "Ymem", "AR%d", (data->f.YY << 2) | data->f.Y);
+
+	/* pmad */
+
+	if (f_valid(data->f.l7))
+		substitute(syntax, "pmad", "#%02X", data->f.l7);
+
+	if (f_valid(data->f.l16))
+		substitute(syntax, "pmad", "#%02X", data->f.l16);
 
 	printf("%s\n", syntax);
 }
@@ -474,6 +525,7 @@ int main(int argc, const char * argv[])
 	int length;
 	uint8_t data[] = { 0x20,			// NOP
 			   0x21,			// NOP E
+			   0x60, 0x00,			// BCC l4, cond
 			   0x16, 0x07, 0xF0,		// MOV #7Fh, DPH
 			   0x00, 0x00, 0xFF,		// RPTCC #FFh, cond
 			   0x12, 0x00, 0x00,		// CMP[U] src RELOP dst, TCx
