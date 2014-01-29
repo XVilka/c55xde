@@ -82,7 +82,6 @@ typedef enum {
     C55X_OPCODE_K16,
     C55X_OPCODE_L16,
     C55X_OPCODE_D16,
-    C55X_OPCODE_P16,
 
     /* 24bl */
 
