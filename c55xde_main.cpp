@@ -63,6 +63,7 @@ struct instruction_data {
 		uint8_t		U;
 		uint8_t		u;
 		uint8_t		g;
+		uint8_t		t;
 
 		uint8_t		SS;
 		uint8_t		DD;
@@ -213,6 +214,9 @@ int run_f_list(insn_data_t * data, insn_item_t * insn)
 			break;
 		case C55X_OPCODE_g:
 			data->f.g = get_bits(data->opcode64, flag->f, 1);
+			break;
+		case C55X_OPCODE_t:
+			data->f.t = get_bits(data->opcode64, flag->f, 1);
 			break;
 
 		/* 2bl parsing */
@@ -535,12 +539,15 @@ void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 		substitute(syntax, "BitOut", tbl_v[(data->f.vv >> 0) & 1]);
 	}
 
-	/* tt */
+	/* tt and t */
 
 	if (f_valid(data->f.tt)) {
 		substitute(syntax, "TCx", tbl_t[(data->f.tt >> 1) & 1]);
 		substitute(syntax, "TCy", tbl_t[(data->f.tt >> 0) & 1]);
 	}
+
+	if (f_valid(data->f.t))
+		substitute(syntax, "Tx", tbl_t[data->f.t & 1]);
 
 	/* XDDD and XSSS */
 
