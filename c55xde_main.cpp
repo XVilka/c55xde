@@ -93,6 +93,9 @@ struct instruction_data {
 		uint8_t		XDDD;
 		uint8_t		XSSS;
 
+		uint8_t		FDDD;
+		uint8_t		FSSS;
+
 		uint8_t		XXX;
 		uint8_t		YY;
 		uint8_t		Y;
@@ -279,6 +282,13 @@ int run_f_list(insn_data_t * data, insn_item_t * insn)
 			break;
 		case C55X_OPCODE_XSSS:
 			data->f.XSSS = get_bits(data->opcode64, flag->f, 4);
+			break;
+
+		case C55X_OPCODE_FDDD:
+			data->f.FDDD = get_bits(data->opcode64, flag->f, 4);
+			break;
+		case C55X_OPCODE_FSSS:
+			data->f.FSSS = get_bits(data->opcode64, flag->f, 4);
 			break;
 
 		case C55X_OPCODE_XXX:
@@ -559,6 +569,25 @@ void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 	if (f_valid(data->f.XSSS)) {
 		substitute(syntax, "xsrc", "%s", tbl_XDDD_XSSS[data->f.XSSS & 15]);
 		substitute(syntax, "XAsrc", "%s", tbl_XDDD_XSSS[data->f.XSSS & 15]);
+	}
+
+	/* FDDD and FSSS */
+
+	if (f_valid(data->f.FSSS) && f_valid(data->f.FDDD)) {
+		substitute(syntax, "[src,] dst", "%s", \
+			   data->f.FSSS == data->f.FDDD ? "dst" : "src, dst");
+	}
+
+	if (f_valid(data->f.FDDD)) {
+		substitute(syntax, "dst1", "%s", get_FSSS_str(data->f.FDDD, NULL));
+		substitute(syntax, "dst", "%s", get_FSSS_str(data->f.FDDD, NULL));
+		substitute(syntax, "TAx", "%s", get_FSSS_str(data->f.FDDD, NULL));
+	}
+
+	if (f_valid(data->f.FSSS)) {
+		substitute(syntax, "src1", "%s", get_FSSS_str(data->f.FSSS, NULL));
+		substitute(syntax, "src", "%s", get_FSSS_str(data->f.FSSS, NULL));
+		substitute(syntax, "TAy", "%s", get_FSSS_str(data->f.FSSS, NULL));
 	}
 
 	/* XXX and YYY */
