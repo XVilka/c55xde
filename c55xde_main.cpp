@@ -386,12 +386,18 @@ void substitute(char * string, const char * token, const char * fmt, ...)
 static const char * tbl_RELOP[] = { "==", "<", ">=", "!=" };
 static const char * tbl_v[2] = { "CARRY", "TC2" };
 static const char * tbl_t[2] = { "TC1", "TC2" };
-static const char * tbl_XDDD_XSSS[16] = {
-	"AC0", "AC1", "AC2", "AC3",
-	"XSP", "XSSP", "XDP", "XCDP",
-	"XAR0", "XAR1", "XAR2", "XAR3",
-	"XAR4", "XAR5", "XAR6", "XAR7"
-};
+
+const char * get_XREG_str(uint8_t key, char * str)
+{
+	static const char * table[16] = {
+		"AC0", "AC1", "AC2", "AC3",
+		"XSP", "XSSP", "XDP", "XCDP",
+		"XAR0", "XAR1", "XAR2", "XAR3",
+		"XAR4", "XAR5", "XAR6", "XAR7",
+	};
+
+	return table[key & 15];
+}
 
 const char * get_SWAP_str(uint8_t key, char * str)
 {
@@ -588,13 +594,13 @@ void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 	/* XDDD and XSSS */
 
 	if (f_valid(data->f.XDDD)) {
-		substitute(syntax, "xdst", "%s", tbl_XDDD_XSSS[data->f.XDDD & 15]);
-		substitute(syntax, "XAdst", "%s", tbl_XDDD_XSSS[data->f.XDDD & 15]);
+		substitute(syntax, "xdst", "%s", get_XREG_str(data->f.XDDD, NULL));
+		substitute(syntax, "XAdst", "%s", get_XREG_str(data->f.XDDD, NULL));
 	}
 
 	if (f_valid(data->f.XSSS)) {
-		substitute(syntax, "xsrc", "%s", tbl_XDDD_XSSS[data->f.XSSS & 15]);
-		substitute(syntax, "XAsrc", "%s", tbl_XDDD_XSSS[data->f.XSSS & 15]);
+		substitute(syntax, "xsrc", "%s", get_XREG_str(data->f.XSSS, NULL));
+		substitute(syntax, "XAsrc", "%s", get_XREG_str(data->f.XSSS, NULL));
 	}
 
 	/* FDDD and FSSS */
