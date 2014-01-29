@@ -717,17 +717,6 @@
 	},
 },
 {
-	.byte = 0x45,
-	.size = 0x02,
-	.insn = {
-		// 1111001001000101
-		.i_list = NULL,
-		.m_list = (insn_mask_t []) { INSN_MASK(8,8,242),  LIST_END },
-		.f_list = NULL,
-		.syntax = INSN_SYNTAX(.LK),
-	},
-},
-{
 	.byte = 0x44,
 	.size = 0x02,
 	.insn = {
@@ -2271,61 +2260,6 @@
 		.m_list = NULL,
 		.f_list = NULL,
 		.syntax = NULL,
-	},
-},
-{
-	.byte = 0x98,
-	.size = 0x01,
-	.insn = {
-		// 10011000
-		.i_list = NULL,
-		.m_list = NULL,
-		.f_list = NULL,
-		.syntax = INSN_SYNTAX(mmap),
-	},
-},
-{
-	.byte = 0x99,
-	.size = 0x01,
-	.insn = {
-		// 10011001
-		.i_list = NULL,
-		.m_list = NULL,
-		.f_list = NULL,
-		.syntax = INSN_SYNTAX(port(Smem)),
-	},
-},
-{
-	.byte = 0x9a,
-	.size = 0x01,
-	.insn = {
-		// 10011010
-		.i_list = NULL,
-		.m_list = NULL,
-		.f_list = NULL,
-		.syntax = INSN_SYNTAX(port(Smem)),
-	},
-},
-{
-	.byte = 0x9c,
-	.size = 0x01,
-	.insn = {
-		// 10011100
-		.i_list = NULL,
-		.m_list = NULL,
-		.f_list = NULL,
-		.syntax = INSN_SYNTAX(<instruction>.LR),
-	},
-},
-{
-	.byte = 0x9d,
-	.size = 0x01,
-	.insn = {
-		// 10011101
-		.i_list = NULL,
-		.m_list = NULL,
-		.f_list = NULL,
-		.syntax = INSN_SYNTAX(<instruction>.CR),
 	},
 },
 {
