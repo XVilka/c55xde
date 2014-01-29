@@ -481,6 +481,15 @@ const char * get_COND_str(uint8_t key, char * str)
 	return str;
 }
 
+const char * get_CMEM_str(uint8_t key, char * str)
+{
+	static const char * table[4] = {
+		"*CDP", "*CDP+", "*CDP-", "*(CDP+T0)",
+	};
+
+	return table[key & 3];
+}
+
 void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 {
 	char temp[64];
@@ -626,6 +635,10 @@ void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 	if (f_valid(data->f.C7))
 		substitute(syntax, "cond", "%s", get_COND_str(data->f.C7, temp));
 
+	/* Cmem */
+
+	if (f_valid(data->f.mm))
+		substitute(syntax, "Cmem", "%s", get_CMEM_str(data->f.mm, temp));
 
 	printf("%s\n", syntax);
 }
