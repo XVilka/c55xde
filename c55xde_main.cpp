@@ -542,10 +542,12 @@ void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 	if (f_valid(data->f.cc))
 		substitute(syntax, "RELOP", tbl_RELOP[data->f.cc & 3]);
 
-	/* [U], [R], [40] */
+	/* [R], [T3 = ], [U], [40] */
 
 	if (f_valid(data->f.R))
 		substitute(syntax, "[R]", "%s", data->f.R ? "R" : "");
+	if (f_valid(data->f.U))
+		substitute(syntax, "[T3 = ]", "%s", data->f.U ? "T3=" : "");
 	if (f_valid(data->f.u))
 		substitute(syntax, "[U]", "%s", data->f.u ? "U" : "");
 	if (f_valid(data->f.g))
