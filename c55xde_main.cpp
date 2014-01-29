@@ -105,6 +105,9 @@ struct instruction_data {
 		uint8_t		L7;
 		uint16_t	L8;
 		uint32_t	L16;
+
+		uint16_t	P8;
+		uint32_t	P24;
 	} f;
 };
 
@@ -328,6 +331,13 @@ int run_f_list(insn_data_t * data, insn_item_t * insn)
 			data->f.L16 = get_bits(data->opcode64, flag->f, 16);
 			break;
 
+		case C55X_OPCODE_P8:
+			data->f.P8 = get_bits(data->opcode64, flag->f, 8);
+			break;
+		case C55X_OPCODE_P24:
+			data->f.P24 = get_bits(data->opcode64, flag->f, 24);
+			break;
+
 		default:
 			printf("TODO: unknown opcode flag %02x\n", flag->v);
 			break;
@@ -502,6 +512,11 @@ void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 		substitute(syntax, "L8", "#%02Xh", data->f.L8);
 	if (f_valid(data->f.L16))
 		substitute(syntax, "L16", "#%04Xh", data->f.L16);
+
+	if (f_valid(data->f.P8))
+		substitute(syntax, "P8", "#%02Xh", data->f.P8);
+	if (f_valid(data->f.P24))
+		substitute(syntax, "P24", "#%04Xh", data->f.P24);
 
 	/* l4 */
 
