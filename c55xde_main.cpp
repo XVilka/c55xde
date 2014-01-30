@@ -61,6 +61,7 @@ struct instruction_data {
 		uint64_t	opcode64;
 	};
 
+	uint8_t		length;
 	char		syntax[1024];
 
 	// TODO: add specific fields
@@ -934,6 +935,8 @@ void decode_addressing_modes(insn_data_t * data)
 
 void decode_insn(insn_data_t * data)
 {
+	data->length = data->head->size;
+
 	snprintf(data->syntax, sizeof(data->syntax), \
 		 field_valid(E) && field_value(E) ? "|| %s" : "%s", data->insn->syntax);
 
@@ -1016,9 +1019,9 @@ int decode(const uint8_t * stream)
 
 	if (lookup_insn_head(&data)) {
 		if (decode_insn_head(&data)) {
-			dump(stream, data.head->size);
+			dump(stream, data.length);
 			printf("%s\n", data.syntax);
-			return data.head->size;
+			return data.length;
 		}
 	}
 
