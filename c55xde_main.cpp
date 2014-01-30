@@ -935,7 +935,7 @@ void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
 	char syntax[1024];
 
 	snprintf(syntax, sizeof(syntax), \
-		 field_valid(E) ? "|| %s" : "%s", insn->syntax);
+		field_valid(E) && field_value(E) ? "|| %s" :"%s", insn->syntax);
 
 	decode_bits(data, syntax);
 
