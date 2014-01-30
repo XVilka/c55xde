@@ -117,6 +117,15 @@ struct instruction_data {
 		uint8_t		CCCCCCC;
 		uint16_t	AAAAAAAI;
 
+		// aggregates
+
+		uint8_t		Xmem_mmm;
+		uint8_t		Xmem_reg;
+		uint8_t		Ymem_mmm;
+		uint8_t		Ymem_reg;
+
+
+
 		// cleanup (WIP)...
 
 
@@ -124,10 +133,6 @@ struct instruction_data {
 		uint8_t		SS2;
 		uint8_t		DD;
 		uint8_t		DD2;
-
-		uint8_t		XXX;
-		uint8_t		YY;
-		uint8_t		Y;
 
 	} f;
 };
@@ -231,6 +236,7 @@ void dump(const void * p, int size)
 
 int run_f_list(insn_data_t * data, insn_item_t * insn)
 {
+	uint8_t temp;
 	insn_flag_t * flag;
 
 	if (!insn->f_list)
@@ -369,11 +375,23 @@ int run_f_list(insn_data_t * data, insn_item_t * insn)
 			data->f.FDDD = get_bits(data->opcode64, flag->f, 4);
 			break;
 
+		case C55X_OPCODE_Y:
+			temp = get_bits(data->opcode64, flag->f, 1) << 2;
+			data->f.Ymem_reg = f_valid(data->f.Ymem_reg) ? data->f.Ymem_reg | temp : temp;
+			break;
+		case C55X_OPCODE_YY:
+			temp = get_bits(data->opcode64, flag->f, 2) << 0;
+			data->f.Ymem_reg = f_valid(data->f.Ymem_reg) ? data->f.Ymem_reg | temp : temp;
+			break;
+		case C55X_OPCODE_XXX:
+			data->f.Xmem_reg = get_bits(data->opcode64, flag->f, 3);
+			break;
 
-
-
-
-
+		case C55X_OPCODE_MMM:
+			temp = get_bits(data->opcode64, flag->f, 3);
+			data->f.Xmem_mmm = f_valid(data->f.Xmem_mmm) ? : temp;
+			data->f.Ymem_mmm = f_valid(data->f.Ymem_mmm) ? : temp;
+			break;
 
 		case C55X_OPCODE_SS:
 			if (f_valid(data->f.SS))
@@ -387,18 +405,6 @@ int run_f_list(insn_data_t * data, insn_item_t * insn)
 			else
 				data->f.DD2 = get_bits(data->opcode64, flag->f, 2);
 			break;
-		case C55X_OPCODE_XXX:
-			data->f.XXX = get_bits(data->opcode64, flag->f, 3);
-			break;
-		case C55X_OPCODE_YY:
-			data->f.YY = get_bits(data->opcode64, flag->f, 2);
-			break;
-		case C55X_OPCODE_Y:
-			data->f.Y = get_bits(data->opcode64, flag->f, 1);
-			break;
-
-
-
 
 		default:
 			printf("TODO: unknown opcode flag %02x\n", flag->v);
@@ -576,6 +582,29 @@ const char * get_cmem_str(uint8_t key, char * str)
 	};
 
 	return table[ key & 3 ];
+}
+
+const char * get_mmm_str(uint8_t key, char * str)
+{
+	switch (key & 7) {
+	case 0: return "*ARn";
+	case 1: return "*ARn+";
+	case 2: return "*ARn−";
+		// TODO:
+		//	C54CM:0 => *(ARn + T0)
+		//	C54CM:1 => *(ARn + AR0)
+	case 3: return "*(ARn + T0)";
+	case 4: return "*(ARn + T1)";
+		// TODO:
+		//	C54CM:0 => *(ARn - T0)
+		//	C54CM:1 => *(ARn - AR0)
+	case 5: return "*(ARn - T0)";
+	case 6: return "*(ARn - T1)";
+		// TODO:
+		//	C54CM:0 => *ARn(T0)
+		//	C54CM:1 => *ARn(AR0)
+	case 7: return "*ARn(T0)";
+	};
 }
 
 /*
@@ -768,6 +797,18 @@ void decode_addressing_modes(insn_data_t * data, char * str)
 {
 	if (field_valid(mm))
 		substitute(str, "Cmem", "%s", get_cmem_str(field_value(mm), NULL));
+
+	// Xmem and Ymem
+
+	if (field_valid(Xmem_reg) && field_valid(Xmem_mmm)) {
+		substitute(str, "Xmem", "%s", get_mmm_str(field_value(Xmem_mmm), NULL));
+		substitute(str, "ARn", "AR%d", field_value(Xmem_reg));
+	}
+
+	if (field_valid(Ymem_reg) && field_valid(Ymem_mmm)) {
+		substitute(str, "Ymem", "%s", get_mmm_str(field_value(Ymem_mmm), NULL));
+		substitute(str, "ARn", "AR%d", field_value(Ymem_reg));
+	}
 }
 
 void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
