@@ -61,6 +61,8 @@ struct instruction_data {
 		uint64_t	opcode64;
 	};
 
+	char		syntax[1024];
+
 	// TODO: add specific fields
 
 	struct {
@@ -226,15 +228,15 @@ void dump(const void * p, int size)
 	printf("%-32s", data);
 }
 
-int run_f_list(insn_data_t * data, insn_item_t * insn)
+int run_f_list(insn_data_t * data)
 {
 	uint8_t temp;
 	insn_flag_t * flag;
 
-	if (!insn->f_list)
-		return 0;
+	if (!data->insn->f_list)
+		return 1;
 
-	for (flag = insn->f_list; !f_list_last(flag); flag++) {
+	for (flag = data->insn->f_list; !f_list_last(flag); flag++) {
 		switch (flag->v) {
 		case C55X_OPCODE_E:
 			data->f.E = get_bits(data->opcode64, flag->f, 1);
@@ -398,27 +400,27 @@ int run_f_list(insn_data_t * data, insn_item_t * insn)
 
 		default:
 			printf("TODO: unknown opcode flag %02x\n", flag->v);
-			break;
+			return 0;
 		}
 	}
 
-	return 0;
+	return 1;
 }
 
-int run_m_list(insn_data_t * data, insn_item_t * insn)
+int run_m_list(insn_data_t * data)
 {
 	insn_mask_t * mask;
 
-	if (!insn->m_list)
-		return 0;
+	if (!data->insn->m_list)
+		return 1;
 
-	for (mask = insn->m_list; !m_list_last(mask); mask++) {
+	for (mask = data->insn->m_list; !m_list_last(mask); mask++) {
 		/* match bits in range [f, f + n] with mask's value */
 		if (get_bits(data->opcode64, mask->f, mask->n) != mask->v)
-			return -1;
+			return 0;
 	}
 
-	return 0;
+	return 1;
 }
 
 void substitute(char * string, const char * token, const char * fmt, ...)
@@ -463,7 +465,7 @@ const char * get_freg_str(uint8_t key, char * str)
 
 const char * get_swap_str(uint8_t key, char * str)
 {
-	strcpy(str, "reserved");
+	strcpy(str, "invalid");
 
 	switch (key) {
 	case 0: return "SWAP AC0, AC2";
@@ -678,184 +680,184 @@ const char * get_mmm_str(uint8_t key, char * str)
 #define field_value(n)		data->f.n
 #define field_valid(n)		f_valid(field_value(n))
 
-void decode_bits(insn_data_t * data, char * str)
+void decode_bits(insn_data_t * data)
 {
 	// rounding
 	if (field_valid(R))
-		substitute(str, "[R]", "%s", field_value(R) ? "R" : "");
+		substitute(data->syntax, "[R]", "%s", field_value(R) ? "R" : "");
 
 	// UNSigned keyword
 	if (field_valid(u))
-		substitute(str, "[U]", "%s", field_value(u) ? "U" : "");
+		substitute(data->syntax, "[U]", "%s", field_value(u) ? "U" : "");
 
 	// 40 keyword
 	if (field_valid(g))
-		substitute(str, "[40]", "%s", field_value(g) ? "40" : "");
+		substitute(data->syntax, "[40]", "%s", field_value(g) ? "40" : "");
 
 	// T3 update
 	if (field_valid(U))
-		substitute(str, "[T3 = ]", "%s", field_value(U) ? "T3=" : "");
+		substitute(data->syntax, "[T3 = ]", "%s", field_value(U) ? "T3=" : "");
 }
 
-void decode_constants(insn_data_t * data, char * str)
+void decode_constants(insn_data_t * data)
 {
 	// signed constant
 
 	if (field_valid(K8))
-		substitute(str, "K8", "#%02Xh", field_value(K8));
+		substitute(data->syntax, "K8", "#%02Xh", field_value(K8));
 	if (field_valid(K16))
-		substitute(str, "K16", "#%04Xh", field_value(K16));
+		substitute(data->syntax, "K16", "#%04Xh", field_value(K16));
 
 	// unsigned constant
 
 	if (field_valid(k4))
-		substitute(str, "k4", "#%02Xh", field_value(k4));
+		substitute(data->syntax, "k4", "#%02Xh", field_value(k4));
 	if (field_valid(k5))
-		substitute(str, "k5", "#%02Xh", field_value(k5));
+		substitute(data->syntax, "k5", "#%02Xh", field_value(k5));
 	if (field_valid(k8))
-		substitute(str, "k8", "#%02Xh", field_value(k8));
+		substitute(data->syntax, "k8", "#%02Xh", field_value(k8));
 
 	if (field_valid(k12))
-		substitute(str, "k12", "#%03Xh", field_value(k12));
+		substitute(data->syntax, "k12", "#%03Xh", field_value(k12));
 	if (field_valid(k16))
-		substitute(str, "k16", "#%04Xh", field_value(k16));
+		substitute(data->syntax, "k16", "#%04Xh", field_value(k16));
 
 	if (field_valid(k4) && field_valid(k3))
-		substitute(str, "k7", "#%02Xh", (field_value(k3) << 4) | field_value(k4));
+		substitute(data->syntax, "k7", "#%02Xh", (field_value(k3) << 4) | field_value(k4));
 	if (field_valid(k4) && field_valid(k5))
-		substitute(str, "k9", "#%03Xh", (field_value(k5) << 4) | field_value(k4));
+		substitute(data->syntax, "k9", "#%03Xh", (field_value(k5) << 4) | field_value(k4));
 
 	// data address label
 
 	if (field_valid(D16))
-		substitute(str, "D16", "%04Xh", field_value(D16));
+		substitute(data->syntax, "D16", "%04Xh", field_value(D16));
 
 	// immediate shift value
 
 	if (field_valid(SHFT))
-		substitute(str, "SHFT", "%02Xh", field_value(SHFT));
+		substitute(data->syntax, "SHFT", "%02Xh", field_value(SHFT));
 	if (field_valid(SHIFTW))
-		substitute(str, "SHIFTW", "%02Xh", field_value(SHIFTW));
+		substitute(data->syntax, "SHIFTW", "%02Xh", field_value(SHIFTW));
 }
 
-void decode_addresses(insn_data_t * data, char * str)
+void decode_addresses(insn_data_t * data)
 {
 	// program address label
 
 	if (field_valid(L7))
-		substitute(str, "L7", "%02Xh", field_value(L7));
+		substitute(data->syntax, "L7", "%02Xh", field_value(L7));
 	if (field_valid(L8))
-		substitute(str, "L8", "%02Xh", field_value(L8));
+		substitute(data->syntax, "L8", "%02Xh", field_value(L8));
 	if (field_valid(L16))
-		substitute(str, "L16", "%04Xh", field_value(L16));
+		substitute(data->syntax, "L16", "%04Xh", field_value(L16));
 
 	// program address label
 
 	if (field_valid(l1) && field_valid(l3))
-		substitute(str, "l4", "%02Xh", (field_value(l3) << 1) | field_value(l1));
+		substitute(data->syntax, "l4", "%02Xh", (field_value(l3) << 1) | field_value(l1));
 
 	// program memory address
 
 	if (field_valid(l7))
-		substitute(str, "pmad", "%02Xh", field_value(l7));
+		substitute(data->syntax, "pmad", "%02Xh", field_value(l7));
 	if (field_valid(l16))
-		substitute(str, "pmad", "%04Xh", field_value(l16));
+		substitute(data->syntax, "pmad", "%04Xh", field_value(l16));
 
 	// program or data address label
 
 	if (field_valid(P8))
-		substitute(str, "P8", "%02Xh", field_value(P8));
+		substitute(data->syntax, "P8", "%02Xh", field_value(P8));
 	if (field_valid(P24))
-		substitute(str, "P24", "%06Xh", field_value(P24));
+		substitute(data->syntax, "P24", "%06Xh", field_value(P24));
 }
 
-void decode_swap(insn_data_t * data, char * str)
+void decode_swap(insn_data_t * data)
 {
 	char tmp[64];
 
 	if (field_valid(k6))
-		substitute(str, "SWAP ( )", get_swap_str(field_value(k6), tmp));
+		substitute(data->syntax, "SWAP ( )", get_swap_str(field_value(k6), tmp));
 }
 
-void decode_relop(insn_data_t * data, char * str)
+void decode_relop(insn_data_t * data)
 {
 	if (field_valid(cc))
-		substitute(str, "RELOP", get_relop_str(field_value(cc), str));
+		substitute(data->syntax, "RELOP", get_relop_str(field_value(cc), NULL));
 }
 
-void decode_cond(insn_data_t * data, char * str)
+void decode_cond(insn_data_t * data)
 {
 	char tmp[64];
 
 	if (field_valid(CCCCCCC))
-		substitute(str, "cond", "%s", get_cond_str(field_valid(CCCCCCC), tmp));
+		substitute(data->syntax, "cond", "%s", get_cond_str(field_valid(CCCCCCC), tmp));
 }
 
-void decode_registers(insn_data_t * data, char * str)
+void decode_registers(insn_data_t * data)
 {
 	uint8_t code = 0;
 
 	// transition register
 
 	if (field_valid(r))
-		substitute(str, "TRNx", "TRN%d", field_value(r));
+		substitute(data->syntax, "TRNx", "TRN%d", field_value(r));
 
 	// source and destination temporary registers
 
 	if (field_valid(ss))
-		substitute(str, "Tx", "T%d", field_value(ss));
+		substitute(data->syntax, "Tx", "T%d", field_value(ss));
 
 	if (field_valid(dd))
-		substitute(str, "Tx", "T%d", field_value(dd));
+		substitute(data->syntax, "Tx", "T%d", field_value(dd));
 
 	// shifted in/out bit values
 
 	if (field_valid(vv)) {
-		substitute(str, "BitIn", "%s", get_v_str(field_value(vv) >> 1, NULL));
-		substitute(str, "BitOut", "%s", get_v_str(field_value(vv) >> 0, NULL));
+		substitute(data->syntax, "BitIn", "%s", get_v_str(field_value(vv) >> 1, NULL));
+		substitute(data->syntax, "BitOut", "%s", get_v_str(field_value(vv) >> 0, NULL));
 	}
 
 	// source and destination of CRC instruction
 
 	if (field_valid(t))
-		substitute(str, "TCx", "%s", get_t_str(field_value(t), NULL));
+		substitute(data->syntax, "TCx", "%s", get_t_str(field_value(t), NULL));
 
 	if (field_valid(tt)) {
-		substitute(str, "TCx", "%s", get_t_str(field_value(tt) >> 1, NULL));
-		substitute(str, "TCy", "%s", get_t_str(field_value(tt) >> 0, NULL));
+		substitute(data->syntax, "TCx", "%s", get_t_str(field_value(tt) >> 1, NULL));
+		substitute(data->syntax, "TCy", "%s", get_t_str(field_value(tt) >> 0, NULL));
 	}
 
 	// source or destination accumulator or extended register
 
 	if (field_valid(XSSS)) {
-		substitute(str, "xsrc", "%s", get_xreg_str(field_value(XSSS), NULL));
-		substitute(str, "XAsrc", "%s", get_xreg_str(field_value(XSSS), NULL));
+		substitute(data->syntax, "xsrc", "%s", get_xreg_str(field_value(XSSS), NULL));
+		substitute(data->syntax, "XAsrc", "%s", get_xreg_str(field_value(XSSS), NULL));
 	}
 
 	if (field_valid(XDDD)) {
-		substitute(str, "xdst", "%s", get_xreg_str(field_value(XDDD), NULL));
-		substitute(str, "XAdst", "%s", get_xreg_str(field_value(XDDD), NULL));
+		substitute(data->syntax, "xdst", "%s", get_xreg_str(field_value(XDDD), NULL));
+		substitute(data->syntax, "XAdst", "%s", get_xreg_str(field_value(XDDD), NULL));
 	}
 
 	// source or destination accumulator, auxiliary or temporary register
 
 	if (field_valid(FSSS) && field_valid(FDDD)) {
 		if (field_value(FSSS) == field_value(FDDD))
-			substitute(str, "[src,] dst", "dst");
+			substitute(data->syntax, "[src,] dst", "dst");
 		else
-			substitute(str, "[src,] dst", "src, dst");
+			substitute(data->syntax, "[src,] dst", "src, dst");
 	}
 
 	if (field_valid(FSSS)) {
-		substitute(str, "src1", "%s", get_freg_str(field_value(FSSS), NULL));
-		substitute(str, "src", "%s", get_freg_str(field_value(FSSS), NULL));
-		substitute(str, "TAy", "%s", get_freg_str(field_value(FSSS), NULL));
+		substitute(data->syntax, "src1", "%s", get_freg_str(field_value(FSSS), NULL));
+		substitute(data->syntax, "src", "%s", get_freg_str(field_value(FSSS), NULL));
+		substitute(data->syntax, "TAy", "%s", get_freg_str(field_value(FSSS), NULL));
 	}
 
 	if (field_valid(FDDD)) {
-		substitute(str, "dst1", "%s", get_freg_str(field_value(FDDD), NULL));
-		substitute(str, "dst", "%s", get_freg_str(field_value(FDDD), NULL));
-		substitute(str, "TAx", "%s", get_freg_str(field_value(FDDD), NULL));
+		substitute(data->syntax, "dst1", "%s", get_freg_str(field_value(FDDD), NULL));
+		substitute(data->syntax, "dst", "%s", get_freg_str(field_value(FDDD), NULL));
+		substitute(data->syntax, "TAx", "%s", get_freg_str(field_value(FDDD), NULL));
 	}
 
 	// source and destination accumulator registers
@@ -867,52 +869,52 @@ void decode_registers(insn_data_t * data, char * str)
 
 	switch (code) {
 	case 0x01:	// SS
-		substitute(str, "ACx", "AC%d", field_value(SS[0]));
+		substitute(data->syntax, "ACx", "AC%d", field_value(SS[0]));
 		break;
 	case 0x03:	// SSSS
-		substitute(str, "ACx", "AC%d", field_value(SS[0]));
-		substitute(str, "ACy", "AC%d", field_value(SS[1]));
+		substitute(data->syntax, "ACx", "AC%d", field_value(SS[0]));
+		substitute(data->syntax, "ACy", "AC%d", field_value(SS[1]));
 		break;
 	case 0x11:	// SS   DD
 		if (field_value(SS[0]) == field_value(DD[0])) {
-			substitute(str, "[ACx,] ACy", "AC%d", field_value(SS[0]));
+			substitute(data->syntax, "[ACx,] ACy", "AC%d", field_value(SS[0]));
 		} else {
-			substitute(str, "[ACx,] ACy", "AC%d, AC%d", field_value(SS[0]), field_value(DD[0]));
+			substitute(data->syntax, "[ACx,] ACy", "AC%d, AC%d", field_value(SS[0]), field_value(DD[0]));
 		}
 		break;
 	case 0x33:	// SSSS DDDD
-		substitute(str, "ACx", "AC%d", field_value(SS[0]));
-		substitute(str, "ACy", "AC%d", field_value(SS[1]));
-		substitute(str, "ACz", "AC%d", field_value(DD[0]));
-		substitute(str, "ACw", "AC%d", field_value(DD[1]));
+		substitute(data->syntax, "ACx", "AC%d", field_value(SS[0]));
+		substitute(data->syntax, "ACy", "AC%d", field_value(SS[1]));
+		substitute(data->syntax, "ACz", "AC%d", field_value(DD[0]));
+		substitute(data->syntax, "ACw", "AC%d", field_value(DD[1]));
 		break;
 	case 0x10:	//      DD
-		substitute(str, "ACx", "AC%d", field_value(DD[0]));
+		substitute(data->syntax, "ACx", "AC%d", field_value(DD[0]));
 		break;
 	case 0x30:	//      DDDD
-		substitute(str, "ACx", "AC%d", field_value(DD[0]));
-		substitute(str, "ACy", "AC%d", field_value(DD[1]));
+		substitute(data->syntax, "ACx", "AC%d", field_value(DD[0]));
+		substitute(data->syntax, "ACy", "AC%d", field_value(DD[1]));
 		break;
 	}
 }
 
-void decode_addressing_modes(insn_data_t * data, char * str)
+void decode_addressing_modes(insn_data_t * data)
 {
 	// Cmem
 
 	if (field_valid(mm))
-		substitute(str, "Cmem", "%s", get_cmem_str(field_value(mm), NULL));
+		substitute(data->syntax, "Cmem", "%s", get_cmem_str(field_value(mm), NULL));
 
 	// Xmem and Ymem
 
 	if (field_valid(Xmem_reg) && field_valid(Xmem_mmm)) {
-		substitute(str, "Xmem", "%s", get_mmm_str(field_value(Xmem_mmm), NULL));
-		substitute(str, "ARn", "AR%d", field_value(Xmem_reg));
+		substitute(data->syntax, "Xmem", "%s", get_mmm_str(field_value(Xmem_mmm), NULL));
+		substitute(data->syntax, "ARn", "AR%d", field_value(Xmem_reg));
 	}
 
 	if (field_valid(Ymem_reg) && field_valid(Ymem_mmm)) {
-		substitute(str, "Ymem", "%s", get_mmm_str(field_value(Ymem_mmm), NULL));
-		substitute(str, "ARn", "AR%d", field_value(Ymem_reg));
+		substitute(data->syntax, "Ymem", "%s", get_mmm_str(field_value(Ymem_mmm), NULL));
+		substitute(data->syntax, "ARn", "AR%d", field_value(Ymem_reg));
 	}
 
 	// Lmem and Smem
@@ -925,59 +927,49 @@ void decode_addressing_modes(insn_data_t * data, char * str)
 			substitute(tmp, "ARn", "AR%d", field_value(AAAAAAAI) >> 5);
 		}
 
-		substitute(str, "Smem", "%s", tmp);
-		substitute(str, "Lmem", "%s", tmp);
+		substitute(data->syntax, "Smem", "%s", tmp);
+		substitute(data->syntax, "Lmem", "%s", tmp);
 	}
 }
 
-void decode_insn_syntax(insn_data_t * data, insn_item_t * insn)
+void decode_insn(insn_data_t * data)
 {
-	char syntax[1024];
+	snprintf(data->syntax, sizeof(data->syntax), \
+		 field_valid(E) && field_value(E) ? "|| %s" : "%s", data->insn->syntax);
 
-	snprintf(syntax, sizeof(syntax), \
-		field_valid(E) && field_value(E) ? "|| %s" :"%s", insn->syntax);
+	decode_bits(data);
 
-	decode_bits(data, syntax);
+	decode_constants(data);
+	decode_addresses(data);
 
-	decode_constants(data, syntax);
-	decode_addresses(data, syntax);
+	decode_swap(data);
+	decode_relop(data);
+	decode_cond(data);
 
-	decode_swap(data, syntax);
-	decode_relop(data, syntax);
-	decode_cond(data, syntax);
-
-	decode_registers(data, syntax);
-	decode_addressing_modes(data, syntax);
-
-	printf("\t%s\n", syntax);
+	decode_registers(data);
+	decode_addressing_modes(data);
 }
 
-int decode_insn(insn_data_t * data)
+insn_item_t * decode_insn_head(insn_data_t * data)
 {
-	insn_item_t * insn = &data->head->insn;
+	run_f_list(data);
 
-	run_f_list(data, insn);
+	if (data->insn->i_list)
+		data->insn = data->insn->i_list;
 
-	if (insn->i_list) {
-		for (insn = insn->i_list; !i_list_last(insn); insn++) {
-			if (!run_m_list(data, insn)) {
-				run_f_list(data, insn);
-				break;
-			}
-		}
+	while (!i_list_last(data->insn)) {
+		if (run_m_list(data) && run_f_list(data))
+			break;
+		data->insn++;
 	}
 
-	if (insn && insn->syntax) {
-		dump(data->stream, data->head->size);
-		decode_insn_syntax(data, insn);
-	} else {
-		printf("%-32s MY_BYTE %02Xh\n", "", data->stream[0]);
-	}
+	if (!i_list_last(data->insn))
+		decode_insn(data);
 
-	return (insn && insn->syntax) ? data->head->size : -1;
+	return i_list_last(data->insn) ? NULL : data->insn;
 }
 
-int lookup_insn(insn_data_t * data)
+insn_head_t * lookup_insn_head(insn_data_t * data)
 {
 	uint8_t opcode = data->opcode;
 
@@ -998,10 +990,15 @@ int lookup_insn(insn_data_t * data)
 		}
 	}
 
-	data->head = data->head ? : \
-		(insn_head_hash[opcode] ? : insn_head_hash[opcode & 0xFE]);
+	if (!data->head) {
+		data->head = insn_head_hash[opcode];
+		if (!data->head)
+			data->head = insn_head_hash[opcode & 0xFE];
+	}
 
-	return data->head ? 0 : -1;
+	data->insn = data->head ? &data->head->insn : NULL;
+
+	return data->head;
 }
 
 void insn_data_init(insn_data_t * data, const uint8_t * stream)
@@ -1017,15 +1014,18 @@ int decode(const uint8_t * stream)
 
 	insn_data_init(&data, stream);
 
-	if (lookup_insn(&data)) {
-//		dump(stream, 1);
-		printf("\tMY_BYTE %02Xh\n", stream[0]);
-		return -1;
+	if (lookup_insn_head(&data)) {
+		if (decode_insn_head(&data)) {
+			dump(stream, data.head->size);
+			printf("%s\n", data.syntax);
+			return data.head->size;
+		}
 	}
 
-//	dump(stream, data.head->size);
+	dump(stream, 1);
+	printf(".MY_BYTE %02Xh\n", stream[0]);
 
-	return decode_insn(&data);
+	return 1;
 }
 
 void initialize(void)
@@ -1041,7 +1041,7 @@ int main(int argc, const char * argv[])
 	int length;
 	uint8_t data[] = { 0x20,			// NOP
 			   0x21,			// NOP E
-//			   0xFD,			// invalid
+			   0xFD,			// invalid
 			   0xCB, 0x88,			//
 			   0x5F, 0x00,			// SWAP (...)
 			   0x60, 0x07,			// BCC l4, cond
@@ -1061,8 +1061,9 @@ int main(int argc, const char * argv[])
 
 	initialize();
 
-	while ((length = decode(p)) > 0) {
-		p += length;
+	while (p < (data + sizeof(data))) {
+		printf("%04X: ", p - data);
+		p += decode(p);
 	}
 #else
 	uint8_t * data;
