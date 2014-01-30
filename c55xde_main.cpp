@@ -577,23 +577,23 @@ const char * get_cmem_str(uint8_t key, char * str)
 const char * get_mmm_str(uint8_t key, char * str)
 {
 	switch (key & 7) {
-	case 0: return "*ARn";
-	case 1: return "*ARn+";
-	case 2: return "*ARn−";
+	case 0x00: return "*ARn";
+	case 0x01: return "*ARn+";
+	case 0x02: return "*ARn−";
 		// TODO:
 		//	C54CM:0 => *(ARn + T0)
 		//	C54CM:1 => *(ARn + AR0)
-	case 3: return "*(ARn + T0)";
-	case 4: return "*(ARn + T1)";
+	case 0x03: return "*(ARn + T0)";
+	case 0x04: return "*(ARn + T1)";
 		// TODO:
 		//	C54CM:0 => *(ARn - T0)
 		//	C54CM:1 => *(ARn - AR0)
-	case 5: return "*(ARn - T0)";
-	case 6: return "*(ARn - T1)";
+	case 0x05: return "*(ARn - T0)";
+	case 0x06: return "*(ARn - T1)";
 		// TODO:
 		//	C54CM:0 => *ARn(T0)
 		//	C54CM:1 => *ARn(AR0)
-	case 7: return "*ARn(T0)";
+	case 0x07: return "*ARn(T0)";
 	};
 }
 
