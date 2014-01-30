@@ -131,7 +131,7 @@ sub flag2name
 	if ($flag =~ /^[D]+$/) { return sprintf("D%d", length($flag)) };
 	if ($flag =~ /^[P]+$/) { return sprintf("P%d", length($flag)) };
 	if ($flag =~ /^[L]+$/) { return sprintf("L%d", length($flag)) };
-	if ($flag =~ /^[K]+$/) { return sprintf("k%d", length($flag)) };
+	if ($flag =~ /^[K]+$/) { return sprintf("K%d", length($flag)) };
 	if ($flag =~ /^[k]+$/) { return sprintf("k%d", length($flag)) };
 	if ($flag =~ /^[l]+$/) { return sprintf("l%d", length($flag)) };
 
@@ -148,7 +148,7 @@ sub insn_parse_opcode
 		DDDDDDDDDDDDDDDD
 		PPPPPPPPPPPPPPPPPPPPPPPP PPPPPPPP
 		LLLLLLLLLLLLLLLL LLLLLLLL LLLLLLL
-		KKKKKKKK
+		KKKKKKKKKKKKKKKK KKKKKKKK
 		kkkkkkkkkkkkkkkk kkkkkkkk kkkkkk kkkkk kkkk kkk
 		llllllllllllllll lllllll lll l
 		SHIFTW SHFT
