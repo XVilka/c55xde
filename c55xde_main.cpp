@@ -574,6 +574,80 @@ const char * get_cmem_str(uint8_t key, char * str)
 	return table[ key & 3 ];
 }
 
+const char * get_smem_str(uint8_t key, char * str)
+{
+	strcpy(str, "invalid");
+
+	// direct memory
+	if ((key & 0x01) == 0) {
+		sprintf(str, "@%04Xh", key >> 1);
+		return str;
+	}
+
+	// indirect memory
+
+	switch (key) {
+	case 0x11: return "ABS16(#k16)";
+	case 0x31: return "*(#k23)";
+	case 0x51: return "port(#k16)";
+	case 0x71: return "*CDP";
+	case 0x91: return "*CDP+";
+	case 0xB1: return "*CDP−";
+	case 0xD1: return "*CDP(#K16)";
+	case 0xF1: return "*+CDP(#K16)";
+	}
+
+	switch (key & 0x1F) {
+	case 0x01: return "*ARn";
+	case 0x03: return "*ARn+";
+	case 0x05: return "*ARn−";
+		// TODO:
+		//	C54CM:0 => *(ARn + T0)
+		//	C54CM:1 => *(ARn + AR0)
+	case 0x07: return "*(ARn + T0)";
+		// TODO:
+		//	C54CM:0 => *(ARn – T0)
+		//	C54CM:1 => *(ARn – AR0)
+	case 0x09: return "*(ARn – T0)";
+		// TODO:
+		//	C54CM:0 => *ARn(T0)
+		//	C54CM:1 => *ARn(AR0)
+	case 0x0B: return "*ARn(T0)";
+	case 0x0D: return "*ARn(#K16)";
+	case 0x0F: return "*+ARn(#K16)";
+		// TODO:
+		//	ARMS:0 => *(ARn + T1)
+		//	ARMS:1 => *ARn(short(#1))
+	case 0x13: return "*(ARn + T1)";
+		// TODO:
+		//	ARMS:0 => *(ARn - T1)
+		//	ARMS:1 => *ARn(short(#2))
+	case 0x15: return "*(ARn - T1)";
+		// TODO:
+		//	ARMS:0 => *ARn(T1)
+		//	ARMS:1 => *ARn(short(#3))
+	case 0x17: return "*ARn(T1)";
+		// TODO:
+		//	ARMS:0 => *+ARn
+		//	ARMS:1 => *ARn(short(#4))
+	case 0x19: return "*+ARn";
+		// TODO:
+		//	ARMS:0 => *-ARn
+		//	ARMS:1 => *ARn(short(#5))
+	case 0x1B: return "*-ARn";
+		// TODO:
+		//	ARMS:0 => *(ARn + T0B)
+		//	ARMS:1 => *ARn(short(#6))
+	case 0x1D: return "*(ARn + T0B)";
+		// TODO:
+		//	ARMS:0 => *(ARn - T0B)
+		//	ARMS:1 => *ARn(short(#7))
+	case 0x1F: return "*(ARn + T0B)";
+	}
+
+	return str;
+}
+
 const char * get_mmm_str(uint8_t key, char * str)
 {
 	switch (key & 7) {
@@ -824,6 +898,8 @@ void decode_registers(insn_data_t * data, char * str)
 
 void decode_addressing_modes(insn_data_t * data, char * str)
 {
+	// Cmem
+
 	if (field_valid(mm))
 		substitute(str, "Cmem", "%s", get_cmem_str(field_value(mm), NULL));
 
@@ -837,6 +913,20 @@ void decode_addressing_modes(insn_data_t * data, char * str)
 	if (field_valid(Ymem_reg) && field_valid(Ymem_mmm)) {
 		substitute(str, "Ymem", "%s", get_mmm_str(field_value(Ymem_mmm), NULL));
 		substitute(str, "ARn", "AR%d", field_value(Ymem_reg));
+	}
+
+	// Lmem and Smem
+
+	if (field_valid(AAAAAAAI)) {
+		char tmp[64];
+
+		get_smem_str(field_value(AAAAAAAI), tmp);
+		if (field_value(AAAAAAAI) & 1) {
+			substitute(tmp, "ARn", "AR%d", field_value(AAAAAAAI) >> 5);
+		}
+
+		substitute(str, "Smem", "%s", tmp);
+		substitute(str, "Lmem", "%s", tmp);
 	}
 }
 
