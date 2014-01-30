@@ -114,6 +114,9 @@ struct instruction_data {
 		uint8_t		FDDD;
 		uint8_t		FSSS;
 
+		uint8_t		SS[2];
+		uint8_t		DD[2];
+
 		uint8_t		CCCCCCC;
 		uint16_t	AAAAAAAI;
 
@@ -123,17 +126,6 @@ struct instruction_data {
 		uint8_t		Xmem_reg;
 		uint8_t		Ymem_mmm;
 		uint8_t		Ymem_reg;
-
-
-
-		// cleanup (WIP)...
-
-
-		uint8_t		SS;
-		uint8_t		SS2;
-		uint8_t		DD;
-		uint8_t		DD2;
-
 	} f;
 };
 
@@ -375,6 +367,17 @@ int run_f_list(insn_data_t * data, insn_item_t * insn)
 			data->f.FDDD = get_bits(data->opcode64, flag->f, 4);
 			break;
 
+		case C55X_OPCODE_SS:
+			temp = get_bits(data->opcode64, flag->f, 2);
+			data->f.SS[1] = f_valid(data->f.SS[0]) ? temp : data->f.SS[1];
+			data->f.SS[0] = f_valid(data->f.SS[0]) ? data->f.SS[0] : temp;
+			break;
+		case C55X_OPCODE_DD:
+			temp = get_bits(data->opcode64, flag->f, 2);
+			data->f.DD[1] = f_valid(data->f.DD[0]) ? temp : data->f.DD[1];
+			data->f.DD[0] = f_valid(data->f.DD[0]) ? data->f.DD[0] : temp;
+			break;
+
 		case C55X_OPCODE_Y:
 			temp = get_bits(data->opcode64, flag->f, 1) << 2;
 			data->f.Ymem_reg = f_valid(data->f.Ymem_reg) ? data->f.Ymem_reg | temp : temp;
@@ -389,21 +392,8 @@ int run_f_list(insn_data_t * data, insn_item_t * insn)
 
 		case C55X_OPCODE_MMM:
 			temp = get_bits(data->opcode64, flag->f, 3);
-			data->f.Xmem_mmm = f_valid(data->f.Xmem_mmm) ? : temp;
-			data->f.Ymem_mmm = f_valid(data->f.Ymem_mmm) ? : temp;
-			break;
-
-		case C55X_OPCODE_SS:
-			if (f_valid(data->f.SS))
-			    data->f.SS = get_bits(data->opcode64, flag->f, 2);
-			else
-			    data->f.SS2 = get_bits(data->opcode64, flag->f, 2);
-			break;
-		case C55X_OPCODE_DD:
-			if (f_valid(data->f.DD))
-				data->f.DD = get_bits(data->opcode64, flag->f, 2);
-			else
-				data->f.DD2 = get_bits(data->opcode64, flag->f, 2);
+			data->f.Ymem_mmm = f_valid(data->f.Xmem_mmm) ? temp : data->f.Ymem_mmm;
+			data->f.Xmem_mmm = f_valid(data->f.Xmem_mmm) ? data->f.Xmem_mmm : temp;
 			break;
 
 		default:
@@ -729,6 +719,8 @@ void decode_cond(insn_data_t * data, char * str)
 
 void decode_registers(insn_data_t * data, char * str)
 {
+	uint8_t code = 0;
+
 	// transition register
 
 	if (field_valid(r))
@@ -790,6 +782,43 @@ void decode_registers(insn_data_t * data, char * str)
 		substitute(str, "dst1", "%s", get_freg_str(field_value(FDDD), NULL));
 		substitute(str, "dst", "%s", get_freg_str(field_value(FDDD), NULL));
 		substitute(str, "TAx", "%s", get_freg_str(field_value(FDDD), NULL));
+	}
+
+	// source and destination accumulator registers
+
+	code |= field_valid(SS[0]) ? 0x01 : 0x00;
+	code |= field_valid(SS[1]) ? 0x02 : 0x00;
+	code |= field_valid(DD[0]) ? 0x10 : 0x00;
+	code |= field_valid(DD[1]) ? 0x20 : 0x00;
+
+	switch (code) {
+	case 0x01:	// SS
+		substitute(str, "ACx", "AC%d", field_value(SS[0]));
+		break;
+	case 0x03:	// SSSS
+		substitute(str, "ACx", "AC%d", field_value(SS[0]));
+		substitute(str, "ACy", "AC%d", field_value(SS[1]));
+		break;
+	case 0x11:	// SS   DD
+		if (field_value(SS[0]) == field_value(DD[0])) {
+			substitute(str, "[ACx,] ACy", "AC%d", field_value(SS[0]));
+		} else {
+			substitute(str, "[ACx,] ACy", "AC%d, AC%d", field_value(SS[0]), field_value(DD[0]));
+		}
+		break;
+	case 0x33:	// SSSS DDDD
+		substitute(str, "ACx", "AC%d", field_value(SS[0]));
+		substitute(str, "ACy", "AC%d", field_value(SS[1]));
+		substitute(str, "ACz", "AC%d", field_value(DD[0]));
+		substitute(str, "ACw", "AC%d", field_value(DD[1]));
+		break;
+	case 0x10:	//      DD
+		substitute(str, "ACx", "AC%d", field_value(DD[0]));
+		break;
+	case 0x30:	//      DDDD
+		substitute(str, "ACx", "AC%d", field_value(DD[0]));
+		substitute(str, "ACy", "AC%d", field_value(DD[1]));
+		break;
 	}
 }
 
