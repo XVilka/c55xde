@@ -126,10 +126,8 @@ sub flag2name
 	my $flag = shift;
 
 	return "R" if ($flag eq "%");
-	return "l" if ($flag eq "l");
 	return $flag if ($flag eq "DD" || $flag eq "SS");
 
-	if ($flag =~ /^[C]+$/) { return sprintf("C%d", length($flag)) };
 	if ($flag =~ /^[D]+$/) { return sprintf("D%d", length($flag)) };
 	if ($flag =~ /^[P]+$/) { return sprintf("P%d", length($flag)) };
 	if ($flag =~ /^[L]+$/) { return sprintf("L%d", length($flag)) };

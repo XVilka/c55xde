@@ -7,87 +7,64 @@
 
 typedef enum {
 
-    /* 1bl */
-
     C55X_OPCODE_E = 0x10,
     C55X_OPCODE_R,
     C55X_OPCODE_U,
-    C55X_OPCODE_Y,
     C55X_OPCODE_u,
     C55X_OPCODE_g,
     C55X_OPCODE_r,
     C55X_OPCODE_t,
-    C55X_OPCODE_n,
-    C55X_OPCODE_x,
-    C55X_OPCODE_l,
-
-    /* 2bl */
 
     C55X_OPCODE_mm = 0x20,
     C55X_OPCODE_cc,
-    C55X_OPCODE_ss,
-    C55X_OPCODE_dd,
     C55X_OPCODE_tt,
     C55X_OPCODE_vv,
+    C55X_OPCODE_ss,
+    C55X_OPCODE_dd,
     C55X_OPCODE_SS,
     C55X_OPCODE_DD,
-    C55X_OPCODE_YY,
-
-    /* 3bl */
 
     C55X_OPCODE_k3 = 0x30,
+    C55X_OPCODE_k4,
+    C55X_OPCODE_k5,
+    C55X_OPCODE_k6,
+    C55X_OPCODE_k8,
+    C55X_OPCODE_k12,
+    C55X_OPCODE_k16,
+
+    C55X_OPCODE_K8,
+    C55X_OPCODE_K16,
+
+    C55X_OPCODE_l1 = 0x40,
     C55X_OPCODE_l3,
-    C55X_OPCODE_MMM,
-    C55X_OPCODE_XXX,
-    C55X_OPCODE_YYY,
+    C55X_OPCODE_l7,
+    C55X_OPCODE_l16,
 
-    /* 4bl */
+    C55X_OPCODE_L7,
+    C55X_OPCODE_L8,
+    C55X_OPCODE_L16,
 
-    C55X_OPCODE_k4 = 0x40,
+    C55X_OPCODE_P8,
+    C55X_OPCODE_P24,
+    C55X_OPCODE_D16,
+
+    C55X_OPCODE_SHFT = 0x50,
+    C55X_OPCODE_SHIFTW,
+    C55X_OPCODE_CCCCCCC,
+    C55X_OPCODE_AAAAAAAI,
+
+    C55X_OPCODE_FSSS = 0x60,
     C55X_OPCODE_FDDD,
-    C55X_OPCODE_FSSS,
-    C55X_OPCODE_SHFT,
-    C55X_OPCODE_XDDD,
     C55X_OPCODE_XSSS,
+    C55X_OPCODE_XDDD,
     C55X_OPCODE_XACS,
     C55X_OPCODE_XACD,
 
-    /* 5bl */
+    C55X_OPCODE_Y = 0x70,
+    C55X_OPCODE_YY,
+    C55X_OPCODE_XXX,
+    C55X_OPCODE_MMM,
 
-    C55X_OPCODE_k5 = 0x50,
-
-    /* 6bl */
-
-    C55X_OPCODE_k6 = 0x60,
-    C55X_OPCODE_SHIFTW,
-
-    /* 7bl */
-
-    C55X_OPCODE_l7 = 0x70,
-    C55X_OPCODE_C7,
-    C55X_OPCODE_L7,
-
-    /* 8bl */
-
-    C55X_OPCODE_k8 = 0x80,
-    C55X_OPCODE_K8,
-    C55X_OPCODE_L8,
-    C55X_OPCODE_P8,
-    C55X_OPCODE_AAAAAAAI,
-
-    /* 16bl */
-
-    C55X_OPCODE_k16 = 0x90,
-    C55X_OPCODE_l16,
-    C55X_OPCODE_K16,
-    C55X_OPCODE_L16,
-    C55X_OPCODE_D16,
-
-    /* 24bl */
-
-    C55X_OPCODE_P24 = 0xA0,
-
-    __C55_OPCODE_LAST
 } insn_flag_e;
 
 #endif /* __C55XDE_H__ */
