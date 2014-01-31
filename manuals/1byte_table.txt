@@ -1,6 +1,0 @@
-0010000E	NOP 
-10011000	mmap 
-10011001	port(Smem) 
-10011010	port(Smem) 
-10011100	<instruction>.LR 
-10011101	<instruction>.CR 
