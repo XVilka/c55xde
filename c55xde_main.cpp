@@ -146,60 +146,11 @@ struct instruction_data {
 // список описателей команд
 
 insn_head_t insn_head_list[] = {
-#if 0
-	{
-		.byte = 0x20,
-		.size = 0x01,
-		.insn = {
-			.i_list = NULL,
-			.m_list = NULL,
-			.f_list = (insn_flag_t []) {
-				INSN_FLAG(0, E),
-				LIST_END,
-			},
-			.syntax = INSN_SYNTAX(NOP),
-		},
-	},
-	{
-		.byte = 0x56,
-		.size = 0x02,
-		.insn = {
-			.i_list = (insn_item_t []) {
-				{
-					.i_list = NULL,
-					.m_list = (insn_mask_t []) {
-						INSN_MASK(14, 1, 0),
-						LIST_END,
-					},
-					.f_list = NULL,
-					.syntax = INSN_SYNTAX(MAC[R] ACx, Tx, ACy[, ACy]),
-				},
-				{
-					.i_list = NULL,
-					.m_list = (insn_mask_t []) {
-						INSN_MASK(14, 1, 1),
-						LIST_END,
-					},
-					.f_list = NULL,
-					.syntax = INSN_SYNTAX(MAC[R] ACy, Tx, ACx, ACy),
-				},
-				LIST_END,
-			},
-			.m_list = NULL,
-			.f_list = (insn_flag_t []) {
-				INSN_FLAG(0, E),
-				INSN_FLAG(14, DD),
-				INSN_FLAG(12, SS),
-				INSN_FLAG(10, ss),
-				INSN_FLAG(8, R),
-				LIST_END,
-			},
-			.syntax = NULL,
-		},
-	},
-#else
 #  include "c55xde.table.h"
-#endif
+};
+
+insn_head_t insn_head_list_e[] = {
+#  include "c55xde.table_e.h"
 };
 
 #include <map>
@@ -208,6 +159,8 @@ insn_head_t insn_head_list[] = {
 
 std::map< uint8_t,
 	  insn_head_t * > insn_head_hash;
+std::map< uint8_t,
+	  insn_head_t * > insn_head_hash_e;
 
 #define get_bits(v, f, n)	(((v) >> (f)) & ((2 << (n - 1)) - 1))
 
@@ -1010,7 +963,7 @@ insn_head_t * lookup_insn_head(insn_data_t * data)
 	if (!data->head) {
 		data->head = insn_head_hash[opcode];
 		if (!data->head)
-			data->head = insn_head_hash[opcode & 0xFE];
+			data->head = insn_head_hash_e[opcode & 0xFE];
 	}
 
 	data->insn = data->head ? &data->head->insn : NULL;
@@ -1047,9 +1000,12 @@ int decode(const uint8_t * stream)
 
 void initialize(void)
 {
-	for (int i = 0; i < ARRAY_SIZE(insn_head_list); i++) {
+	int i;
+
+	for (i = 0; i < ARRAY_SIZE(insn_head_list); i++)
 		insn_head_hash[ insn_head_list[i].byte ] = &insn_head_list[i];
-	}
+	for (i = 0; i < ARRAY_SIZE(insn_head_list_e); i++)
+		insn_head_hash_e[ insn_head_list_e[i].byte ] = &insn_head_list_e[i];
 }
 
 int main(int argc, const char * argv[])
