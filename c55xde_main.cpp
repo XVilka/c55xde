@@ -898,6 +898,28 @@ void decode_addressing_modes(insn_data_t * data)
 	}
 }
 
+void decode_qualifiers(insn_data_t * data)
+{
+	uint8_t byte;
+	uint16_t word;
+
+	byte = *(uint8_t *)(data->stream + data->length);
+
+	if (byte == 0x98) {
+		// TODO: mmap();
+		data->length += 1;
+	} else if (byte == 0x99) {
+		// port(Smem);
+		substitute(data->syntax, "Smem", "port(Smem)");
+		substitute(data->syntax, "Xmem", "port(Xmem)");
+		substitute(data->syntax, "Ymem", "port(Ymem)");
+		data->length += 1;
+	} else if (byte == 0x9a) {
+		// TODO: port(k16)
+		data->length += 1;
+	}
+}
+
 insn_item_t * decode_insn(insn_data_t * data)
 {
 	data->length = data->head->size;
@@ -906,6 +928,7 @@ insn_item_t * decode_insn(insn_data_t * data)
 		 field_valid(E) && field_value(E) ? "|| %s" : "%s", data->insn->syntax);
 
 	decode_bits(data);
+	decode_qualifiers(data);
 
 	decode_constants(data);
 	decode_addresses(data);

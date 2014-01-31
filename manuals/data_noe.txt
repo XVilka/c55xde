@@ -100,7 +100,7 @@ xxxxxxxx10010100	RESET
 1CCCCCCC10010110	XCCPART [label, ]cond
 #10011000	mmap
 #10011001	port(Smem)
-#10011010	port(Smem)
+#10011010	port(k16)
 #10011100	<instruction>.LR
 #10011101	<instruction>.CR
 0CCCCCCC10011110	XCC [label, ]cond
