@@ -460,7 +460,7 @@ const char * get_cond_str(uint8_t key, char * str)
 	/* 000 FSSS ... 101 FSSS */
 	if ((key >> 4) >= 0 && (key >> 4) <= 5) {
 		static const char * op[6] = { "==", "!=", "<", "<=", ">", ">=" };
-		sprintf(str, "%s %s 0", get_freg_str(key, NULL), op[(key >> 4) & 7]);
+		sprintf(str, "%s %s #0", get_freg_str(key & 15, NULL), op[(key >> 4) & 7]);
 		return str;
 	}
 
@@ -744,7 +744,7 @@ void decode_cond(insn_data_t * data)
 	char tmp[64];
 
 	if (field_valid(CCCCCCC))
-		substitute(data->syntax, "cond", "%s", get_cond_str(field_valid(CCCCCCC), tmp));
+		substitute(data->syntax, "cond", "%s", get_cond_str(field_value(CCCCCCC), tmp));
 }
 
 void decode_registers(insn_data_t * data)
