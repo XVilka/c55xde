@@ -645,7 +645,7 @@ const char * get_smem_str(uint8_t key, char * str)
 		// TODO:
 		//	ARMS:0 => *(ARn - T0B)
 		//	ARMS:1 => *ARn(short(#7))
-	case 0x1F: return "*(ARn + T0B)";
+	case 0x1F: return "*(ARn - T0B)";
 	}
 
 	return str;
