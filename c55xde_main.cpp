@@ -777,8 +777,8 @@ void decode_registers(insn_data_t * data)
 		substitute(data->syntax, "TCx", "%s", get_t_str(field_value(t), NULL));
 
 	if (field_valid(tt)) {
-		substitute(data->syntax, "TCx", "%s", get_t_str(field_value(tt) >> 1, NULL));
-		substitute(data->syntax, "TCy", "%s", get_t_str(field_value(tt) >> 0, NULL));
+		substitute(data->syntax, "TCx", "%s", get_t_str(field_value(tt) >> 0, NULL));
+		substitute(data->syntax, "TCy", "%s", get_t_str(field_value(tt) >> 1, NULL));
 	}
 
 	// source or destination accumulator or extended register
