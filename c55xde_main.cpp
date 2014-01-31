@@ -921,10 +921,22 @@ void decode_addressing_modes(insn_data_t * data)
 	// Lmem and Smem
 
 	if (field_valid(AAAAAAAI)) {
-		char tmp[64];
+		char str[64], tmp[64];
 
-		get_smem_str(field_value(AAAAAAAI), tmp);
+		snprintf(tmp, sizeof(tmp), "%s", get_smem_str(field_value(AAAAAAAI), str));
+
 		if (field_value(AAAAAAAI) & 1) {
+			if (strstr(tmp, "k16")) {
+				substitute(tmp, "k16", "%X", *(uint16_t *)(data->stream + data->length));
+				data->length += 2;
+			} else if (strstr(tmp, "k23")) {
+				substitute(tmp, "k23", "%X", *(uint32_t *)(data->stream + data->length) & 0x7FFFFF);
+				data->length += 3;
+			} else if (strstr(tmp, "K16")) {
+				substitute(tmp, "K16", "%X", *(uint16_t *)(data->stream + data->length));
+				data->length += 2;
+			}
+
 			substitute(tmp, "ARn", "AR%d", field_value(AAAAAAAI) >> 5);
 		}
 
