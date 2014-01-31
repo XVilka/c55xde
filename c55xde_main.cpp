@@ -933,7 +933,7 @@ void decode_addressing_modes(insn_data_t * data)
 	}
 }
 
-void decode_insn(insn_data_t * data)
+insn_item_t * decode_insn(insn_data_t * data)
 {
 	data->length = data->head->size;
 
@@ -951,25 +951,27 @@ void decode_insn(insn_data_t * data)
 
 	decode_registers(data);
 	decode_addressing_modes(data);
+
+	return data->insn;
 }
 
 insn_item_t * decode_insn_head(insn_data_t * data)
 {
 	run_f_list(data);
 
-	if (data->insn->i_list)
+	if (data->insn->i_list) {
 		data->insn = data->insn->i_list;
-
-	while (!i_list_last(data->insn)) {
-		if (run_m_list(data) && run_f_list(data))
-			break;
-		data->insn++;
+		while (!i_list_last(data->insn)) {
+			if (run_m_list(data) && run_f_list(data))
+				break;
+			data->insn++;
+		}
 	}
 
 	if (!i_list_last(data->insn))
-		decode_insn(data);
+		return decode_insn(data);
 
-	return i_list_last(data->insn) ? NULL : data->insn;
+	return NULL;
 }
 
 insn_head_t * lookup_insn_head(insn_data_t * data)
