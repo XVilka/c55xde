@@ -219,20 +219,20 @@ DDx1DDU%YMMM11mmXXXMMMYY10000101	FIRSSUB Xmem, Ymem, Cmem, ACx, ACy
 110xxxxxYMMMSSDDXXXMMMYY10000111	MOV Xmem << #16, ACy :: MOV HI(ACx << T2), Ymem
 XSSSXDDD10010000	MOV xsrc, xdst
 xxxxxxSS10010001	B ACx
-uuDDDDg%YMMM00mmXXXMMMYY10010010	MPY[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MPY[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx
-uuDDDDg%YMMM01mmXXXMMMYY10010010	MPY[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MAC[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx
-uuDDDDg%YMMM10mmXXXMMMYY10010010	MPY[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MAS[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx
+#uuDDDDg%YMMM00mmXXXMMMYY10010010	MPY[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MPY[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx
+#uuDDDDg%YMMM01mmXXXMMMYY10010010	MPY[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MAC[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx
+#uuDDDDg%YMMM10mmXXXMMMYY10010010	MPY[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MAS[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx
 xxxxxxSS10010010	CALL ACx
-uuDDDDg%YMMM00mmXXXMMMYY10010011	MAC[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MAC[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx
-uuDDDDg%YMMM01mmXXXMMMYY10010011	MAC[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MAS[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx
-uuDDDDg%YMMM10mmXXXMMMYY10010011	MAC[R][40] [uns(]HI(Ymem)[)], [uns(]HI(Cmem)[)], ACy, :: MAC[R][40] [uns(]LO(Xmem)[)], [uns(]LO(Cmem)[)], ACx >> #16
-uuDDDDg%YMMM11mmXXXMMMYY10010011	MAC[R][40] [uns(]HI(Ymem)[)], [uns(]HI(Cmem)[)], ACy >> #16, :: MAC[R][40] [uns(]LO(Xmem)[)], [uns(]LO(Cmem)[)], ACx >> #16
-uuDDDDg%YMMM00mmXXXMMMYY10010100	MAC[R][40] [uns(]HI(Ymem)[)], [uns(]HI(Cmem)[)], ACy >> #16, :: MAS[R][40] [uns(]LO(Xmem)[)], [uns(]LO(Cmem)[)], ACx
-uuDDDDg%YMMM10mmXXXMMMYY10010100	MAC[R][40] [uns(]HI(Ymem)[)], [uns(]HI(Cmem)[)], ACy >> #16, :: MPY[R][40] [uns(]LO(Xmem)[)], [uns(]LO(Cmem)[)], ACx
+#uuDDDDg%YMMM00mmXXXMMMYY10010011	MAC[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MAC[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx
+#uuDDDDg%YMMM01mmXXXMMMYY10010011	MAC[R][40] [uns(]Ymem[)], [uns(]HI(Cmem)[)], ACy, :: MAS[R][40] [uns(]Xmem[)], [uns(]LO(Cmem)[)], ACx
+#uuDDDDg%YMMM10mmXXXMMMYY10010011	MAC[R][40] [uns(]HI(Ymem)[)], [uns(]HI(Cmem)[)], ACy, :: MAC[R][40] [uns(]LO(Xmem)[)], [uns(]LO(Cmem)[)], ACx >> #16
+#uuDDDDg%YMMM11mmXXXMMMYY10010011	MAC[R][40] [uns(]HI(Ymem)[)], [uns(]HI(Cmem)[)], ACy >> #16, :: MAC[R][40] [uns(]LO(Xmem)[)], [uns(]LO(Cmem)[)], ACx >> #16
+#uuDDDDg%YMMM00mmXXXMMMYY10010100	MAC[R][40] [uns(]HI(Ymem)[)], [uns(]HI(Cmem)[)], ACy >> #16, :: MAS[R][40] [uns(]LO(Xmem)[)], [uns(]LO(Cmem)[)], ACx
+#uuDDDDg%YMMM10mmXXXMMMYY10010100	MAC[R][40] [uns(]HI(Ymem)[)], [uns(]HI(Cmem)[)], ACy >> #16, :: MPY[R][40] [uns(]LO(Xmem)[)], [uns(]LO(Cmem)[)], ACx
 xxxxxxxx10010100	RESET
 0xxkkkkk10010101	INTR k5
 1xxkkkkk10010101	TRAP k5
-uuDDDDg%YMMM01mmXXXMMMYY10010101	MAS[R][40] [uns(]HI(Ymem)[)], [uns(]HI(Cmem)[)], ACy, :: MAS[R][40] [uns(]LO(Xmem)[)], [uns(]LO(Cmem)[)], ACx
+#uuDDDDg%YMMM01mmXXXMMMYY10010101	MAS[R][40] [uns(]HI(Ymem)[)], [uns(]HI(Cmem)[)], ACy, :: MAS[R][40] [uns(]LO(Xmem)[)], [uns(]LO(Cmem)[)], ACx
 0CCCCCCC10010110	XCC [label, ]cond
 1CCCCCCC10010110	XCCPART [label, ]cond
 #10011000	mmap
